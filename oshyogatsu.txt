@@ -1,0 +1,22 @@
+@G
+
+T=200
+V1=10 V2=10 V3=10 VD=10
+
+@1
+
+L8C~~~D~CDE~G~E~~~
+D~D~C~D~E~~~~~~~
+CC<AAG~G~>CCDDE~~~
+E~DDCCCCDDEEG~~~
+C~~~D~CDE~G~E~~~
+D~D~E~D~C~~~~~~~
+
+@2
+
+L8<E~~~G~EG>C~E~C~~~
+<G~G~E~G~>C~~~~~~~
+
+@3
+
+@D

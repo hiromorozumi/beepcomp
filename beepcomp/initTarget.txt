@@ -1,0 +1,6 @@
+@Target.Project_name_like_program_name = SetString True
+@Target. = SetString -1
+@Target.Start_mode.StartMode = SetString 0
+@Target.InitDir = SetString C:\Users\Administrator\Documents\Dev\BeepComp
+@Target.Name = SetString C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe
+@Target.Args = SetString 

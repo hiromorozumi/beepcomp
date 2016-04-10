@@ -1,0 +1,303 @@
+<?hml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+	<Product Name='BeepComp' 
+		Id='2BB9BD67-0B46-4FC4-AEEF-D170D2AEF8FD'
+		UpgradeCode='8F81687A-D9C1-4711-AF2A-347CA54ADDD8'
+		Language='1033'
+		Codepage='1252'
+		Version='0.1.0'
+		Manufacturer='Gingerroot Soft'>
+	
+	<Package Id='*' Keywords='Installer' 
+		Description="BeepComp Installer"
+		Comments='This installs BeepComp in your machine'
+		Manufacturer='Gingerroot Soft'
+		InstallerVersion='100' Languages='1033' Compressed='yes'
+		SummaryCodepage='1252' />
+
+	<Media Id='1' Cabinet='beepcomp.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
+	
+	<Property Id='DiskPrompt' Value="BeepComp Installation [1]" />
+	
+	
+	<Directory Id="TARGETDIR" Name="SourceDir">
+
+
+
+	
+		<Directory Id="DesktopFolder" Name="Desktop">
+			<Component Id="ApplicationShortcutDesktop" Guid="*">
+				<Shortcut Id="ApplicationDesktopShortcut"
+						Name="BeepComp"
+						Description="Launch BeepComp"
+						Target="[INSTALLDIR]beepcomp.exe"
+						WorkingDirectory='INSTALLDIR'/>
+				<RemoveFolder Id="DesktopFolder" On="uninstall"/>
+					<RegistryValue
+						Root="HKCU"
+						Key='Software\[Manufacturer]\[ProductName]'
+						Name="installed"
+						Type="integer"
+						Value="1"
+						KeyPath="yes"/>
+			</Component>
+		</Directory>	
+
+
+	
+		<Directory Id="ProgramFilesFolder" Name="PFiles">
+			<Directory Id="INSTALLDIR" Name="BeepComp">
+			
+			
+
+			
+				<Component Id='cmp_beepcompEXE' Guid='*'>
+					<File Id="beepcompEXE" Name="beepcomp.exe" DiskId='1' Source='..\beepcomp.exe' KeyPath='yes'>
+						<Shortcut Id="startmenuBeepComp" Directory="ProgramMenuDir" Name="BeepComp" WorkingDirectory='INSTALLDIR' Icon="beepcomp.exe" IconIndex="0" Advertise="yes" />					
+					</File>
+				</Component>
+				
+				<Component Id='cmp_libwinpthread_1DLL' Guid='*'>
+					<File Id="libwinpthread_1DLL" Name="libwinpthread-1.dll" 
+					DiskId='1' Source='..\libwinpthread-1.dll' KeyPath='yes'>				
+					</File>
+				</Component>				
+
+				<Component Id='cmp_libgcc_s_dw2_1DLL' Guid='*'>
+					<File Id="libgcc_s_dw2_1DLL" Name="libgcc_s_dw2-1.dll" 
+					DiskId='1' Source='..\libgcc_s_dw2-1.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+	
+				<Component Id='cmp_libstdcpp_6DLL' Guid='*'>
+					<File Id="libstdcpp_6DLL" Name="libstdc++-6.dll" 
+					DiskId='1' Source='..\libstdc++-6.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+
+				<Component Id='cmp_portaudio_x86DLL' Guid='*'>
+					<File Id="portaudio_x86DLL" Name="portaudio_x86.dll" 
+					DiskId='1' Source='..\portaudio_x86.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+				
+				<Component Id='cmp_sfml_graphics_2DLL' Guid='*'>
+					<File Id="sfml_graphics_2DLL" Name="sfml-graphics-2.dll" 
+					DiskId='1' Source='..\sfml-graphics-2.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+
+				<Component Id='cmp_sfml_system_2DLL' Guid='*'>
+					<File Id="sfml_system_2DLL" Name="sfml-system-2.dll" 
+					DiskId='1' Source='..\sfml-system-2.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+
+				<Component Id='cmp_sfml_window_2DLL' Guid='*'>
+					<File Id="sfml_window_2DLL" Name="sfml-window-2.dll" 
+					DiskId='1' Source='..\sfml-window-2.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+
+				<Component Id='cmp_libsndfile_1DLL' Guid='*'>
+					<File Id="libsndfile_1DLL" Name="libsndfile-1.dll" 
+					DiskId='1' Source='..\libsndfile-1.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+				
+				<Component Id='cmp_libmp3lame_0DLL' Guid='*'>
+					<File Id="libmp3lame_0DLL" Name="libmp3lame-0.dll" 
+					DiskId='1' Source='..\libmp3lame-0.dll' KeyPath='yes'>				
+					</File>
+				</Component>
+				
+		
+				
+				<Component Id='cmp_defaultTXT' Guid='*'>
+					<File Id="defaultTXT" Name="default.txt" 
+					DiskId='1' Source='..\default.txt' KeyPath='yes'>				
+					</File>
+				</Component>
+
+
+				
+				<Directory Id="FontDir" Name="fonts">
+					
+					<Component Id='cmp_EnvyCodeRTTF' Guid='*'>
+						<File Id="EnvyCodeRTTF" Name="EnvyCodeR.ttf" 
+						DiskId='1' Source='..\fonts\EnvyCodeR.ttf' KeyPath='yes'>				
+						</File>
+					</Component>			
+
+					<Component Id='cmp_uni0563TTF' Guid='*'>
+						<File Id="uni0563TTF" Name="uni0563.ttf" 
+						DiskId='1' Source='..\fonts\uni0563.ttf' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+				</Directory>
+				
+				
+				<Directory Id="ImagesDir" Name="images" >
+					
+					<Component Id='cmp_beepcomp_iconPNG' Guid='*'>
+						<File Id="beepcomp_iconPNG" Name="beepcomp_icon.png" 
+						DiskId='1' Source='..\images\beepcomp_icon.png' KeyPath='yes'>				
+						</File>		
+					</Component>
+
+					<Component Id='cmp_beepcomp_logoPNG' Guid='*'>
+						<File Id="beepcomp_logoPNG" Name="beepcomp_logo.png" 
+						DiskId='1' Source='..\images\beepcomp_logo.png' KeyPath='yes'>				
+						</File>		
+					</Component>
+					
+				</Directory>
+
+				
+				<Directory Id="DocumentationDir" Name="documentation" >
+					
+					<Component Id='cmp_beepcomp_users_guideHTML' Guid='*'>
+						<File Id="beepcomp_users_guideHTML" Name="beepcomp_users_guide.html" 
+						DiskId='1' Source='..\documentation\beepcomp_users_guide.html' KeyPath='yes'>				
+						</File>		
+					</Component>
+
+					<Component Id='cmp_beepcomp_screen_explainPNG' Guid='*'>
+						<File Id="beepcomp_screen_explainPNG" Name="beepcomp_screen_explain.png" 
+						DiskId='1' Source='..\documentation\beepcomp_screen_explain.png' KeyPath='yes'>				
+						</File>		
+					</Component>
+
+					<Component Id='cmp_beepcomp_volume_envelopePNG' Guid='*'>
+						<File Id="beepcomp_volume_envelopePNG" Name="beepcomp_volume_envelope.png" 
+						DiskId='1' Source='..\documentation\beepcomp_volume_envelope.png' KeyPath='yes'>				
+						</File>		
+					</Component>
+					
+				</Directory>
+				
+				
+				<Directory Id="UserDataDir" Name="userdata" >
+					
+					<Component Id='cmp_xanaduTXT' Guid='*' Permanent="yes">
+						<File Id="xanaduTXT" Name="xanadu.txt" 
+						DiskId='1' Source='..\userdata\xanadu.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+					<Component Id='cmp_some_funky_tuneTXT' Guid='*' Permanent="yes">
+						<File Id="some_funky_tuneTXT" Name="some_funky_tune.txt" 
+						DiskId='1' Source='..\userdata\some_funky_tune.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+						
+					<Component Id='cmp_romanciaTXT' Guid='*' Permanent="yes">
+						<File Id="romanciaTXT" Name="romancia.txt" 
+						DiskId='1' Source='..\userdata\romancia.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+
+					<Component Id='cmp_ys1_field_musicTXT' Guid='*' Permanent="yes">
+						<File Id="ys1_field_musicTXT" Name="ys1_field_music.txt" 
+						DiskId='1' Source='..\userdata\ys1_field_music.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+						
+					<Component Id='cmp_ys1_town_musicTXT' Guid='*' Permanent="yes">
+						<File Id="ys1_town_musicTXT" Name="ys1_town_music.txt" 
+						DiskId='1' Source='..\userdata\ys1_town_music.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+					<Component Id='cmp_astro_effectTXT' Guid='*' Permanent="yes">
+						<File Id="astro_effectTXT" Name="astro_effect.txt" 
+						DiskId='1' Source='..\userdata\astro_effect.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+					<Component Id='cmp__tutorial_basic_1TXT' Guid='*' Permanent="yes">
+						<File Id="cmp__tutorial_basic_1TXT" Name="_tutorial_basic_1.txt" 
+						DiskId='1' Source='..\userdata\_tutorial_basic_1.txt' KeyPath='yes'>				
+						</File>
+					</Component>					
+
+					<Component Id='cmp__tutorial_repeatsTXT' Guid='*' Permanent="yes">
+						<File Id="cmp__tutorial_repeatsTXT" Name="_tutorial_repeats.txt" 
+						DiskId='1' Source='..\userdata\_tutorial_repeats.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+					<Component Id='cmp__tutorial_drumsTXT' Guid='*' Permanent="yes">
+						<File Id="cmp__tutorial_drumsTXT" Name="_tutorial_drums.txt" 
+						DiskId='1' Source='..\userdata\_tutorial_drums.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+			
+				</Directory>
+				
+			</Directory>
+		</Directory>
+		
+		
+		<Directory Id="ProgramMenuFolder" Name="Programs">
+			<Directory Id="ProgramMenuDir" Name="BeepComp">
+				<Component Id="ProgramMenuDir" Guid="*">
+					<RemoveFolder Id='ProgramMenuDir' On='uninstall' />
+					<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
+				</Component>
+			</Directory>
+        </Directory>
+		
+		
+	</Directory>
+	
+	
+    <Feature Id='Complete' Level='1'>
+
+		<ComponentRef Id='ApplicationShortcutDesktop' />
+	
+		<ComponentRef Id='cmp_beepcompEXE' />
+		<ComponentRef Id='cmp_libwinpthread_1DLL' />
+		<ComponentRef Id='cmp_libgcc_s_dw2_1DLL' />
+		<ComponentRef Id='cmp_libstdcpp_6DLL' />
+		<ComponentRef Id='cmp_portaudio_x86DLL' />
+		<ComponentRef Id='cmp_sfml_graphics_2DLL' />
+		<ComponentRef Id='cmp_sfml_system_2DLL' />
+		<ComponentRef Id='cmp_sfml_window_2DLL' />
+		<ComponentRef Id='cmp_libsndfile_1DLL' />
+		<ComponentRef Id='cmp_libmp3lame_0DLL' />
+		
+		<ComponentRef Id='cmp_defaultTXT' />
+		
+		<ComponentRef Id='cmp_EnvyCodeRTTF' />
+		<ComponentRef Id='cmp_uni0563TTF' />
+		<ComponentRef Id='cmp_beepcomp_iconPNG' />
+		<ComponentRef Id='cmp_beepcomp_logoPNG' />
+		<ComponentRef Id='cmp_beepcomp_users_guideHTML' />
+		<ComponentRef Id='cmp_beepcomp_screen_explainPNG' />
+		<ComponentRef Id='cmp_beepcomp_volume_envelopePNG' />
+		
+		<ComponentRef Id='cmp_xanaduTXT' />
+		<ComponentRef Id='cmp_some_funky_tuneTXT' />
+		<ComponentRef Id='cmp_romanciaTXT' />
+		<ComponentRef Id='cmp_ys1_field_musicTXT' />
+		<ComponentRef Id='cmp_ys1_town_musicTXT' />		
+		<ComponentRef Id='cmp_astro_effectTXT' />
+		<ComponentRef Id='cmp__tutorial_repeatsTXT' />	
+		<ComponentRef Id='cmp__tutorial_drumsTXT' />
+		<ComponentRef Id='cmp__tutorial_basic_1TXT' />
+		
+		<ComponentRef Id='ProgramMenuDir' />
+		
+    </Feature>
+	
+	<UIRef Id="WixUI_Minimal" />
+	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+	
+	<Icon Id="beepcomp.exe" SourceFile="..\beepcomp.exe" />
+	
+	<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+
+	</Product>
+</Wix>

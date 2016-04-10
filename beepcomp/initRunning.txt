@@ -1,0 +1,20 @@
+@Functions.Collect_profile_data = SetString True
+@Functions.ThresholdTime = SetString 0
+@Functions.ThresholdTime.Items = StringCollection.Create
+StringCollection.Add @Functions.ThresholdTime.Items <none>
+StringCollection.Add @Functions.ThresholdTime.Items 0.1
+StringCollection.Add @Functions.ThresholdTime.Items 0.5
+StringCollection.Add @Functions.ThresholdTime.Items 1.0
+StringCollection.Add @Functions.ThresholdTime.Items 5.0
+StringCollection.Add @Functions.ThresholdTime.Items 10.
+StringCollection.Add @Functions.ThresholdTime.Items 50.
+StringCollection.Add @Functions.ThresholdTime.Items 100
+StringCollection.Add @Functions.ThresholdTime.Items 500
+StringCollection.Add @Functions.ThresholdTime.Items 1000
+StringCollection.Add @Functions.ThresholdTime.Items 5000
+@Functions.TriggerFunction = SetString 0
+@Functions.TriggerFunction.Items = StringCollection.Create
+StringCollection.Add @Functions.TriggerFunction.Items <always>
+StringCollection.Add @Functions.TriggerFunction.Items <never>
+@Send. = SetString -1
+@Ending.If_target's_File_->_Exit_is_selected.ExitOptions = SetString 0

@@ -1,0 +1,107 @@
+/////////////////////////////////////////////////
+//  Ancient Ys Vanished Omen 1 (Falcom, 1987)  //
+//  Opening town music                         //
+/////////////////////////////////////////////////
+
+@G
+
+MASTERVOLUME=60
+TEMPO=152
+DELAYTIME=460
+DELAYLEVEL=30
+
+V1=8 V2=8 V3=5 VD=10
+
+/// Channel 1 - Melody //////////////////////////
+
+@1
+
+ATTACKTIME=0
+PEAKLEVEL=95
+PEAKTIME=70
+DECAYTIME=40
+SUSTAINLEVEL=40
+RELEASETIME=80
+
+LFO=ON
+LFOWAIT=500
+LFOSPEED=6
+LFORANGE=30
+
+L8O4
+
+:DFA>C<Bb:D FA>C<BbABbAF
+G~~~~~~~ ~~~~~~~~
+:EbGBb>DC:<Eb GBb>DC<Bb>C<BbG
+A~~~~~~~ ~~~~~~~~
+:DFA>C<Bb:D FA>C<BbABbAF
+G~~~~~~~ ~~~~~~~~
+:EbGBb>DC:<Bb A::Bb::>C<:
+BbBbBbBb:Bb:Bb :Bb:Bb>CC<Bb:
+
+/// Channel 2 - Bass ////////////////////////////
+
+@2
+
+ATTACKTIME=0
+PEAKLEVEL=95
+PEAKTIME=100
+DECAYTIME=80
+SUSTAINLEVEL=40
+RELEASETIME=80
+
+L8O2
+
+Bb::Bb :::: Bb::Bb :Bb>CD
+Eb::Eb :::: Eb::Eb :EbDD
+C::C   :::: C::C   :CDEb
+F::F   :::: F::F   :<FGA
+
+Bb::Bb ::::  Bb::Bb :Bb>CD
+Eb::Eb ::::  Eb::Eb :EbDD
+C::C   :CDEb F<::F  :FGA
+Ab::Ab ::Ab: Ab::Ab AbAbAbAb
+
+/// Channel 3 - Embelishment ////////////////////
+
+@3
+
+ATTACKTIME=0
+PEAKLEVEL=95
+PEAKTIME=70
+DECAYTIME=40
+SUSTAINLEVEL=40
+RELEASETIME=80
+
+LFO=ON
+LFOWAIT=500
+LFOSPEED=6
+LFORANGE=30
+
+L8O5
+
+D~~F~~Bb~ D~~F~~Bb~
+G~>D~C<Bb~G ~~G~A~Bb~
+Eb~~G~~>C~ <Eb~~G~~>C~<
+F~>F~EbD~C ~~C~D~Eb~<
+
+D~~F~~Bb~ D~~F~~Bb~
+G~>D~C<Bb~G ~~G~A~Bb~
+Eb~~G~~>C~ <F::F::F~
+BbBbBbBb:Bb:Bb :Bb:BbBbBbBbBb
+
+/// Drum Channel ////////////////////////////////
+
+@D
+
+L8
+
+K::K ::[HH]H K::K ::S:
+K::K ::hH    K::K ::S[HH]
+K::K ::[HH]H K::K ::S:
+K::K ::hH    K::K ::S[HH]
+
+K::K ::[HH]H K::K ::S:
+K::K ::hH    K::K ::S[HH]
+K::K ::[HH]H K::K ::S:
+K::K ::S[hh] sSS[SS] [sS]k[KK]S  

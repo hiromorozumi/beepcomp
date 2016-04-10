@@ -1,0 +1,50 @@
+0x2 0x0 EventBuffersOpened 0x12b4 0x1454, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe, Wed Jan 20 05:39:50 2016
+0x2 0x0 CpuFreq 2956160240 0
+0x2 0x2 CpuFreq 3192295950 0
+0x2 0x2 ModuleNative 0x00400000 0xc4000 "C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe"
+0x2 0x2 ModuleNative 0x77310000 0x180000 "C:\Windows\SysWOW64\ntdll.dll"
+0x2 0x2 ModuleNative 0x75270000 0x110000 "C:\Windows\syswow64\kernel32.dll"
+0x2 0x2 ModuleNative 0x75c10000 0x47000 "C:\Windows\syswow64\KERNELBASE.dll"
+0x2 0x2 ModuleNative 0x761a0000 0x7b000 "C:\Windows\syswow64\COMDLG32.DLL"
+0x2 0x2 ModuleNative 0x760f0000 0xac000 "C:\Windows\syswow64\msvcrt.dll"
+0x2 0x2 ModuleNative 0x75a30000 0x57000 "C:\Windows\syswow64\SHLWAPI.dll"
+0x2 0x2 ModuleNative 0x75d00000 0x90000 "C:\Windows\syswow64\GDI32.dll"
+0x2 0x2 ModuleNative 0x75f20000 0x100000 "C:\Windows\syswow64\USER32.dll"
+0x2 0x2 ModuleNative 0x751c0000 0xa1000 "C:\Windows\syswow64\ADVAPI32.dll"
+0x2 0x2 ModuleNative 0x750b0000 0x19000 "C:\Windows\SysWOW64\sechost.dll"
+0x2 0x2 ModuleNative 0x74f40000 0xf0000 "C:\Windows\syswow64\RPCRT4.dll"
+0x2 0x2 ModuleNative 0x74c70000 0x60000 "C:\Windows\syswow64\SspiCli.dll"
+0x2 0x2 ModuleNative 0x74c60000 0xc000 "C:\Windows\syswow64\CRYPTBASE.dll"
+0x2 0x2 ModuleNative 0x75c00000 0xa000 "C:\Windows\syswow64\LPK.dll"
+0x2 0x2 ModuleNative 0x76220000 0x9d000 "C:\Windows\syswow64\USP10.dll"
+0x2 0x2 ModuleNative 0x746f0000 0x84000 "C:\Windows\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.18837_none_ec86b8d6858ec0bc\COMCTL32.dll"
+0x2 0x2 ModuleNative 0x762c0000 0xc4b000 "C:\Windows\syswow64\SHELL32.dll"
+0x2 0x2 ModuleNative 0x6eb80000 0x87000 "C:\Users\Administrator\Documents\Dev\BeepComp\libmp3lame-0.dll"
+0x2 0x2 ModuleNative 0x66980000 0xf7000 "C:\Users\Administrator\Documents\Dev\BeepComp\sfml-graphics-2.dll"
+0x2 0x2 ModuleNative 0x68980000 0x15000 "C:\Users\Administrator\Documents\Dev\BeepComp\sfml-system-2.dll"
+0x2 0x2 ModuleNative 0x74190000 0x32000 "C:\Windows\system32\WINMM.DLL"
+0x2 0x2 ModuleNative 0x6cec0000 0x24000 "C:\Users\Administrator\Documents\Dev\BeepComp\libgcc_s_sjlj-1.dll"
+0x2 0x2 ModuleNative 0x6fc40000 0x105000 "C:\Users\Administrator\Documents\Dev\BeepComp\libstdc++-6.dll"
+0x2 0x2 ModuleNative 0x691c0000 0x1f000 "C:\Users\Administrator\Documents\Dev\BeepComp\sfml-window-2.dll"
+0x2 0x2 ModuleNative 0x50930000 0xc8000 "C:\Windows\system32\OPENGL32.DLL"
+0x2 0x2 ModuleNative 0x53990000 0x22000 "C:\Windows\system32\GLU32.dll"
+0x2 0x2 ModuleNative 0x66e10000 0xe7000 "C:\Windows\system32\DDRAW.dll"
+0x2 0x2 ModuleNative 0x737f0000 0x6000 "C:\Windows\system32\DCIMAN32.dll"
+0x2 0x2 ModuleNative 0x757d0000 0x19d000 "C:\Windows\syswow64\SETUPAPI.dll"
+0x2 0x2 ModuleNative 0x75c70000 0x27000 "C:\Windows\syswow64\CFGMGR32.dll"
+0x2 0x2 ModuleNative 0x76020000 0x8f000 "C:\Windows\syswow64\OLEAUT32.dll"
+0x2 0x2 ModuleNative 0x75d90000 0x15c000 "C:\Windows\syswow64\ole32.dll"
+0x2 0x2 ModuleNative 0x75090000 0x12000 "C:\Windows\syswow64\DEVOBJ.dll"
+0x2 0x2 ModuleNative 0x74170000 0x13000 "C:\Windows\system32\dwmapi.dll"
+0x2 0x2 ModuleNative 0x70640000 0x16a000 "C:\Users\Administrator\Documents\Dev\BeepComp\libsndfile-1.dll"
+0x2 0x2 ModuleNative 0x50000000 0x40000 "C:\Users\Administrator\Documents\Dev\BeepComp\portaudio_x86.dll"
+0x2 0x2 ModuleNative 0x75ca0000 0x60000 "C:\Windows\system32\IMM32.DLL"
+0x2 0x2 ModuleNative 0x75380000 0xcc000 "C:\Windows\syswow64\MSCTF.dll"
+0x2 0x2 ModuleNative 0x10000000 0x1c7000 "C:\Program Files\GlowCode 9.2\gc6prof.dll"
+0x2 0x2 ModuleNative 0x74f30000 0x5000 "C:\Windows\syswow64\PSAPI.DLL"
+0x2 0x2 GenericName GenericClassId 1 Kernel32::FreeLibrary
+0x2 0x2 GenericName GenericMethodId 1 FreeLibrary
+0x2 0x2 GenericName GenericMethodId 2 LoadLibraryExW
+0x3 0x13 ProcessDetachBegin 0x12b4 0x1c9c, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe, Wed Jan 20 05:41:20 2016
+0x3 0x14 ProcessDetachEnd 0x12b4 0x1c9c, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe, Wed Jan 20 05:41:20 2016
+0x3 0x14 EventBuffersClosed 0x12b4 0x1c9c, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe, Wed Jan 20 05:41:20 2016

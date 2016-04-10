@@ -1,0 +1,14 @@
+// My first BeepComp track! :)
+
+@G
+TEMPO=100
+MASTERVOLUME=80
+
+@1
+O5L4 CDEFG~
+
+@2
+O4L4 EFGAB~
+
+@D
+L4 KKKSSS

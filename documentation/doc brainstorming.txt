@@ -1,0 +1,86 @@
+BeepComp Documentation brainstorming
+
+---
+
+Getting Started
+
+Tutorials
+
+Basics
+
+Key Commands
+
+Sections
+
+Global sections
+
+Music Channel Sections
+
+Drum Channle Section
+
+Delay Effects
+
+Volume Envelopes
+
+LFO Effects
+
+ASTRO effects
+
+Wavetables
+
+---
+
+
+Syntax Reference
+
+	General
+
+		// ... commenting
+		@  ... defines beginning of section
+
+	Global
+
+		TEMPo= ... Sets tempo, takes a value 30-300.
+		MASTERVOLUME= ... 
+		V#= ...
+		VD= ...
+		LOOP= ...
+		DELAY= ... Turns the delay on or off. Takes ON or OFF.
+		DELAYTIME=
+		DELAYLEVEL= ...
+	
+	Music Channel
+
+		ATTACKTIME=
+		PEAKTIME=
+		PEAKLEVEL=
+		DECAYTIME=
+		SUSTAINLEVEL=
+		RELEASETIME=
+		LFO=
+		LFORANGE=
+		LFOSPEED=
+		LFOWAIT=
+		ASTRO=
+
+		L ... 
+		O ...
+		V ...
+		C ... Musical note
+		D ... Musical note
+		E ... Musical note
+		F ...
+		G
+		A
+		B
+		b ... Flat
+		# ... Sharp
+		~ ...
+		[] ... Tuplets grouping
+		{} ... Repeat
+		^ ... Channel volume up
+		_ ... Channel volume down
+
+	Drum Channel
+
+		 

@@ -1,0 +1,22 @@
+#GlowCode symbol file v1.3
+#Module, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe
+#ModuleTime, 01/20/2016 12:00:55 UTC
+#CommandLine, "C:\Program Files\GlowCode 9.2\gcSym.exe"  /module:"C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe" /out:"beepcomp.gcSym" /search:""
+NativeModuleTable.Open, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe
+#SymCallbackProc: CBA_DEFERRED_SYMBOL_LOAD_START C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe
+#SymCallbackProc: CBA_DEFERRED_SYMBOL_LOAD_PARTIAL C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe
+#SymCallbackProc: CBA_EVENT DBGHELP: No header for C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe.  Searching for image on disk 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe - OK 
+#SymCallbackProc: CBA_EVENT DBGHELP: No debug info for C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe.  Searching for dbg file 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.dbg - file not found 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\symbols\exe\beepcomp.dbg - path not found 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\exe\beepcomp.dbg - path not found 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.dbg - file not found 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe missing debug info.  Searching for pdb anyway 
+#SymCallbackProc: CBA_EVENT DBGHELP: C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.pdb - file not found 
+#SymCallbackProc: CBA_EVENT DBGHELP: beepcomp.pdb - file not found 
+#SymCallbackProc: CBA_DEFERRED_SYMBOL_LOAD_COMPLETE C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe
+#SymCallbackProc: CBA_EVENT DBGHELP: beepcomp - no symbols loaded 
+#SymGetModuleInfo64 pdb:, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe, C:\Users\Administrator\Documents\Dev\BeepComp\beepcomp.exe, beepcomp, NumSyms:0
+#SymEnumSymbols
+NativeModuleTable.Close, 0 functions
