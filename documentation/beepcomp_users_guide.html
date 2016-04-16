@@ -300,7 +300,6 @@ img {
 <h2>Contents</h2>
 <ul>
 <li><a href="#about_beepcomp">About BeepComp</a></li>
-<li><a href="#if_you_found_issues_bugs">If you found issues/bugs...</a></li>
 <li><a href="#getting_started">Getting Started</a></li>
 <li><a href="#tutorials">Tutorials</a></li>
 <li>
@@ -344,6 +343,8 @@ img {
 <li><a href="#lfo_effect">LFO Effect</a></li>
 <li><a href="#astro_effect">Astro Effect</a></li>
 <li><a href="#wave_tables">Wave Tables</a></li>
+<li><a href="#bookmarking_your_start_position">Bookmarking Your Start Position</a></li>
+<li><a href="#auto_saving">Auto Saving</a></li>
 <li>
 <a href="#syntax_reference">Syntax Reference</a>
 <ul>
@@ -353,30 +354,30 @@ img {
 <li><a href="#syntax_reference_drum_channel">Drum Channel</a></li>
 </ul>
 </li>
-<li><a href="#repository">Repository</a></li>
+<li><a href="#if_you_found_issues_bugs">If you found issues/bugs...</a></li>
+<li><a href="#beepcomp_on_the_web">BeepComp on the Web</a></li>
 <li><a href="#contact_me">Contact Me!</a></li>
 </ul>
 <div id="about_beepcomp" />
 <h2>About BeepComp</h2>
-<p>BeepComp lets you compose chiptune tracks with text files. It features a nice retro-sounding synthesizer engine with 9 music channels and 1 drum channel.</p>
-<div id="if_you_found_issues_bugs" />
-<h2>If you found issues/bugs...</h2>
-<p>BeepComp is still in its development stage... so I really appreciate you letting me know about any issues you experience. I really want to make a program that is reliable and enjoyable to anyone :)</p>
+<p><a href="http://hiromorozumi.com/beepcomp">BeepComp</a> lets you compose chiptune tracks with text files. It features a nice retro-sounding synthesizer engine with 9 music channels and 1 drum channel.</p>
+<p>BeepComp is an open-source project. This means that you're welcome to modify the source code however you want. BeepComp is a also freeware that anyone can use freely. It is distributed under the MIT license.</p>
 <div id="getting_started" />
 <h2>Getting Started</h2>
 <p>Use the latest installer package available on the <a href="https://sourceforge.net/projects/beepcomp/">Sourceforge top page</a>. Run this set up file, and you'll be all set for your journey!</p>
 <h4>Windows</h4>
-<p>Launch the MSI installer file you download. Your program will be installed in the folder:</p>
+<p>Launch the MSI installer file, <strong>beepcomp.msi</strong>, which you just downloaded. Your program will be installed in the folder:</p>
 <ul>
 <li><strong>C:\Program Files\BeepComp\</strong> on 32-bit Windows</li>
 <li><strong>C:\Program Files (x86)\BeepComp\</strong> on 64-bit Windows</li>
 </ul>
-<p>After installation, BeepComp will be on the list of installed programs. On Windows XP &amp; 7, go to Start-&gt;All Programs-&gt;BeepComp.</p>
+<p>After installation, BeepComp will be on the list of installed programs. On Windows XP &amp; 7, go to Start-&gt;All Programs-&gt;BeepComp. You can also click the shortcut that has been created on your Desktop.</p>
 <h4>Mac / Linux</h4>
 <p>I'll be working on these versions soon :)</p>
 <div id="tutorials" />
 <h2>Tutorials</h2>
-<p>Some tutorial files are included in the <strong>/userdata</strong> folder inside your installed directory to get you started. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see what you can write into BeepComp and what results you get. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
+<p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> on this documentation has a similar content.</p>
+<p>After exploring those tutorials, exploring the tutorial files included in the <strong>/userdata</strong> folder inside your installed directory will be helpful, also. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
 <p>These files are located in:</p>
 <ul>
 <li><strong>C:\Program Files\BeepComp\userdata</strong> on 32-bit Windows</li>
@@ -451,9 +452,9 @@ L4 KKKSSS
 <div id="basics_copying_and_pasting_source" />
 <h3>Copying and Pasting Source</h3>
 <p>A nice thing about working with text is that you can easily copy and paste between BeepComp and other sources!</p>
-<p>Try this - Start a new file (NEW button or F9), Go to <a href="http://codrspace.com/hiromorozumi/beepcomp-source-ys-1-field-music/">this page</a>, copy all the code inside the grey box, and press CTRL + V in BeepComp, and play. </p>
+<p>Try this - Start a new file (NEW button or F9), Go to <a href="http://codrspace.com/hiromorozumi/beepcomp-source-ys-1-field-music/">this page</a>, copy all the code inside the grey box, and press CTRL + V in BeepComp, and play.</p>
 <p>I hope you see how easy it is to share work with each other on the web :)</p>
-<p>Of course, you can easily copy your work from BeepComp by pressing CTRL + A (select all) then CTRL + C (copy), to email your music to a friend, for instance.</p>
+<p>Of course, going the other way is easy, too. You can easily copy your work from BeepComp by pressing CTRL + A (select all) then CTRL + C (copy), and paste what you just copied into your external applications like your Outlook to email your music to a friend, for instance.</p>
 <div id="basics_exporting_your_work" />
 <h3>Exporting Your Work</h3>
 <p>You can create audio files of your work by pressing the EXPORT button(or F12). Currently supported formats are: WAV, MP3 and OGG files. After you export your work, you can add fades and other finishing touches on audio editors like Audacity.</p>
@@ -493,12 +494,16 @@ L4 KKKSSS
 <li><strong>CTRL + A</strong> ... Select all</li>
 <li><strong>CTRL + S</strong> ... Save</li>
 <li><strong>ALT + S</strong> ... Quick-save to last saved file</li>
+<li><strong>ALT + V</strong> ... Open the system volume control</li>
+<li><strong>ALT + D</strong> ... Open the audio device control</li>
+<li><strong>ALT + I</strong> ... Initialize the audio device </li>
 <li><strong>HOME</strong> ... Go to the very top</li>
 <li><strong>END</strong> ... Go to the very bottom</li>
 </ul>
 <h3>Key Commands: File Dialog</h3>
 <ul>
 <li><strong>ESCAPE</strong> ... Exits dialog</li>
+<li><strong>HOME</strong> ... Go back to the default starting folder</li>
 <li><strong>END</strong> ... Go back to previous folder</li>
 <li><strong>F1</strong> ... Toggle file types to display</li>
 <li><strong>F12</strong> ... Load/Save/Export (as indicated)</li>
@@ -506,6 +511,7 @@ L4 KKKSSS
 <li><strong>RIGHT</strong> ... Selects a file name, Go to child folder (when over &lt;&lt;&lt;)</li>
 <li><strong>LEFT</strong> ... Go to parent folder (when over &lt;&lt;&lt;)</li>
 <li><strong>BACKSPACE</strong> ... Backspacing in the file name input</li>
+<li><strong>ALT + O</strong> ... Open the currently selected directory in Explorer</li>
 </ul>
 <div id="global_section_in_detail" />
 <h2>Global Section in Detail</h2>
@@ -641,7 +647,12 @@ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD
 {CDEF{GFEF}ED} {{{C~}}}
 </code></pre>
 
-<p>Note that nesting makes the total number of repeats grow exponentially. The latter part of the above example is repeated 2 x 2 x 2 = 8 times. </p>
+<p>Note that nesting makes the total number of repeats grow exponentially. The latter part of the above example is repeated 2 x 2 x 2 = 8 times.</p>
+<p>You can also specify a certain number of times which a phrase should repeat by adding a single digit number just after the left curly brace like this:</p>
+<pre><code> @1
+ {5CDE}{3FGA}
+</code></pre>
+
 <div id="drum_section_in_detail" />
 <h2>Drum Section in Detail</h2>
 <p>Writing <code>@D</code> starts the drum section.</p>
@@ -744,12 +755,12 @@ SUSTAINLEVEL=50
 RELEASETIME=40
 </code></pre>
 
-<p>I invite you to play around with different settings for each parameter. By the way, you could get unprocessed square wave tone like this:</p>
+<p>I invite you to play around with different settings for each parameter. By the way, you could get a &quot;pure PC beep&quot; tone with an unprocessed square waveform like this:</p>
 <pre><code>ATTACKTIME=0
 PEAKTIME=0
-PEAKLEVEL=0
+PEAKLEVEL=70
 DECAYTIME=0
-SUSTAINLEVEL=100
+SUSTAINLEVEL=70
 RELEASETIME=0
 </code></pre>
 
@@ -768,7 +779,7 @@ L2 CDEFG
 <p>You could even use this LFO effect to get really wacky results. Try setting <code>LFOSPEED=1</code> and <code>LFORANGE=2400</code> :)</p>
 <div id="astro_effect" />
 <h2>Astro Effect</h2>
-<p>This is a very fun effect you can add to your music. The name comes from a game titled <em>Astro Wars</em>, which I used to play on a little TV game console. (search with &quot;Astro Wars SCV&quot; on YouTube :)) What this effect does is to add a square wave LFO to the pitches. The resulting sound is a out-of-world and funky wobbly sound. Try:</p>
+<p>This is a very fun effect you can add to your music. The name comes from a game titled <em>Astro Wars</em>, which I used to play on a little TV game console. (search with &quot;Astro Wars SCV&quot; on YouTube :)) What this effect does is to add a square wave LFO to the pitches. The resulting sound is an out-of-world, funky and wobbly sound. Try:</p>
 <pre><code>@1
 ASTRO=14
 L4 CDEFG
@@ -779,6 +790,22 @@ L4 CDEFG
 <h2>Wave Tables</h2>
 <p>(Not yet fully implemented)</p>
 <p>Right now, only the square wave and sine wave are available. But I plan to add capabilities to choose different wave tables so you can have more sounds to choose from.</p>
+<div id="bookmarking_your_start_position" />
+<h2>Bookmarking Your Start Position</h2>
+<p>When you compose a long song, you can take advantage of the bookmarking feature. Placing two percent signs <code>%%</code>in your source forces the player to start from where those percent signs are. Here is an example:</p>
+<pre><code> @1 L8
+ // verse
+ {E~G~G~A~G~G~E~~~}
+ %%
+ // chorus
+ F~G~A~F~&gt;C~C~&lt;G~~~
+</code></pre>
+
+<p>Now that you have finished working on the verse, you can just focus on the chorus part without having to go back to the top every time you press the play button.</p>
+<p>Note that the bookmark will not be effective when you export to an audio file.</p>
+<div id="auto_saving" />
+<h2>Auto Saving</h2>
+<p>Everytime BeepComp quits, it will save your current work to a hidden file named &quot;__AUTOSAVED__.txt&quot; in your <strong>userdata</strong> folder. If you accidentally close the application, you can load this file to retrieve your work.</p>
 <div id="syntax_reference" />
 <h2>Syntax Reference</h2>
 <div id="syntax_reference_general" />
@@ -788,12 +815,13 @@ L4 CDEFG
 <li><code>@G</code> ... Declares the global section</li>
 <li><code>@n</code> ... Declares a music channel section (n=1,2,3...9)</li>
 <li><code>@D</code> ... Declares the drum channel section</li>
+<li><code>%%</code> ... Bookmarks the player's starting point (Note: not effective when exporting)</li>
 </ul>
 <div id="syntax_reference_global_section" />
 <h3>Global Section</h3>
 <ul>
 <li><code>MASTERVOLUME=n</code> ... Sets the master output gain (n=1 to 100)</li>
-<li><code>TEMPO=n</code> ... Sets the track tempo (n=30 to 300)</li>
+<li><code>TEMPO=n</code> ... Sets the track tempo (n=40 to 300)</li>
 <li><code>Vn=v</code> ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100)</li>
 <li><code>VD=v</code> ... Sets the volume (v=0 to 10) for the drum channel</li>
 <li><code>LOOP=?</code> ... Turns track looping on or off (?=ON or OFF)</li>
@@ -815,6 +843,7 @@ L4 CDEFG
 <li><code>LFORANGE=n</code> ... Sets the LFO range to cents of a semitone (n=1 to 2400)</li>
 <li><code>LFOSPEED=n</code> ... Sets the LFO speed by cycles per second (n=0 to 100)</li>
 <li><code>ASTRO=n</code> ... Turns on the astro effect and sets the number of wobbles per second (n=1 to 100)</li>
+<li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)</li>
 </ul>
 <h5>Commands processed as the track progresses</h5>
 <ul>
@@ -833,7 +862,8 @@ L4 CDEFG
 <li><code>:</code> ... Rest for the current note length</li>
 <li><code>[---]</code> ... Tuplet - groups notes --- in the space of current note length</li>
 <li><code>[n---]</code> ... Tuplet - groups notes --- in the space of note length specified by n</li>
-<li><code>{}</code> ... Repeats the enclosed snipet</li>
+<li><code>{---}</code> ... Repeats the enclosed snippet ---</li>
+<li><code>{n---}</code> ... Repeats the enclosed snippet --- <code>n</code> times</li>
 <li><code>^</code> ... Increase channel volume by 10%</li>
 <li><code>_</code> ... Decrease channel volume by 10%</li>
 </ul>
@@ -852,14 +882,21 @@ L4 CDEFG
 <li><code>:</code> ... Rest for the current note length</li>
 <li><code>[---]</code> ... Tuplet - groups notes --- in the space of current note length</li>
 <li><code>[n---]</code> ... Tuplet - groups notes --- in the space of note length specified by n</li>
-<li><code>{}</code> ... Repeats the enclosed snipet</li>
+<li><code>{---}</code> ... Repeats the enclosed snippet ---</li>
+<li><code>{n---}</code> ... Repeats the enclosed snippet --- <code>n</code> times</li>
 <li><code>^</code> ... Increase channel volume by 10%</li>
 <li><code>_</code> ... Decrease channel volume by 10%</li>
 </ul>
-<div id="repository" />
-<h2>Repository</h2>
-<p>BeepComp is open-source. This means that you're welcome to use or modify the source to suit your needs. I will also welcome any patches if you spot issues. The address of the repository is:</p>
-<p><a href="https://sourceforge.net/p/beepcomp/code/ci/master/tree/">https://sourceforge.net/p/beepcomp/code/ci/master/tree/</a></p>
+<div id="if_you_found_issues_bugs" />
+<h2>If you found issues/bugs...</h2>
+<p>BeepComp is still in its development stage... so I really appreciate you letting me know about any issues you experience. You're welcome to write in our <a href="http://beepcomp.freeforums.net/">forum page</a>. or contact me via <a href="https://sourceforge.net/u/smokinhiro/profile/send_message">this page</a>. I really want to make a program that is reliable and enjoyable to anyone :)</p>
+<div id="beepcomp_on_the_web" />
+<h2>BeepComp on the Web</h2>
+<p>The home page for BeepComp is at:
+<a href="http://hiromorozumi.com/beepcomp">http://hiromorozumi.com/beepcomp</a>.</p>
+<p>Also, there is a <a href="http://beepcomp.freeforums.net/">forum page</a> where you can join our discussion.</p>
+<p>The source code is publicly available at the <a href="http://sourceforge.net">SourceForge</a> repository. I will also welcome patches if you spot issues. The address of the repository is:
+<a href="https://sourceforge.net/p/beepcomp/code/ci/master/tree/">https://sourceforge.net/p/beepcomp/code/ci/master/tree/</a>.</p>
 <div id="contact_me" />
 <h2>Contact Me!</h2>
 <p>I welcome anyone using BeepComp and also anyone interested in getting involved to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) To e-mail me, just write through the <a href="https://sourceforge.net/u/smokinhiro/profile/send_message">SourceForge contact page</a>.</p>

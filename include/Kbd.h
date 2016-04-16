@@ -82,9 +82,25 @@ public:
 		{ if( sf::Keyboard::isKeyPressed(sf::Keyboard::Down)
 			&& ( sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl) ) )
 			return true; else return false; }
+	bool altD()
+		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+			&& sf::Keyboard::isKeyPressed(sf::Keyboard::D) )
+			return true; else return false; }
+	bool altO()
+		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+			&& sf::Keyboard::isKeyPressed(sf::Keyboard::O) )
+			return true; else return false; }
+	bool altI()
+		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+			&& sf::Keyboard::isKeyPressed(sf::Keyboard::I) )
+			return true; else return false; }
 	bool altS()
 		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
 			&& sf::Keyboard::isKeyPressed(sf::Keyboard::S) )
+			return true; else return false; }
+	bool altV()
+		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+			&& sf::Keyboard::isKeyPressed(sf::Keyboard::V) )
 			return true; else return false; }
 	bool shift()
 		{ if( sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift) )

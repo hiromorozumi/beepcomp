@@ -110,6 +110,21 @@
 					DiskId='1' Source='..\libmp3lame-0.dll' KeyPath='yes'>				
 					</File>
 				</Component>
+
+
+				
+				<Component Id='cmp_READMETXT' Guid='*'>
+					<File Id="READMETXT" Name="README.txt" 
+					DiskId='1' Source='..\README.txt' KeyPath='yes'>				
+					</File>
+				</Component>
+
+				<Component Id='cmp_LICENSETXT' Guid='*'>
+					<File Id="LICENSETXT" Name="LICENSE.txt" 
+					DiskId='1' Source='..\LICENSE.txt' KeyPath='yes'>				
+					</File>
+				</Component>
+
 				
 		
 				
@@ -268,6 +283,9 @@
 		<ComponentRef Id='cmp_libsndfile_1DLL' />
 		<ComponentRef Id='cmp_libmp3lame_0DLL' />
 		
+		<ComponentRef Id='cmp_READMETXT' />
+		<ComponentRef Id='cmp_LICENSETXT' />
+		
 		<ComponentRef Id='cmp_defaultTXT' />
 		
 		<ComponentRef Id='cmp_EnvyCodeRTTF' />
@@ -298,6 +316,7 @@
 	<Icon Id="beepcomp.exe" SourceFile="..\beepcomp.exe" />
 	
 	<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
+	<WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
 
 	</Product>
 </Wix>

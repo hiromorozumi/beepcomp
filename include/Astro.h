@@ -23,6 +23,7 @@ public:
 	void setSpeed(int nCyclesPerSecond);
 	double process(double freq);
 	bool stateChanged();
+	void refresh();
 };
 
 #endif

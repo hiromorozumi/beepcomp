@@ -27,6 +27,10 @@ public:
 	vector<float> table;
 	
 	double phase;
+	double dblPhaseIntPart;
+	int intPhase;
+	int intPhaseNext;
+	float deviation;
 	double increment;
 	double freq;
 	double adjustedFreq;

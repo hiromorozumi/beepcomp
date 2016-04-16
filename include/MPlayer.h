@@ -42,6 +42,7 @@ public:
 	long framePos;
 	long songLastFrame;
 	long songLastFramePure;
+	long bookmark;
 	
 	float masterGain;
 	int tableType;
@@ -56,7 +57,7 @@ public:
 	bool dChannelDone;
 	int remainingFrames[9];
 	int dRemainingFrames;
-	int freqNote[9];
+	double freqNote[9];
 	int noteIndex[9];
 	int dNoteIndex;
 	int currentDrumNote;
@@ -88,6 +89,8 @@ public:
 	void silenceDrumChannel();
 	void activateChannel(int channel);
 	void activateDrumChannel();
+	void enableLooping();
+	void disableLooping();
 	void advance();
 	float getMix(int channel);
 	float compress(float input);
@@ -138,6 +141,10 @@ public:
 	float getProgressRatio();
 	long getNextSeekPoint();
 	long getPreviousSeekPoint();
+	void setBookmark(long bm);
+	long getBookmark();
+	bool reachedSongLastFramePure();
+	bool isSongFinished();
 };
 
 #endif

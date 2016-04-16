@@ -804,7 +804,7 @@ void Dialog::handleInputFileDialog()
 	// 'load' button, only for load dialog
 	if(dialogMode == 0) // load dialog
 	{
-		if( hovering(&loadButton) && !dragging || kbd.f12() ) 
+		if( (hovering(&loadButton) && !dragging) || kbd.f12() ) 
 			// handle 'load' button
 		{
 			if(mouse.left() || kbd.f12())
@@ -829,7 +829,7 @@ void Dialog::handleInputFileDialog()
 	// 'save' button, only for save dialog
 	if(dialogMode == 1) // save dialog
 	{
-		if( hovering(&saveButton) && !dragging || kbd.f12() ) 
+		if( (hovering(&saveButton) && !dragging) || kbd.f12() ) 
 			// handle 'load' button
 		{
 			if(mouse.left() || kbd.f12())
@@ -876,7 +876,7 @@ void Dialog::handleInputFileDialog()
 	// 'export' button, only for export dialog
 	if(dialogMode == 2)
 	{
-		if( hovering(&exportButton) && !dragging || kbd.f12() ) 
+		if( (hovering(&exportButton) && !dragging) || kbd.f12() ) 
 			// handle 'export' button
 		{
 			if(mouse.left() || kbd.f12())
@@ -922,7 +922,7 @@ void Dialog::handleInputFileDialog()
 	}
 	
 	// handle 'cancel' button - all file dialogs
-	if(hovering(&cancelButton) && !dragging || kbd.escape())
+	if( ( hovering(&cancelButton) && !dragging ) || kbd.escape())
 	{
 		if(mouse.left() || kbd.escape())
 		{
@@ -966,14 +966,14 @@ void Dialog::handleInputFileDialog()
 			dehighlightButton(&filterButton);
 	}
 	
-	// see if the path name is being clicked
-	if(hoveringOnPathName())
+	// see if the path name is being clicked - or pressed ALT + O
+	if( hoveringOnPathName() || kbd.altO() )
 	{
 		// being clicked over
-		if(mouse.left() && !calledExplorerAlready)
+		if( ( mouse.left() || kbd.altO() ) && !calledExplorerAlready)
 		{
 			cwd.setColor(sf::Color(255, 170, 100));
-			while(mouse.left()){
+			while( mouse.left() || kbd.altO() ){
 				drawFileDialog(); // update screen once				
 			}
 		
@@ -1299,7 +1299,7 @@ void Dialog::readDir(string path, string strFilter)
 	
 	// get folder names
 	vector<string> folders = getDirNamesInDir(currentDir);
-	for(int i=0; i<folders.size(); i++)
+	for(unsigned int i=0; i<folders.size(); i++)
 	{
 		filesFolders.push_back(folders[i]);
 		itemTypes.push_back(1);
@@ -1307,7 +1307,7 @@ void Dialog::readDir(string path, string strFilter)
 	
 	// get file names
 	vector<string> files = getFileNamesInDir(currentDir, fileFilter);
-	for(int i=0; i<files.size(); i++)
+	for(unsigned int i=0; i<files.size(); i++)
 	{
 		filesFolders.push_back(files[i]);
 		itemTypes.push_back(2);
@@ -1391,7 +1391,7 @@ void Dialog::setStrView()
 {
 	for(int i=0;i<TEXT_HEIGHT; i++)
 	{
-		int lineIndex = topRenderLine + i;
+		unsigned int lineIndex = topRenderLine + i;
 		if(lineIndex < filesFolders.size())
 		{
 			strView[i] = filesFolders[lineIndex];
@@ -1493,7 +1493,7 @@ void Dialog::blinkCursor()
 bool Dialog::overwriting(string file)
 {
 	bool sameNameFound = false;
-	for(int i=0;i<filesFolders.size();i++)
+	for(unsigned int i=0;i<filesFolders.size();i++)
 	{
 		if(itemTypes[i]==2 && filesFolders[i] == file)
 			sameNameFound = true;

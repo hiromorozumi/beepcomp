@@ -1,77 +1,55 @@
+///////////////////////////////////////////////
 //
-//  Welcome to ** BeepComp ** !
+//  Try playing some drums...
 //
-//    ... this app lets you compose
-//    nice chip tunes on text files. 
-//
-//  Press [F1] to play
-//    .. hear what the source below sounds like.
-//
-//  Press [F10] to load
-//     .. explore example / tutorial files.
-//
-//    I'll be adding more features
-//    So your feedback and bug reports will be
-//    greatly appreciated!
-//
-//  Enjoy!! :)
-//
-//                                  - Hiro
+//  Drum channel begins with '@D'
 //
 
-// global channel
+////////////////////////////////////// global //
 
 @G
 
-MASTERVOLUME=80 TEMPO=132
-V1=9 V2=9 V3=5 VD=0
+TEMPO=120
+VD=10 // Drum ch volume
 
-// channel 1 - melody
-	
-@1
-
-LFO=ON
-O5L8
-
-::C<B~AbB~AbG~[8AbGF]
-G~~G~~:GFDAbG
-::>C<B~AbB~AbG~[8AbGF]
-G~~G~~:GFDAbG
-Ab~AbG~GAb~AbG>C<B
-Ab~AbG~GAb~Ab:G~
-Ab~AbG~GAb~AbG>C<B
-Ab~AbG~GAb~AbL16G~~G~~G~~G~~
-
-// channel 2 - bass
-	
-@2
-
-O3L8
-
-CEb~DF~EbG~DF~
-CEb~DF~:<BbAbF>C<B>
-CEb~DF~EbG~DF~
-CEb~DF~:<BbAbF>C<B>
-L16F~~EF~Eb~~DEb~F~~EF~Eb~~DEb~
-F~~EF~Eb~~DEb~F~~EF~::Eb~~~
-L16F~~EF~Eb~~DEb~F~~EF~Eb~~DEb~
-F~~EF~Eb~~DEb~F~~EF~D~~D~~D~~D~~
-C~EbDEb~D~FEF~Eb~GF#G~D~FEF~
-
-// channel 3 - harmony line
-	
-@3
-
-LFO=ON
-O4L8
-
-::::::::::::::::::::::::
-L8EbG>EbD~<B>D~C<B~>[8C<BAb]
-B~~B~~:BAbF>C<B
-::::::::::::::::::::::::
-L16>C~~<B>C~C~~<B>C~C~~<B>C~C~Eb~D~
-C~~<B>C~C~~<B>C~C~~<B>C~<B~~B~~B~~B~~
-
-// drum channel - is not used
+//////////////////////////////// Drum Channel //
 
 @D
+
+  // Kick is 'K'
+
+K::K::K: K::K::K:
+
+  // Lower case is 'quiet'
+
+K::k::kk K::k::kk
+
+  // Now add snare - 'S'
+  // again, lower case is 'quiet'
+
+K::k::S~ K::k::S~
+K::k:sS~ K::kssSS
+
+  // Hihat is 'H'
+
+HHHHHHHH HHHHHHHH
+
+  // Make it funky with dynamics
+
+HhhHhhHh HhhHhhHh
+
+  // Tuplets are great to use
+  //   just enclose your hits with [ ]
+  // [4SSS] means
+  //   three snare hits in space of quarter note
+
+K:::[4KKK] K::k[4SSS]
+K:::[4HHH] K::k[4ssS]
+
+  // you can go nuts with tuplets :)
+
+K::[KK] [4sssSSS]
+:::: K [16KKKK] [8ssssSSSS]
+
+  // make sure you calculate
+  // to make your timing correct :)

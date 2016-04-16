@@ -6,14 +6,14 @@
 
 using namespace std;
 
-const int OSC::OSC_TABLE_SIZE = 4096;
+const int OSC::OSC_TABLE_SIZE = 8192;
 const int OSC::ENV_TABLE_SIZE = 1024;
 const double OSC::OSC_SAMPLE_RATE = 44100.0;
 const float OSC::TWO_PI = 6.283185307;
 
 OSC::OSC()
 {
-	table.resize(4096); // wave table (vector)
+	table.resize(OSC_TABLE_SIZE); // wave table (vector)
 	
 	setTable(1); // default - set up a square table
 	phase = 0.0;
@@ -210,6 +210,10 @@ void OSC::setFrequency(double noteFreq)
 	// refresh LFO so it starts from beginning
 	if(lfoEnabled)
 		lfo.refresh();
+	
+	// refresh Astro effect so it starts from beginning
+	if(astroEnabled)
+		astro.refresh();
 }
 
 // set the phase increment to travel across wave table every frame
@@ -311,6 +315,18 @@ void OSC::initializePhase()
 
 float OSC::getOutput()
 {
+	/*
+	// trying out linear interpolation...
+	deviation = modf(phase, &dblPhaseIntPart);
+	intPhase = static_cast<int>(dblPhaseIntPart);
+	intPhaseNext = intPhase++;
+	if(intPhaseNext >= OSC_TABLE_SIZE)
+		intPhaseNext = 0;
+	
+	float out = (table[intPhase] + (table[intPhaseNext] - table[intPhase]) * deviation) 
+		* getEnvelopeOutput() * gain;
+	*/
+	
 	int ph = static_cast<int> (phase);
 	// cout << "phase=" << phase << "..";
 	

@@ -43,7 +43,7 @@ double Astro::process(double freq)
 	else
 		statusChanged = false;
 	
-	// update frame coung
+	// update frame count
 	frameCount++;
 	if(frameCount >= oneCycleFrames)
 		frameCount = 0;
@@ -51,5 +51,10 @@ double Astro::process(double freq)
 	return processedFrequency;
 }
 
+// whenever Astro changes the frequency, statusChanged flag turns on
 bool Astro::stateChanged()
 	{ return statusChanged; }
+
+// forces the Astro effect cycle to begin from beginning (frameCount = 0)
+void Astro::refresh()
+	{ frameCount = 0;}

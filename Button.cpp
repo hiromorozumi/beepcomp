@@ -58,7 +58,6 @@ void Button::initialize(int btype, const std::string &name, float xx, float yy, 
 			shape2.setFillColor(shapeColor);
 			
 			float barWidth = w/7;
-			float barHeight = h/2;
 			float centerX = x + w/2;
 			float devXFromCenter = w/9;
 			

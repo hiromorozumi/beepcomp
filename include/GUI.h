@@ -92,7 +92,7 @@ class Help
 {
 public:
 
-	static const int N_ITEMS = 50;
+	static const int N_ITEMS = 80;
 	static const int FONTSIZE = 13;
 	static const int QMESSAGE_X = 680;
 	static const int QMESSAGE_Y = 0;
@@ -175,7 +175,7 @@ public:
 	}
 	
 	// sets up a quick message to be displayed for a few seconds
-	setQuickMessage(std::string qText)
+	void setQuickMessage(std::string qText)
 	{
 		strQuickMessage = qText;
 		activateQuickMessage();
@@ -303,7 +303,7 @@ public:
 
 	static const int TEXT_WIDTH = 50;
 	static const int TEXT_HEIGHT = 22;
-	static const int TEXT_TOP_X = 6;
+	static const int TEXT_TOP_X = 10;
 	static const int TEXT_TOP_Y = 10;
 
 	sf::RenderWindow window;

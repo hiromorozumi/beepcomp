@@ -222,6 +222,9 @@ string MML::parse(MPlayer* player)
 	tempo = 120.0;
 	octave = 4;						// default octave is 4
 	noteLength = baseLength * 2;	// set default to 8th notes
+	
+	// player's bookmarked start is of course off in default
+	player->setBookmark(0);
 
 	// parse global source
 	parseGlobalSource(player);
@@ -268,6 +271,18 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 	while(!configDone)
 	{
 		configDone = true;
+		
+		// follow format -> setEnvelope(int attackTimeMS, int peakTimeMS, int decayTimeMS, 
+		//								int releaseTimeMS, float peakLV, float sustainLV)
+
+		// sets up a preset tone... pure beep!
+		found = str.find("PRESET=BEEP");
+		if(found != string::npos)
+		{
+			configDone = false;
+			player->osc[channel].setEnvelope(0, 0, 0, 0, 0.65f, 0.65f);
+			str.erase(found, 11); // erase this statement
+		}
 
 		found = str.find("ATTACKTIME=");
 		if(str.find("ATTACKTIME=") != string::npos)
@@ -275,6 +290,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+11,4); // get 4 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(9999, max(1, value)); // floor + ceil the value
 
@@ -288,6 +304,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+9,4); // get 4 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(9999, max(1, value)); // floor + ceil the value
 
@@ -301,6 +318,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+10,4); // get 4 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(9999, max(1, value)); // floor + ceil the value
 
@@ -314,6 +332,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+12,4); // get 4 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(9999, max(1, value)); // floor + ceil the value
 
@@ -327,6 +346,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+10,8); // get 8 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			double value = static_cast<double>( atoi(strValue.c_str()) );
 			value = min(100.0, max(0.01, value)); // floor + ceil the value
 			float valuef = static_cast<float>(value / 100.0);
@@ -341,6 +361,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+13,8); // get 8 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			double value =  static_cast<double>( atoi(strValue.c_str()) );
 			value = min(100.0, max(0.01, value)); // floor + ceil the value
 			float valuef = static_cast<float>(value / 100.0);
@@ -355,6 +376,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+6,3); // get 3 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(100, max(1, value) ); // floor + ceil the value
 
@@ -384,6 +406,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+9,4); // get 4 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(2400, max(1, value)); // floor + ceil the value
 
@@ -397,6 +420,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+9,8); // get 3 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			double value = static_cast<double>( atof(strValue.c_str()) );
 			value = min(100.0, max(0.1, value)); // floor + ceil the value
 
@@ -410,6 +434,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			configDone = false;
 			string strValue = str.substr(found+8,4); // get 4 digits following '='
 			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
 			int value = atoi(strValue.c_str());
 			value = min(3000, max(1, value)); // floor + ceil the value
 
@@ -434,6 +459,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 
 	int i = 0;
 	vector<int> leftBraces;
+	vector<int> repeatTimes;
 	char ch = ' ';
 	int leftBracePos = 0;
 	string strToCopy = "";
@@ -447,6 +473,27 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 		{
 			leftBraces.push_back(i); // push this position into stack
 			str.erase(i,1); // go ahead and erase this '{'
+			
+			char chNext = str.at(i); // this should be the char right after '{'
+			int numberRead = 0;
+			
+			// check if a number is followed...
+			if(chNext >= '0' && chNext <= '9')
+			{
+				numberRead = chNext - '0'; // set the num of times to duplicate at right brace
+				str.erase(i,1); // go ahead and erase this digit
+				if(numberRead==0) numberRead = 1;
+				
+				// make sure there aren't any more digits after this
+				while( (str.at(i)>='0'&&str.at(i)<='9') )
+					str.erase(i,1); // erase this digit
+			}
+			else
+				numberRead = 2; // repeat times not specified -> set to twice
+			
+			// push this number... it'll be popped when right brace is found
+			repeatTimes.push_back(numberRead);
+
 		}
 		else if (ch=='}') // right brace to close repeat
 		{
@@ -456,10 +503,20 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 				// pop last element from stack - gets the nearest pos of '{'
 				leftBracePos = leftBraces.back();
 				leftBraces.pop_back();
-
+				
+				// and get the number of times we should duplicate
+				int timesToDuplicate = repeatTimes.back();
+				repeatTimes.pop_back();
+				timesToDuplicate -= 1; // if repeat is x3, duplicate twice :)
+				
 				nCharsToCopy = i - leftBracePos; // n of chars to duplicate
 				strToCopy = str.substr(leftBracePos, nCharsToCopy); // str to be duplicated
-				str.insert(leftBracePos+nCharsToCopy, strToCopy);
+				
+				if(timesToDuplicate >=1 && timesToDuplicate <=8)
+				{
+					for(int i=0; i<timesToDuplicate; i++)
+						str.insert(leftBracePos+nCharsToCopy, strToCopy);
+				}
 			}
 		}
 		else if (ch=='$') // end of parse string
@@ -481,8 +538,8 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 	string result = "";
 	ch = ' ';
 	i = 0;
-	int len = str.length();
-	unsigned long framesWritten = 0;
+	// int len = str.length();
+	long framesWritten = 0;
 
 	if(str.empty() || str.length() <= 1)
 	{
@@ -516,19 +573,19 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 
 			// peak into next char
 
-			bool peakDone = false;
+			// bool peakDone = false;
 
 			if(str.at(i)=='#') // sharp
 			{
 				toneNum++;
 				i++;
 			}
-			if(str.at(i)=='b') // flat
+			else if(str.at(i)=='b') // flat
 			{
 				toneNum--;
 				i++;
 			}
-
+			
 			if(str.at(i)=='~') // tie to another note unit
 			{
 				noteLengthToAssign += noteLength;
@@ -678,6 +735,14 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 					nNotes++;
 					tupletIndex++;
 				}
+				
+				else if(str.at(i)==':') // we have a rest...
+				{
+					i++; // advance index...
+					notes[tupletIndex] = 65535; // freq 65535 for rest
+					nNotes++;
+					tupletIndex++;
+				}
 
 				else if(str.at(i)=='~') // tie last note
 				{
@@ -700,38 +765,46 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 
 				else if (str.at(i) == ']') // closing brace - finalize tupletDone
 				{
-					int division = nNotes + nTied;
-					int eachTupletLength = wholeLength / division;
-					int remainder = wholeLength % division;
-
-					/*
-					cout << "TUPLETS" << endl << "wholeLength=" << wholeLength << " division=" << division << endl;
-					cout << " nNotes=" << nNotes << " nTied =" << nTied << endl;
-					for(int itr=0; itr<nNotes; itr++)
-						cout << " note=" << notes[itr] << " tie=" << tie[itr] << " / ";
-					cout << endl;
-					*/
-
-					// push tuplet data to mData
-					for(int j=0; j<nNotes; j++)
+					if( (nNotes + nTied) > 0) // if we have empty braces - skip altogether! (avoid div by 0)
 					{
-						// get
-						int lengthToWrite = eachTupletLength;
-						lengthToWrite += tie[j] * eachTupletLength;
-						if(j==0)
-							lengthToWrite += remainder;
-						// cout << "Writing length = " << lengthToWrite << endl;
+						int division = nNotes + nTied;
+						int eachTupletLength = wholeLength / division;
+						int remainder = wholeLength % division;
+	
+						/*
+						cout << "TUPLETS" << endl << "wholeLength=" << wholeLength << " division=" << division << endl;
+						cout << " nNotes=" << nNotes << " nTied =" << nTied << endl;
+						for(int itr=0; itr<nNotes; itr++)
+							cout << " note=" << notes[itr] << " tie=" << tie[itr] << " / ";
+						cout << endl;
+						*/
+	
+						// push tuplet data to mData
+						for(int j=0; j<nNotes; j++)
+						{
+							// get
+							int lengthToWrite = eachTupletLength;
+							lengthToWrite += tie[j] * eachTupletLength;
+							if(j==0)
+								lengthToWrite += remainder;
+							// cout << "Writing length = " << lengthToWrite << endl;
+							
+							// get frequency of the note...
+							double freqToWrite;
+							if(notes[j]==65535) // then we have a rest
+								freqToWrite = notes[j]; // use 65535 as freq, to signify a rest
+							else
+								freqToWrite = getFrequency(notes[j]);
 
-						// get frequency of the note
-						double freqToWrite = getFrequency(notes[j]);
-						// cout << "Writing freq = " << freqToWrite << endl;
-
-						// push this note data to mData object
-						output->freqNote.push_back(freqToWrite);
-						output->len.push_back(lengthToWrite);
-						output->param.push_back(0);
-						output->totalFrames += lengthToWrite;
-						framesWritten += lengthToWrite;
+							// cout << "Writing freq = " << freqToWrite << endl;
+	
+							// push this note data to mData object
+							output->freqNote.push_back(freqToWrite);
+							output->len.push_back(lengthToWrite);
+							output->param.push_back(0);
+							output->totalFrames += lengthToWrite;
+							framesWritten += lengthToWrite;
+						}
 					}
 
 					i++;
@@ -768,7 +841,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 		{
 			// read the next 2 characters
 			string strValue = str.substr(i+1,2); // get 3 digits following 'V'
-			int valueDigits = countDigits(strValue);
+			// int valueDigits = countDigits(strValue);
 			int value = atoi(strValue.c_str());
 			value = min(10, max(1, value)); // floor + ceil the value
 
@@ -796,6 +869,24 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			output->param.push_back(0);	 // no param needed
 			i++;
 		}
+		
+		// '%%' is for bookmarking
+		else if(str.at(i)=='%')
+		{
+			i++;
+			if(str.at(i)=='%')
+			{
+				// if requested place (totalFrames at current parsing position)
+				// is later than already bookmarked place, set it as new bookmark
+				if(framesWritten > player->getBookmark())
+				{
+					player->setBookmark(framesWritten);
+					
+					cout << "Bookmarked! at ... " << player->getBookmark() << endl;
+				}
+				i++;
+			}
+		}
 
 		else if(ch=='$') // end of string
 		{
@@ -806,7 +897,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 
 			// integrity check
 
-			int r = framesWritten % quarterNoteLength;
+			// int r = framesWritten % quarterNoteLength;
 
 			// cout << "End of parsing a channel... num of framesWritten=" << framesWritten << endl;
 			// cout << "Dividing by quarter note length, remainder=" << r << endl << endl;
@@ -846,6 +937,7 @@ string MML::parseDrumSource(MPlayer* player)
 
 	int i = 0;
 	vector<int> leftBraces;
+	vector<int> repeatTimes;
 	char ch = ' ';
 	int leftBracePos = 0;
 	string strToCopy = "";
@@ -859,6 +951,26 @@ string MML::parseDrumSource(MPlayer* player)
 		{
 			leftBraces.push_back(i); // push this position into stack
 			str.erase(i,1); // go ahead and erase this '{'
+			
+			char chNext = str.at(i); // this should be the char right after '{'
+			int numberRead = 0;
+			
+			// check if a number is followed...
+			if(chNext >= '0' && chNext <= '9')
+			{
+				numberRead = chNext - '0'; // set the num of times to duplicate at right brace
+				str.erase(i,1); // go ahead and erase this digit
+				if(numberRead==0) numberRead = 1;
+				
+				// make sure there aren't any more digits after this
+				while( (str.at(i)>='0'&&str.at(i)<='9') )
+					str.erase(i,1); // erase this digit
+			}
+			else
+				numberRead = 2; // repeat times not specified -> set to twice
+			
+			// push this number... it'll be popped when right brace is found
+			repeatTimes.push_back(numberRead);
 		}
 		else if (ch=='}') // right brace to close repeat
 		{
@@ -868,10 +980,20 @@ string MML::parseDrumSource(MPlayer* player)
 				// pop last element from stack - gets the nearest pos of '{'
 				leftBracePos = leftBraces.back();
 				leftBraces.pop_back();
+				
+				// and get the number of times we should duplicate
+				int timesToDuplicate = repeatTimes.back();
+				repeatTimes.pop_back();
+				timesToDuplicate -= 1; // if repeat is x3, duplicate twice :)
 
 				nCharsToCopy = i - leftBracePos; // n of chars to duplicate
 				strToCopy = str.substr(leftBracePos, nCharsToCopy); // str to be duplicated
-				str.insert(leftBracePos+nCharsToCopy, strToCopy);
+				
+				if(timesToDuplicate >=1 && timesToDuplicate <=8)
+				{
+					for(int i=0; i<timesToDuplicate; i++)
+						str.insert(leftBracePos+nCharsToCopy, strToCopy);
+				}
 			}
 		}
 		else if (ch=='$') // end of parse string
@@ -893,8 +1015,8 @@ string MML::parseDrumSource(MPlayer* player)
 	string result = "";
 	ch = ' ';
 	i = 0;
-	int len = str.length();
-	unsigned long framesWritten = 0;
+	// int len = str.length();
+	long framesWritten = 0;
 
 	while(!done)
 	{
@@ -905,7 +1027,6 @@ string MML::parseDrumSource(MPlayer* player)
 		if(ch=='K'||ch=='S'||ch=='H'||ch=='k'||ch=='s'||ch=='h')
 		{
 			int drumNote = 0;
-			int j = 0;
 			int noteLengthToAssign = noteLength;
 			string search = "KSHksh";
 			size_t found = search.find(ch);
@@ -917,7 +1038,7 @@ string MML::parseDrumSource(MPlayer* player)
 
 			// peak into next char
 
-			bool peakDone = false;
+			// bool peakDone = false;
 
 			if(str.at(i)=='~') // tie to another note unit
 			{
@@ -1028,41 +1149,52 @@ string MML::parseDrumSource(MPlayer* player)
 					nTied++;
 					i++;
 				}
+				
+				else if(str.at(i)==':') // we have a rest...
+				{
+					i++; // advance index...
+					notes[tupletIndex] = 65535; // freq 65535 for rest
+					nNotes++;
+					tupletIndex++;
+				}
 
 				else if (str.at(i) == ']') // closing brace - finalize tupletDone
 				{
-					int division = nNotes + nTied;
-					int eachTupletLength = wholeLength / division;
-					int remainder = wholeLength % division;
-
-					/*
-					cout << "TUPLETS" << endl << "wholeLength=" << wholeLength << " division=" << division << endl;
-					cout << " nNotes=" << nNotes << " nTied =" << nTied << endl;
-					for(int itr=0; itr<nNotes; itr++)
-						cout << " note=" << notes[itr] << " tie=" << tie[itr] << " / ";
-					cout << endl;
-					*/
-
-					// push tuplet data to dData
-					for(int j=0; j<nNotes; j++)
+					if( (nNotes + nTied) > 0) // if we have a empty set of braces - skip altogether!
 					{
-						// get
-						int lengthToWrite = eachTupletLength;
-						lengthToWrite += tie[j] * eachTupletLength;
-						if(j==0)
-							lengthToWrite += remainder;
-						// cout << "Writing length = " << lengthToWrite << endl;
-
-						// get frequency of the note
-						int noteToWrite = notes[j];
-						// cout << "Writing freq = " << notesToWrite << endl;
-
-						// push this note data to mData object
-						dOutput->drumNote.push_back(noteToWrite);
-						dOutput->len.push_back(lengthToWrite);
-						dOutput->param.push_back(0);
-						dOutput->totalFrames += lengthToWrite;
-						framesWritten += lengthToWrite;
+						int division = nNotes + nTied;
+						int eachTupletLength = wholeLength / division;
+						int remainder = wholeLength % division;
+	
+						/*
+						cout << "TUPLETS" << endl << "wholeLength=" << wholeLength << " division=" << division << endl;
+						cout << " nNotes=" << nNotes << " nTied =" << nTied << endl;
+						for(int itr=0; itr<nNotes; itr++)
+							cout << " note=" << notes[itr] << " tie=" << tie[itr] << " / ";
+						cout << endl;
+						*/
+	
+						// push tuplet data to dData
+						for(int j=0; j<nNotes; j++)
+						{
+							// get
+							int lengthToWrite = eachTupletLength;
+							lengthToWrite += tie[j] * eachTupletLength;
+							if(j==0)
+								lengthToWrite += remainder;
+							// cout << "Writing length = " << lengthToWrite << endl;
+	
+							// get frequency of the note
+							int noteToWrite = notes[j];
+							// cout << "Writing freq = " << notesToWrite << endl;
+	
+							// push this note data to mData object
+							dOutput->drumNote.push_back(noteToWrite);
+							dOutput->len.push_back(lengthToWrite);
+							dOutput->param.push_back(0);
+							dOutput->totalFrames += lengthToWrite;
+							framesWritten += lengthToWrite;
+						}
 					}
 
 					i++;
@@ -1099,7 +1231,7 @@ string MML::parseDrumSource(MPlayer* player)
 		{
 			// read the next 2 characters
 			string strValue = str.substr(i+1,2); // get 3 digits following 'V'
-			int valueDigits = countDigits(strValue);
+			// int valueDigits = countDigits(strValue);
 			int value = atoi(strValue.c_str());
 			value = min(10, max(1, value)); // floor + ceil the value
 
@@ -1128,6 +1260,25 @@ string MML::parseDrumSource(MPlayer* player)
 			i++;
 		}
 
+		// '%%' is for bookmarking
+		else if(str.at(i)=='%')
+		{
+			i++;
+			if(str.at(i)=='%')
+			{				
+				// if requested place (totalFrames at current parsing position)
+				// is later than already bookmarked place, set it as new bookmark
+				if(framesWritten > player->getBookmark())
+				{
+					player->setBookmark(framesWritten);
+					
+					cout << "Dr channel - Bookmarked! at ... " << player->getBookmark() << endl;
+					while(!GetAsyncKeyState(VK_SPACE)){} // DEBUG
+				}
+				i++;
+			}
+		}
+
 		else if(ch=='$') // end of string
 		{
 			// insert data to signify end
@@ -1137,7 +1288,7 @@ string MML::parseDrumSource(MPlayer* player)
 
 			// integrity check
 
-			int r = framesWritten % quarterNoteLength;
+			// int r = framesWritten % quarterNoteLength;
 
 			// cout << "End of parsing a channel... num of framesWritten=" << framesWritten << endl;
 			// cout << "Dividing by quarter note length, remainder=" << r << endl << endl;
@@ -1171,9 +1322,6 @@ void MML::parseGlobalSource(MPlayer* player)
 
 	// default values
 	double tpo = 120.0;
-	float gain1 = 0.5f;
-	float gain2 = 0.5f;
-	float gain3 = 0.5f;
 	float gainD = 0.5f;
 
 	string str = gsource + "    $$$$";
@@ -1367,8 +1515,11 @@ string MML::loadFile(string filename, MPlayer* player)
 	inFile.open(filename.c_str(), ifstream::in);
 
 	// if read error - return false
-	if(inFile.bad())
+	if(!inFile)
+	{
+		errLog("Error loading file: ", filename);
 		return "Error";
+	}
 
 	string fileContent = "";
 	char ch = inFile.get();
@@ -1385,8 +1536,10 @@ string MML::loadFile(string filename, MPlayer* player)
 	// if not, add it to end
 	char chEOF = 255;
 	size_t found = fileContent.find(chEOF);
+	string strEOF = "\xFF";
 	if(found == string::npos)
-		fileContent.append<char>(1,0xFF);
+		fileContent += strEOF;
+		// fileContent.append<char>(1,0xFF);
 
 	// reset source MML
 	setSource(fileContent);
@@ -1405,38 +1558,29 @@ string MML::loadFile(string filename, MPlayer* player)
 string MML::saveFile(string filename, MPlayer* player)
 {
 	string result;
-	int writePos = 0;
-	int writeLen = originalSource.length();
-
 	string strToWrite = originalSource;
 
+	// erase ALL EOF chars before saving...
 	char chEOF = 255;
 	size_t found = strToWrite.find(chEOF);
-	if(found != string::npos)
-		strToWrite.erase(found,1);
-
+	while(found!=string::npos) // if chEOF found..
+	{
+		strToWrite.erase(found,1); // erase that chEOF
+		found = strToWrite.find(chEOF);
+	}
+	
 	// try to open file
 	ofstream outFile(filename.c_str());
 	if (outFile.is_open())
 	{
-		/*
-		int ch;
-		for(int i=0; i<writeLen; i++)
-		{
-			ch = originalSource.at(i);
-			if(ch!=255)
-				outFile << ch;
-		}
-		*/
-
 		outFile << strToWrite;
-
 		outFile.close();
 		result = "File written successfully.";
 	}
 	else
 	{
 		cout << "Unable to open file";
+		errLog("Error opening file: ", filename);
 		result = "Error";
 	}
 
@@ -1454,8 +1598,8 @@ int MML::countDigits(string snippet)
 	{
 		if(snippet.at(pos) >= '0' && snippet.at(pos) <= '9')
 			count++;
-		else if(snippet.at(pos) == '.')
-			count++;
+		// else if(snippet.at(pos) == '.') // maybe we don't need decimals at all!
+			// count++;
 		else if(snippet.at(pos)=='$')
 			done = true;
 		else
@@ -1464,4 +1608,13 @@ int MML::countDigits(string snippet)
 		pos++;
 	}
 	return count;
+}
+
+// prints an error message to a log file
+void MML::errLog(std::string errText1, std::string errText2)
+{
+	std::ofstream ofs;
+	ofs.open("_errors_mml.txt", std::ofstream::out | std::ofstream::app);
+	ofs << errText1 << errText2 << endl;
+	ofs.close();
 }

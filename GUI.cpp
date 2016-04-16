@@ -15,7 +15,7 @@ void GUI::initialize()
 	anotherThreadRunning = false;
 
 	// create window
-	windowTitle = "*** BeepComp *** ... still under development :)";
+	windowTitle = "*** BeepComp ***";
 	window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), windowTitle);
 	adjustedWindowWidth = static_cast<double>(WINDOW_WIDTH);
 	adjustedWindowHeight = static_cast<double>(WINDOW_HEIGHT);
@@ -82,7 +82,7 @@ void GUI::initialize()
  		text[i].setFont(font); // font is a sf::Font
 		text[i].setCharacterSize(24); // in pixels, not points!
 		text[i].setColor(sf::Color::Green);
-		text[i].setPosition(6, i * charHeight + 6);
+		text[i].setPosition(TEXT_TOP_X, i * charHeight + TEXT_TOP_Y - 4);
 	}
 
 	// set up a cursor
@@ -184,27 +184,6 @@ void GUI::initialize()
 	progress.initialize(&window);
 	
 	//
-	// DEBUG
-	// 		'progress bar' place holder
-	
-	/*
-	progress.setSize(sf::Vector2f(140,4));
-	progress.setPosition(sf::Vector2f(680, 210));
-	progress.setFillColor(sf::Color(10,10,120));
-	float mWidth = 12.0;
-	float mHeight = 12.0;
-	float markerX = 680; float markerY = 210;
-	progressMarker.setFillColor(sf::Color(10,10,120));
-	progressMarker.setPointCount(3);
-	progressMarker.setPoint(0, sf::Vector2f(markerX, markerY));
-	progressMarker.setPoint(1, sf::Vector2f(markerX-mWidth/2, markerY-mHeight));
-	progressMarker.setPoint(2, sf::Vector2f(markerX+mWidth/2, markerY-mHeight));
-	//
-	//
-	//
-	*/
-	
-	//
 	// set up HELP text
 	//
 	help.initialize(&window, miniFont);
@@ -241,13 +220,19 @@ void GUI::initialize()
 	help.set(29, "SHIFT + ARROW"   ,  6           ,  6 + helpYSpacing*7);
 	help.set(30, ".... SELECT TEXT",  6 + helpXTab,  6 + helpYSpacing*7);
 	help.set(31, "ALT"   ,     6           ,  6 + helpYSpacing*8);
-	help.set(32, ".... CLEAR SELECTION",  6 + helpXTab,  6 + helpYSpacing*8);	
-	help.set(33, "HOME"            ,  6,             6 + helpYSpacing*9);
-	help.set(34, ".... TO TOP"     ,  6 + helpXTab,  6 + helpYSpacing*9);
-	help.set(35, "END"             ,  6,             6 + helpYSpacing*10);
-	help.set(36, ".... TO END"     ,  6 + helpXTab,  6 + helpYSpacing*10);
+	help.set(32, ".... CLEAR SELECTION",  6 + helpXTab,  6 + helpYSpacing*8);
+	help.set(33, "ALT + V",    6           ,  6 + helpYSpacing*9);
+	help.set(34, ".... SYSTEM VOLUME" ,  6 + helpXTab,  6 + helpYSpacing*9);
+	help.set(35, "ALT + D",    6           ,  6 + helpYSpacing*10);
+	help.set(36, ".... AUDIO DEVICE" ,  6 + helpXTab,  6 + helpYSpacing*10);
+	help.set(37, "ALT + I",    6           ,  6 + helpYSpacing*11);
+	help.set(38, ".... INITIALIZE AUDIO" ,  6 + helpXTab,  6 + helpYSpacing*11);
+	help.set(39, "HOME"            ,  6,             6 + helpYSpacing*12);
+	help.set(40, ".... TO TOP"     ,  6 + helpXTab,  6 + helpYSpacing*12);
+	help.set(41, "END"             ,  6,             6 + helpYSpacing*13);
+	help.set(42, ".... TO END"     ,  6 + helpXTab,  6 + helpYSpacing*13);
 	
-	help.setBlackOut(3, 3, 360, helpYSpacing*11+10);	
+	help.setBlackOut(3, 3, 360, helpYSpacing*14+10);	
 	help.deactivate(); // start inactive...
 	
 	//
@@ -808,7 +793,16 @@ void GUI::handleInputs()
 		mplayer.resetForNewSong();
 		mml.setSource(source);
 		mml.parse(&mplayer);
-		mplayer.start();
+		
+		// if bookmark is placed, begin from that place
+		if(mplayer.getBookmark()>0)
+		{
+			mplayer.goToBeginning();
+			mplayer.seekAndStart(mplayer.getBookmark());
+		}
+		// no bookmark - start track normally
+		else
+			mplayer.start();
 	}
 	else if(playButton.hovering(mouseX, mouseY))
 		playButton.highlight();
@@ -846,9 +840,6 @@ void GUI::handleInputs()
 			// rewind to a seek position just before current framePos
 			long rewindTo = mplayer.getPreviousSeekPoint();
 			mplayer.pause();
-			mplayer.resetForNewSong();
-			mml.setSource(source);
-			mml.parse(&mplayer);
 			mplayer.goToBeginning();
 			mplayer.seekAndStart(rewindTo);
 		}
@@ -871,9 +862,6 @@ void GUI::handleInputs()
 			// forward to the next seek position relative to current framePos
 			long forwardTo = mplayer.getNextSeekPoint();
 			mplayer.pause();
-			mplayer.resetForNewSong();
-			mml.setSource(source);
-			mml.parse(&mplayer);
 			mplayer.goToBeginning();
 			mplayer.seekAndStart(forwardTo);
 		}
@@ -933,8 +921,7 @@ void GUI::handleInputs()
 											// ... sorry, I just needed to get that out :)
 		
 		// double backslashes...
-		bool done = false;
-		int i = 0;
+		unsigned int i = 0;
 		char ch;
 		while(i<docPath.length())
 		{
@@ -1003,20 +990,8 @@ void GUI::handleInputs()
 		cout << "currentLine = " << currentLine << endl;
 		cout << "getLineNumber(charPos) = " << getLineNumber(charPos) << endl;
 		cout << "getStartPosInLine(getLineNumber(charPos)) = " << getStartPosInLine(getLineNumber(charPos)) << endl;
-		cout << "mouse -> " << mouseX << ", " << mouseY << " points cursor to: " << cx << ", " << cy << endl;
-		
-		// DEBUG
-		// Testing the seek function...
-		// "restart song from middle"
-		
-		mplayer.pause();
-		mplayer.resetForNewSong();
-		mml.setSource(source);
-		mml.parse(&mplayer);
-		mplayer.goToBeginning();
-		
-		long middlePoint = mplayer.getSongLastFramePure() / 2;
-		mplayer.seekAndStart(middlePoint);
+		cout << "mouse -> " << mouseX << ", " << mouseY << endl;
+		cout << "current cx & cy -> " << cx << ", " << cy << endl;
 		
 		// DEBUG
 		cout << "progress ratio=" << mplayer.getProgressRatio() << endl;
@@ -1091,6 +1066,62 @@ void GUI::handleInputs()
 			// set up a quick message (turns off automatically after a few seconds)
 			help.setQuickMessage("Quick-saved!");
 		}
+	}
+	
+	// TRY to... invoke system volume control 
+	if(kbd.altV())
+	{
+		while(kbd.altV())
+		{ updateDisplay(); }
+
+		// for XP
+		// system("sndvol32.exe");
+
+		// for Windows 7 ...
+		// WinExec("sndvol.exe -f", SW_HIDE);
+		
+		string exePath = "C:\\Windows\\System32\\sndvol.exe"; // win 7
+		string param = "-f";
+		
+		string exePath2 = "C:\\Windows\\System32\\sndvol32.exe"; // xp
+
+		ShellExecute( NULL, NULL, exePath.c_str(), param.c_str(), NULL, SW_SHOWNORMAL );
+		ShellExecute( NULL, NULL, exePath2.c_str(), NULL, NULL, SW_SHOWNORMAL );		
+		cout << "Open - system volume\n";
+	}
+	
+	// open up system audio device control
+	if(kbd.altD())
+	{
+		while(kbd.altD())
+		{ updateDisplay(); }
+	
+		string exeCommand = "mmsys.cpl";
+		ShellExecute( NULL, NULL, exeCommand.c_str(), NULL, NULL, SW_SHOWNORMAL );
+		cout << "Open - audio device properties\n";
+	}
+
+	// initialize audio device / port audio
+	if(kbd.altI())
+	{
+		while(kbd.altI())
+		{ updateDisplay(); }
+	
+		mplayer.pause();
+		mplayer.close();
+		cout << "Reinitializing portaudio...\n";
+		mplayer.initialize();
+	}
+	
+	// open up system audio device control
+	if(kbd.altD())
+	{
+		while(kbd.altD())
+		{ updateDisplay(); }
+	
+		string exeCommand = "mmsys.cpl";
+		ShellExecute( NULL, NULL, exeCommand.c_str(), NULL, NULL, SW_SHOWNORMAL );
+		cout << "Open - audio device properties\n";
 	}
 
 	// EXPORT button or F12
@@ -1248,7 +1279,7 @@ endOfButtonRoutines:
 		cout << "charPos=" << charPos << ", source.length()=" << source.length() << endl;
 		
 		// amend the source string
-		if(charPos>0 && charPos<source.length()) // safeguarding...
+		if(charPos>=0 && charPos<source.length()) // safeguarding...
 			source.insert(charPos, strToPaste);
 
 		// update the charPos position
@@ -1283,6 +1314,9 @@ endOfButtonRoutines:
 			// update pointed char coordinates
 			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
 			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			
+			// safeguarding for negative x values
+			if(cx < 0) cx = 0;
 			
 			if(cy < 0) // out of bound - upwards
 				cy = -1;
@@ -1389,7 +1423,11 @@ endOfButtonRoutines:
 		{
 			// update pointed char coordinates
 			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
-			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);			
+			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+
+			// EXPERIMENT - safeguarding for negative x, y values
+			if(cx < 0) cx = 0;
+			if(cy < 0) cy = 0;
 			
 			selectEnd = charPos;
 			selectEndLine = getLineNumber(selectEnd);
@@ -1631,8 +1669,6 @@ void GUI::setStrView()
 // recalculate 'charPos' from currentLine and posInLine variables
 void GUI::calculateCharPos()
 {
-	bool done = false;
-	int lineIndex = 0;
 	int chIndex = 0;
 
 	if(currentLine == 0)
@@ -2080,7 +2116,7 @@ void GUI::setHighlighter()
 		if(lineIndex==markStartLine && lineIndex==markEndLine)
 		{
 			int markStartPosInLine = markStartPos - getStartPosInLine(markStartLine);
-			int markEndPosInLine = markEndPos - getStartPosInLine(markEndLine);
+			// int markEndPosInLine = markEndPos - getStartPosInLine(markEndLine); unused
 			int nCharsToHighlight = (markEndPos - markStartPos) + 1;
 			hx = markStartPosInLine * charWidth + TEXT_TOP_X;
 			hy = i * charHeight + TEXT_TOP_Y;
@@ -2102,7 +2138,7 @@ void GUI::setHighlighter()
 		else if(lineIndex==markEndLine)
 		{
 			int markEndPosInLine = markEndPos - getStartPosInLine(markEndLine);
-			hx = 6;
+			hx = TEXT_TOP_X;
 			hy = i * charHeight + TEXT_TOP_Y;
 			hw = (markEndPosInLine + 1) * charWidth;
 			hh = 24;
@@ -2111,7 +2147,7 @@ void GUI::setHighlighter()
 		// then highlight all characters in this line
 		else if( (markStartLine < lineIndex) && (lineIndex < markEndLine) )
 		{
-			hx = 6;
+			hx = TEXT_TOP_X;
 			hy = i * charHeight + TEXT_TOP_Y;
 			hw = nCharsLine[lineIndex] * charWidth;
 			hh = 24;

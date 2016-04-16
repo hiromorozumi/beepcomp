@@ -29,7 +29,7 @@ int MPlayer::playerCallback (
 		PaStreamCallbackFlags statusFlags )
 {
 	float* out = static_cast<float*>(outputBuffer);
-	static_cast<int>(framesPerBuffer);
+	// static_cast<int>(framesPerBuffer); // since this has no effect..
 	static_cast<void>(timeInfo);
 	static_cast<void>(statusFlags);
 	static_cast<void>(inputBuffer);
@@ -37,7 +37,7 @@ int MPlayer::playerCallback (
 	float soundAmplitudeLeft;
 	float soundAmplitudeRight;
 
-	for(int i=0; i<framesPerBuffer; i++)
+	for(unsigned long i=0; i<framesPerBuffer; i++)
 	{
 		if(!playing) // if player is not playing or finished playing, just pass 0
 		{
@@ -256,6 +256,7 @@ MPlayer::MPlayer()
 	framePos = 0;
 	songLastFrame = 0;
 	songLastFramePure = 0;
+	bookmark = 0;
 
 	// call this function once to set various parameters settings to default
 	resetForNewSong();
@@ -652,6 +653,12 @@ void MPlayer::activateChannel(int channel)
 void MPlayer::activateDrumChannel()
 	{ dSilenced = false; }
 
+void MPlayer::enableLooping()
+	{ loopEnabled = true; }
+
+void MPlayer::disableLooping()
+	{ loopEnabled = false; }
+	
 void MPlayer::advance()
 {
 	// advance each music oscillator
@@ -791,8 +798,6 @@ std::string MPlayer::exportToFile(string filename)
 
 		int read, write;
 		long currentSongFrame = 0;
-		int nFramesWritten = 0;
-		float data = 0;
 
 		// go to the beginning of the song
 		goToBeginning();
@@ -852,7 +857,7 @@ std::string MPlayer::exportToFile(string filename)
 			int nFramesWritten = fillExportBuffer(sndBuffer, writeChunkSize, currentFrame, songFrameLen);
 
 			// write to file just this much
-			int framesWrittenFile = sf_writef_float(sndFile, sndBuffer, writeChunkSize);
+			// int framesWrittenFile = sf_writef_float(sndFile, sndBuffer, writeChunkSize);
 
 			currentFrame += nFramesWritten; // update current position
 			if(currentFrame >= songFrameLen) // reached end...
@@ -1360,3 +1365,17 @@ long MPlayer::getPreviousSeekPoint()
 		seekDestination = 0;
 	return seekDestination;
 }
+
+// set the player's temp start point
+void MPlayer::setBookmark(long bm)
+{ bookmark = bm; }
+
+// get the bookmark value - if 0, no bookmark
+long MPlayer::getBookmark()
+{ return bookmark; }
+
+bool MPlayer::reachedSongLastFramePure()
+{ return (framePos >= songLastFramePure); }
+
+bool MPlayer::isSongFinished()
+{ return songFinished; }
