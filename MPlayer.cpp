@@ -10,8 +10,14 @@
 #include <math.h>
 #include <cstdio>
 #include <windows.h> // DEBUG
+
+/*-----[BCPLAYER][STARTCOMMENTOUT]-----*/
+
 #include <sndfile.hh>
 #include <lame/lame.h>
+
+/*-----[BCPLAYER][ENDCOMMENTOUT]-----*/
+
 #include "MPlayer.h"
 
 const int MPlayer::SAMPLE_RATE = 44100;
@@ -43,6 +49,14 @@ int MPlayer::playerCallback (
 		{
 			soundAmplitudeLeft = 0.0f;
 			soundAmplitudeRight = 0.0f;
+			
+			// place holder for BCPlayer...
+			// in BCPlayer, if music is stopped, you get sound effects only :)
+			/*-----[BCPLAYER][CALLSFXINCALLBACK]-----*/
+			
+			// soundAmplitudeLeft = sfx->getOutput(0);
+			// soundAmplitudeRight = sfx->getOutput(1);
+			
 		}
 		// player IS playing... get mix - output - advance frame - check for end of channel
 		else
@@ -205,6 +219,9 @@ int MPlayer::playerCallback (
 				{
 					songFinished = true;
 					playing = false;
+					
+					/*-----[BCPLAYER][STARTCOMMENTOUT]-----*/
+					
 					// DEBUG
 					cout << "song officially finished!\n";
 					cout << "framePos = " << framePos << endl;
@@ -213,6 +230,8 @@ int MPlayer::playerCallback (
 					for(int i=0; i<9; i++)
 						cout << "channel " << i << " length = " << data[i].totalFrames << "\n";
 					cout << "d channel length = " << ddata.totalFrames << "\n";
+					
+					/*-----[BCPLAYER][ENDCOMMENTOUT]-----*/
 				}
 			}
 
@@ -694,6 +713,13 @@ float MPlayer::getMix(int channel)
 
 	// apply master gain and compress
 	mix = compress(mix * masterGain);
+	
+	// place holder for BCPlayer...
+	// in BCPlayer, add sound effects on top of music!
+	/*-----[BCPLAYER][CALLSFX]-----*/
+	
+	// mix += sfx->getOutput(channel); // add the entire SFX mix
+										// for BCPlayer only!	
 
 	// limit
 	if(mix >= masterOutCap)
@@ -729,7 +755,6 @@ float MPlayer::compress(float input)
 		{
 			output = -compThreshold + ((input + compThreshold) / compRatio);
 		}
-
 	}
 
 	return output;
@@ -759,6 +784,9 @@ float MPlayer::getMasterGain()
 
 void MPlayer::setMasterGain(float g)
 	{ masterGain = g; }
+
+
+/*-----[BCPLAYER][STARTCOMMENTOUT]-----*/
 
 std::string MPlayer::exportToFile(string filename)
 {
@@ -874,6 +902,9 @@ std::string MPlayer::exportToFile(string filename)
 		return "Invalid file type";
 	}
 }
+
+/*-----[BCPLAYER][ENDCOMMENTOUT]-----*/
+
 
 // fill the export buffer with music data for exporting
 // just a chunk at a time - from startFrame in the song
@@ -1379,3 +1410,8 @@ bool MPlayer::reachedSongLastFramePure()
 
 bool MPlayer::isSongFinished()
 { return songFinished; }
+
+/*-----[BCPLAYER][ADDSFXBINDER]-----*/
+
+//void MPlayer::bindSFX(SFX *sfxObj)
+//{ sfx = sfxObj; }

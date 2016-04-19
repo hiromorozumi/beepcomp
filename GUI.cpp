@@ -253,6 +253,9 @@ void GUI::initialize()
 	// clock to track blinking
 	blinkState = 0;
 	blinkClock.restart();
+	
+	// clock for auto-saving (every 5 min.)
+	autoSaveClock.restart();
 
 	window.requestFocus();
 	
@@ -344,16 +347,7 @@ void GUI::run()
         }
 
 		handleInputs();
-
-		// update meter information
-		if(meterClock.getElapsedTime().asSeconds() > 0.05f)
-		{
-			updateMeter();
-			meterClock.restart();
-		}
-
-		blinkCursor();
-		updatePanel();
+		handleTimedSaving();
 		updateDisplay();
 
 		// check for termination request
@@ -1461,9 +1455,26 @@ endOfButtonRoutines:
 	}
 }
 
+// every five mintues, your work gets saved!
+void GUI::handleTimedSaving()
+{
+	if(autoSaveClock.getElapsedTime().asSeconds() > 300.0f)
+	{
+		autoSave();	
+		autoSaveClock.restart();
+	}
+}
+
 // update panel components that reflect realtime data
 void GUI::updatePanel()
 {
+	// update gain meter from time to time
+	if(meterClock.getElapsedTime().asSeconds() > 0.05f)
+	{
+		updateMeter();
+		meterClock.restart();
+	}
+	
 	// volume knob
 	knob.update(static_cast<int>(mplayer.getMasterGain() * 100.0f));
 
@@ -1483,6 +1494,9 @@ void GUI::updateDisplay()
 	if(exitApp)
 		return;
 
+	blinkCursor();
+	updatePanel();	
+	
 	// let's update gain meter here...
 	//
 	//
@@ -1765,10 +1779,14 @@ void GUI::startNewDialog()
 
 		// set the window title
 		window.setTitle(windowTitle);
+		autoSaveClock.restart();
 	}
 
 	// set the window title
-	window.setTitle(windowTitle);
+	if(currentFileName.empty())
+		window.setTitle(windowTitle);
+	else
+		window.setTitle(windowTitle + " ... " + currentFileName);
 }
 
 void GUI::saveDialog()
@@ -1805,10 +1823,13 @@ void GUI::saveDialog()
 		mml.saveFile(currentPathAndFileName, &mplayer);
 		// renewForNewSong();
 		lastSavedPathAndFileName = currentPathAndFileName;
+		autoSaveClock.restart();
 	}
-
 	// set the window title
-	window.setTitle(windowTitle + " ... " + currentFileName);
+	if(currentFileName.empty())
+		window.setTitle(windowTitle);
+	else
+		window.setTitle(windowTitle + " ... " + currentFileName);
 }
 
 void GUI::loadDialog()
@@ -1831,10 +1852,17 @@ void GUI::loadDialog()
 		mml.parse(&mplayer);
 		mplayer.goToBeginning();
 		renewForNewSong();
+		
+		// set the window title
+		window.setTitle(windowTitle + " ... " + currentFileName);
+		autoSaveClock.restart();
 	}
 	
 	// set the window title
-	window.setTitle(windowTitle + " ... " + currentFileName);
+	if(currentFileName.empty())
+		window.setTitle(windowTitle);
+	else
+		window.setTitle(windowTitle + " ... " + currentFileName);
 }
 
 void GUI::exportDialog()
@@ -1876,8 +1904,11 @@ void GUI::exportDialog()
 		unsetMessage();
 	}
 	
-	// set the window title over
-	window.setTitle(windowTitle + " ... " + currentFileName);
+	// set the window title
+	if(currentFileName.empty())
+		window.setTitle(windowTitle);
+	else
+		window.setTitle(windowTitle + " ... " + currentFileName);
 }
 
 // this function creates a dialog box for starting new file - start new if yes
@@ -2225,6 +2256,7 @@ void GUI::autoSave()
 	// save the file!
 	mml.setSource(source);
 	mml.saveFile(autoSavePath, &mplayer);
+	help.setQuickMessage("Auto-saving...");
 }
 
 // quick-save ... called when ALT + S is pressed

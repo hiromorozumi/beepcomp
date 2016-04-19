@@ -336,6 +336,7 @@ public:
 	// sf::Time fireClElapsed;
 	sf::Clock blinkClock;
 	sf::Clock meterClock;
+	sf::Clock autoSaveClock;
 
 	float charHeight;
 	float charWidth;
@@ -433,6 +434,7 @@ public:
 	void initialize();
 	void run();
 	void handleInputs();
+	void handleTimedSaving();
 	void updatePanel();
 	void updateDisplay();
 	void updateLineStats();

@@ -55,12 +55,15 @@ void OSC::setTable(int type)
 {
 	switch(type)
 	{
+		float maxAmp;
+		int oneCycleFrames;
+		
 		// sine table
 		case 0:
-		
+			maxAmp = 0.99f;
 			for(int i=0; i<OSC_TABLE_SIZE; i++)
 			{
-				table[i] = sin( TWO_PI * (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE) ) ) * 0.85;
+				table[i] = sin( TWO_PI * (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE) ) ) * maxAmp;
 			}
 			break;
 			
@@ -77,9 +80,107 @@ void OSC::setTable(int type)
 			}
 			break;
 		
-		default:
+		// sawthooth wave
+		case 2:
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] = -0.99f  + (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE)) * 1.98f;
 			break;
+
+		// triangle wave
+		case 3:
+			for(int i=0; i<OSC_TABLE_SIZE/2; i++)
+				table[i] = -0.99f  + (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE/2)) * 1.98f;	
+			for(int i=OSC_TABLE_SIZE/2; i<OSC_TABLE_SIZE; i++)
+				table[i] = 0.99f  - (static_cast<float>(i-OSC_TABLE_SIZE/2) / static_cast<float>(OSC_TABLE_SIZE/2)) * 1.98f;
+			break;
+		
+		// sine wave with 3rd, 6th, 9th, 12th harmonics
+		case 4:
+		
+			maxAmp = 0.90f;
+			
+			// first order sine as base
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] = sin( TWO_PI * (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE) ) ) * maxAmp;
+			
+			// then add 3rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 3;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 3.0f);
+			
+			// then add 6rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 6;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 6.0f);
+							
+			// then add 9rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 9;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 9.0f);			
+
+			// then add 12th harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 12;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 12.0f);		
+	
+		break;
+	
+		// sine wave with 2nd, 3rd, 4th harmonics
+		case 5:
+		
+			maxAmp = 0.68f;
+			
+			// first order sine as base
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] = sin( TWO_PI * (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE) ) ) * maxAmp;
+			
+			// then add 2rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 2;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 2.0f);
+			
+			// then add 3rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 3;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 3.0f);
+							
+			// then add 4rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 4;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 4.0f);			
+
+			// then add 5rd harmonics
+			oneCycleFrames = OSC_TABLE_SIZE / 5;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] += sin(TWO_PI * (static_cast<float>(i%oneCycleFrames) / static_cast<float>(oneCycleFrames)))
+							* (maxAmp / 5.0f);								
+			
+			break;
+
+		// default is sine wave...
+		default:
+			maxAmp = 0.99f;
+			for(int i=0; i<OSC_TABLE_SIZE; i++)
+				table[i] = sin( TWO_PI * (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE) ) ) * maxAmp;
+			
+			break;
+			
 	}
+	
+	// limit...
+	for(int i=0; i<OSC_TABLE_SIZE; i++)
+	{
+		if(table[i]>0.99f) table[i] = 0.99f;
+		else if(table[i] < -0.99f) table[i] = -0.99f;
+	}	
+	
 }
 
 void OSC::setGain(float g)

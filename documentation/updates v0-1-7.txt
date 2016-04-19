@@ -1,0 +1,9 @@
+update list... for v0.1.7
+
+- Minor bug fix: parsing empty tuplet braces caused a crash 
+- Allowed using rests ":" inside tuplets []
+- Now you can specify a set number of repeats by {n---}
+   ex. {3CDE}, {3{2C:D}}
+- PRESET=BEEP sets up a channel for a pure square wave tone
+   (this is perfect if you want to make cheap old PC tones :))
+- In a file dialog, ALT + D opens the currently selected folder in Explorer

@@ -264,6 +264,9 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 	//
 	// first parse the configuration part
 	//
+	
+	// start by resetting... wavetable = 1 (just to safeguard!)
+	player->osc[channel].setTable(1); // square wave	
 
 	bool configDone = false; // when all config statements are parsed, this gets set to true
 	size_t found;
@@ -275,13 +278,36 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 		// follow format -> setEnvelope(int attackTimeMS, int peakTimeMS, int decayTimeMS, 
 		//								int releaseTimeMS, float peakLV, float sustainLV)
 
+		// reset tone... to default
+		found = str.find("DEFAULTTONE");
+		if(found != string::npos)
+		{
+			configDone = false;
+			player->osc[channel].setEnvelope(0, 0, 0, 0, 0.99f, 0.99f);
+			str.erase(found, 11); // erase this statement
+		}
+		
 		// sets up a preset tone... pure beep!
 		found = str.find("PRESET=BEEP");
 		if(found != string::npos)
 		{
 			configDone = false;
+			player->osc[channel].setTable(1); // square wave
 			player->osc[channel].setEnvelope(0, 0, 0, 0, 0.65f, 0.65f);
 			str.erase(found, 11); // erase this statement
+		}
+		
+		found = str.find("WAVEFORM=");
+		if(found != string::npos)
+		{
+			configDone = false;
+			string strValue = str.substr(found+9,2); // get 2 digits following '='
+			int valueDigits = countDigits(strValue);
+			strValue = strValue.substr(0, valueDigits);
+			int value = atoi(strValue.c_str());
+			value = min(99, max(0, value)); // floor + ceil the value
+			player->osc[channel].setTable(value); // set wavetable for this value
+			str.erase(found, 9+valueDigits); // erase this statement
 		}
 
 		found = str.find("ATTACKTIME=");
@@ -1273,7 +1299,7 @@ string MML::parseDrumSource(MPlayer* player)
 					player->setBookmark(framesWritten);
 					
 					cout << "Dr channel - Bookmarked! at ... " << player->getBookmark() << endl;
-					while(!GetAsyncKeyState(VK_SPACE)){} // DEBUG
+					// while(!GetAsyncKeyState(VK_SPACE)){} // DEBUG
 				}
 				i++;
 			}

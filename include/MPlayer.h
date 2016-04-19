@@ -20,6 +20,11 @@ class DelayLine;
 #include "DData.h"
 #include <portaudio.h>
 
+/*-----[BCPLAYER][INCLUDESFXHEADER]-----*/
+
+//#include "SFX.h"
+
+
 class MPlayer
 {
 	
@@ -145,6 +150,14 @@ public:
 	long getBookmark();
 	bool reachedSongLastFramePure();
 	bool isSongFinished();
+	
+	
+	
+	/*-----[BCPLAYER][ADDSFXPROPERTIES]-----*/
+	
+	// void bindSFX(SFX* sfxObj);
+	// SFX* sfx;
+
 };
 
 #endif

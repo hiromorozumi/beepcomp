@@ -225,6 +225,18 @@
 						</File>
 					</Component>
 					
+					<Component Id='cmp_astro_wars_1TXT' Guid='*' Permanent="yes">
+						<File Id="astro_wars_1TXT" Name="astro_wars_1.txt" 
+						DiskId='1' Source='..\userdata\astro_wars_1.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+					<Component Id='cmp_pure_psg_toneTXT' Guid='*' Permanent="yes">
+						<File Id="pure_psg_toneTXT" Name="pure_psg_tone.txt" 
+						DiskId='1' Source='..\userdata\pure_psg_tone.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
 					<Component Id='cmp_astro_effectTXT' Guid='*' Permanent="yes">
 						<File Id="astro_effectTXT" Name="astro_effect.txt" 
 						DiskId='1' Source='..\userdata\astro_effect.txt' KeyPath='yes'>				
@@ -300,7 +312,9 @@
 		<ComponentRef Id='cmp_some_funky_tuneTXT' />
 		<ComponentRef Id='cmp_romanciaTXT' />
 		<ComponentRef Id='cmp_ys1_field_musicTXT' />
-		<ComponentRef Id='cmp_ys1_town_musicTXT' />		
+		<ComponentRef Id='cmp_ys1_town_musicTXT' />
+		<ComponentRef Id='cmp_astro_wars_1TXT' />
+		<ComponentRef Id='cmp_pure_psg_toneTXT' />
 		<ComponentRef Id='cmp_astro_effectTXT' />
 		<ComponentRef Id='cmp__tutorial_repeatsTXT' />	
 		<ComponentRef Id='cmp__tutorial_drumsTXT' />
