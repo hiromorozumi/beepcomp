@@ -1,0 +1,19 @@
+BeepComp Release Notes
+======================
+
+New features in version 0.1.7:
+
+- Your work now gets saved every 5 minutes
+- If the audio device drops out, it gets re-initialized automatically
+  (automatic check performed every 5 seconds)
+- Now you can specify a set number to repeat a phrase by {n---}
+- Minor bug fix: empty tuplet braces [] caused crash
+- Minor bug fix: made rests ":" work correctly inside tuplet markings
+- PRESET=BEEP sets up for a raw PC beep tone
+- WAVEFORM=n specifies a waveform to use
+  (0..sine, 1..square(default), 2..saw, 3..triangle, 4&5..hybrid sine)
+- DEFAULTTONE sets up for default square tone beep (similar to PRESET=BEEP)
+- A couple of new example source files were added
+- Better pasting: CTRL + V will paste over selection if a selection is present
+
+----------

@@ -342,7 +342,7 @@ img {
 <li><a href="#volume_envelope">Volume Envelope</a></li>
 <li><a href="#lfo_effect">LFO Effect</a></li>
 <li><a href="#astro_effect">Astro Effect</a></li>
-<li><a href="#wave_tables">Wave Tables</a></li>
+<li><a href="#waveforms">Waveforms</a></li>
 <li><a href="#bookmarking_your_start_position">Bookmarking Your Start Position</a></li>
 <li><a href="#auto_saving">Auto Saving</a></li>
 <li>
@@ -361,7 +361,7 @@ img {
 <div id="about_beepcomp" />
 <h2>About BeepComp</h2>
 <p><a href="http://hiromorozumi.com/beepcomp">BeepComp</a> lets you compose chiptune tracks with text files. It features a nice retro-sounding synthesizer engine with 9 music channels and 1 drum channel.</p>
-<p>BeepComp is an open-source project. This means that you're welcome to modify the source code however you want. BeepComp is a also freeware that anyone can use freely. It is distributed under the MIT license.</p>
+<p>BeepComp is an open-source project. This means that you're welcome to modify the source code however you want. BeepComp is a also shareware that anyone can use freely. It is distributed under the MIT license.</p>
 <div id="getting_started" />
 <h2>Getting Started</h2>
 <p>Use the latest installer package available on the <a href="https://sourceforge.net/projects/beepcomp/">Sourceforge top page</a>. Run this set up file, and you'll be all set for your journey!</p>
@@ -527,6 +527,16 @@ L4 KKKSSS
 <p>The tempo, measured by beats per measure (BPM), determines how fast your track is played. The <code>TEMPO=</code> command takes a value between 30 and 300.</p>
 <p>The delay effect is applied to the whole track (not to inidividual track). See the Delay Effect section for more. </p>
 <p>By default, your track is set to play in an infinite loop. You can turn off track looping by <code>LOOP=OFF</code>. If you want to loop your track a certain number of times, you could first set <code>LOOP=OFF</code> in your global section and then enclose the entire real time data with <code>{}</code> in each channel.</p>
+<p>Here is an example of using the global section to set up the volume, tempo and looping for your track:</p>
+<pre><code>@G
+MASTERVOLUME=50 // not too loud
+TEMPO=80 // kind of slow
+LOOP=OFF
+
+@1
+GFEDC // this won't be looped
+</code></pre>
+
 <div id="music_section_in_detail" />
 <h2>Music Section in Detail</h2>
 <p>Each section for a music is defined with <code>@n</code>. Your first channel section will start with <code>@1</code>, your second with <code>@2</code> and so forth.</p>
@@ -786,10 +796,16 @@ L4 CDEFG
 </code></pre>
 
 <p>The number you specify after <code>ASTRO=</code> is the number of times that the wobble happens. Between 10 and 20 is good to start with, but try different values to see which value works for you.</p>
-<div id="wave_tables" />
-<h2>Wave Tables</h2>
-<p>(Not yet fully implemented)</p>
-<p>Right now, only the square wave and sine wave are available. But I plan to add capabilities to choose different wave tables so you can have more sounds to choose from.</p>
+<div id="waveforms" />
+<h2>Waveforms</h2>
+<p>Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring <code>WAVEFORM=</code> in each channel. The currently available waveforms and their assigned number are: sine(0), square(1, default), sawtooth(3), hybrid sine A(4), hybrid sine B(5). The hybrid sine waves combine a basic sign wave with a few added upper harmonics.</p>
+<p>Here is an example where a different waveform is selected:</p>
+<pre><code>@1
+DEFAULTTONE // resets the volume envelope settings to plain beep
+WAVEFORM=2  // sets up a saw tooth wave
+F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
+</code></pre>
+
 <div id="bookmarking_your_start_position" />
 <h2>Bookmarking Your Start Position</h2>
 <p>When you compose a long song, you can take advantage of the bookmarking feature. Placing two percent signs <code>%%</code>in your source forces the player to start from where those percent signs are. Here is an example:</p>
@@ -805,7 +821,7 @@ L4 CDEFG
 <p>Note that the bookmark will not be effective when you export to an audio file.</p>
 <div id="auto_saving" />
 <h2>Auto Saving</h2>
-<p>Everytime BeepComp quits, it will save your current work to a hidden file named &quot;__AUTOSAVED__.txt&quot; in your <strong>userdata</strong> folder. If you accidentally close the application, you can load this file to retrieve your work.</p>
+<p>Your work gets automatically saved to a hidden file named &quot;__AUTOSAVED__.txt&quot; in your <strong>userdata</strong> folder every 5 minutes and also when you quit the application. If something unexpected ever happens, you can load this file to retrieve your work.</p>
 <div id="syntax_reference" />
 <h2>Syntax Reference</h2>
 <div id="syntax_reference_general" />
@@ -844,6 +860,8 @@ L4 CDEFG
 <li><code>LFOSPEED=n</code> ... Sets the LFO speed by cycles per second (n=0 to 100)</li>
 <li><code>ASTRO=n</code> ... Turns on the astro effect and sets the number of wobbles per second (n=1 to 100)</li>
 <li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)</li>
+<li><code>DEFAULTTONE</code> ... Clears the volume envelope settings</li>
+<li><code>WAVEFORM=?</code> ... Chooses the waveform that the channel uses (n=0 to 5)</li>
 </ul>
 <h5>Commands processed as the track progresses</h5>
 <ul>
@@ -899,7 +917,7 @@ L4 CDEFG
 <a href="https://sourceforge.net/p/beepcomp/code/ci/master/tree/">https://sourceforge.net/p/beepcomp/code/ci/master/tree/</a>.</p>
 <div id="contact_me" />
 <h2>Contact Me!</h2>
-<p>I welcome anyone using BeepComp and also anyone interested in getting involved to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) To e-mail me, just write through the <a href="https://sourceforge.net/u/smokinhiro/profile/send_message">SourceForge contact page</a>.</p>
+<p>I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) To e-mail me, just write through the <a href="https://sourceforge.net/u/smokinhiro/profile/send_message">SourceForge contact page</a>.</p>
 
 </body>
 </html>

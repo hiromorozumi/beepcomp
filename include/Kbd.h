@@ -102,6 +102,14 @@ public:
 		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
 			&& sf::Keyboard::isKeyPressed(sf::Keyboard::V) )
 			return true; else return false; }
+	bool altX()
+		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+			&& sf::Keyboard::isKeyPressed(sf::Keyboard::X) )
+			return true; else return false; }
+	bool altZ()
+		{ if( (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+			&& sf::Keyboard::isKeyPressed(sf::Keyboard::Z) )
+			return true; else return false; }
 	bool shift()
 		{ if( sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift) )
 			return true; else return false; }

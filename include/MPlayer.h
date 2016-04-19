@@ -71,7 +71,8 @@ public:
 	
 	PaStreamParameters outputParameters;
 	PaStream* stream;
-	PaError err;	
+	PaError err;
+	bool appIsExiting;
 
 	MPlayer();
 	~MPlayer();
@@ -118,9 +119,21 @@ public:
 					->playerCallback(inputBuffer, outputBuffer,
 					framesPerBuffer, timeInfo, statusFlags);
 			}
+	
+	void playerStoppedCallback();
+	
+	// this static function will only redirect to stream-stopped callback (above)
+	static void paStoppedCallback( void *userData )
+			{	cout << "stream finished callback called! step 1\n"; // DEBUG
+				((MPlayer*)userData)->playerStoppedCallback(); }
 
 	void handlePaError( PaError e );
 	void initialize();
+	void restartStream();
+	void stopStream();
+	void declareAppTermination();
+	std::string getStreamStateString();
+	bool getStreamState();
 	void resetForNewSong();
 	void close();
 	void start();

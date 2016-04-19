@@ -38,7 +38,7 @@
 * [Volume Envelope](#volume_envelope)
 * [LFO Effect](#lfo_effect)
 * [Astro Effect](#astro_effect)
-* [Wave Tables](#wave_tables)
+* [Waveforms](#waveforms)
 * [Bookmarking Your Start Position](#bookmarking_your_start_position)
 * [Auto Saving](#auto_saving)
 * [Syntax Reference](#syntax_reference)
@@ -55,7 +55,7 @@
 
 [BeepComp](http://hiromorozumi.com/beepcomp) lets you compose chiptune tracks with text files. It features a nice retro-sounding synthesizer engine with 9 music channels and 1 drum channel.
 
-BeepComp is an open-source project. This means that you're welcome to modify the source code however you want. BeepComp is a also freeware that anyone can use freely. It is distributed under the MIT license.
+BeepComp is an open-source project. This means that you're welcome to modify the source code however you want. BeepComp is a also shareware that anyone can use freely. It is distributed under the MIT license.
 
 <div id="getting_started" />
 ## Getting Started ##
@@ -264,6 +264,16 @@ The tempo, measured by beats per measure (BPM), determines how fast your track i
 The delay effect is applied to the whole track (not to inidividual track). See the Delay Effect section for more. 
 
 By default, your track is set to play in an infinite loop. You can turn off track looping by `LOOP=OFF`. If you want to loop your track a certain number of times, you could first set `LOOP=OFF` in your global section and then enclose the entire real time data with `{}` in each channel.
+
+Here is an example of using the global section to set up the volume, tempo and looping for your track:
+
+    @G
+    MASTERVOLUME=50 // not too loud
+    TEMPO=80 // kind of slow
+    LOOP=OFF
+
+    @1
+    GFEDC // this won't be looped
 
 <div id="music_section_in_detail" />
 ## Music Section in Detail ##
@@ -570,12 +580,17 @@ This is a very fun effect you can add to your music. The name comes from a game 
 
 The number you specify after `ASTRO=` is the number of times that the wobble happens. Between 10 and 20 is good to start with, but try different values to see which value works for you.
 
-<div id="wave_tables" />
-## Wave Tables ##
+<div id="waveforms" />
+## Waveforms ##
 
-(Not yet fully implemented)
+Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring `WAVEFORM=` in each channel. The currently available waveforms and their assigned number are: sine(0), square(1, default), sawtooth(3), hybrid sine A(4), hybrid sine B(5). The hybrid sine waves combine a basic sign wave with a few added upper harmonics.
 
-Right now, only the square wave and sine wave are available. But I plan to add capabilities to choose different wave tables so you can have more sounds to choose from.
+Here is an example where a different waveform is selected:
+
+    @1
+    DEFAULTTONE // resets the volume envelope settings to plain beep
+    WAVEFORM=2  // sets up a saw tooth wave
+	F~:G~:Ab~:>C~:<Ab:G:F~:Eb~:F~~~~~::::
 
 <div id="bookmarking_your_start_position" />
 ## Bookmarking Your Start Position ##
@@ -596,7 +611,7 @@ Note that the bookmark will not be effective when you export to an audio file.
 <div id="auto_saving" />
 ## Auto Saving ##
 
-Everytime BeepComp quits, it will save your current work to a hidden file named "\_\_AUTOSAVED\_\_.txt" in your **userdata** folder. If you accidentally close the application, you can load this file to retrieve your work.
+Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt" in your **userdata** folder every 5 minutes and also when you quit the application. If something unexpected ever happens, you can load this file to retrieve your work.
 
 <div id="syntax_reference" />
 ## Syntax Reference ##
@@ -638,6 +653,8 @@ Everytime BeepComp quits, it will save your current work to a hidden file named 
 * `LFOSPEED=n` ... Sets the LFO speed by cycles per second (n=0 to 100)
 * `ASTRO=n` ... Turns on the astro effect and sets the number of wobbles per second (n=1 to 100)
 * `PRESET=?` ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)
+* `DEFAULTTONE` ... Clears the volume envelope settings
+* `WAVEFORM=?` ... Chooses the waveform that the channel uses (n=0 to 5)
 
 ##### Commands processed as the track progresses #####
 
@@ -700,4 +717,4 @@ The source code is publicly available at the [SourceForge](http://sourceforge.ne
 <div id="contact_me" />
 ## Contact Me! ##
 
-I welcome anyone using BeepComp and also anyone interested in getting involved to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) To e-mail me, just write through the [SourceForge contact page](https://sourceforge.net/u/smokinhiro/profile/send_message).
+I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) To e-mail me, just write through the [SourceForge contact page](https://sourceforge.net/u/smokinhiro/profile/send_message).

@@ -253,8 +253,20 @@ int MPlayer::playerCallback (
 
 ////////////////////////////////////////////////////////
 
+// portaudio stream has been dropped! ... attempt to reopen stream...
+void MPlayer::playerStoppedCallback ()
+{
+	cout << "Stream finished callback called! step 2 :)\n";
+	if(!appIsExiting)
+		restartStream();
+}
+
+////////////////////////////////////////////////////////
+
 MPlayer::MPlayer()
 {
+	appIsExiting = false; // when this is true, paStreamFinishedCallback will NOT automatically reopen stream
+	
 	for(int i=0;i<9;i++)
 		silenced[i] = false;
 
@@ -331,11 +343,74 @@ void MPlayer::initialize()
               this // pass this class to callback
 		);
 	if( err != paNoError ) handlePaError( err );
+	
+	// set up callback to be called in case stream gets intrrupted
+	err = Pa_SetStreamFinishedCallback( &stream, paStoppedCallback );
 
 	// start port audiostream
     err = Pa_StartStream( stream );
 }
 
+// this method should be used if portaudio drops off and stops its stream
+void MPlayer::restartStream()
+{
+	if(appIsExiting)
+	{
+		cout << "pa stream restart requested, but app is exiting...\n(will not restart audio stream)\n";
+		return;
+	}
+	
+	// specifically stop stream first (as user guide recommends it)
+	err = Pa_StopStream( stream );
+	
+	// open port audio stream
+    err = Pa_OpenStream(
+              &stream,
+              NULL, /* no input */
+              &outputParameters,
+              SAMPLE_RATE,
+              FRAMES_PER_BUFFER,
+              paClipOff,      /* we won't output out of range samples so don't bother clipping them */
+              paCallback,	// the name of port audio callback function
+              this // pass this class to callback
+		);
+	if( err != paNoError ) handlePaError( err );
+	
+	err = Pa_StartStream( stream );
+	if( err != paNoError ) handlePaError( err );
+	else
+		cout << "portaudio stream restarted - success!\n";
+}
+
+// DEBUG
+void MPlayer::stopStream()
+{
+	err = Pa_StopStream( stream );
+	cout << "requesting portaudio to stop stream...\n";
+}
+
+// 
+void MPlayer::declareAppTermination()
+	{ appIsExiting = true; }
+
+// utility function - query portaudio stream state
+std::string MPlayer::getStreamStateString()
+{
+	err = Pa_IsStreamStopped( stream );
+	std::string strError = Pa_GetErrorText(err);
+	return strError;
+}
+
+// return portaudio stream state in boolean (success is true)
+bool MPlayer::getStreamState()
+{
+	err = Pa_IsStreamStopped( stream );
+	if(err==0)
+		return true;
+	else
+		return false;
+}
+	
 // function to set back to default before loading new song (or 'play' current song again)
 // reset all oscillator + delay settings etc. - before parsing source
 void MPlayer::resetForNewSong()

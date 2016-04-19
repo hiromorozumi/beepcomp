@@ -243,6 +243,12 @@
 						</File>
 					</Component>
 					
+					<Component Id='cmp_sawtooth_wave_testTXT' Guid='*' Permanent="yes">
+						<File Id="sawtooth_wave_testTXT" Name="sawtooth_wave_test.txt" 
+						DiskId='1' Source='..\userdata\sawtooth_wave_test.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
 					<Component Id='cmp__tutorial_basic_1TXT' Guid='*' Permanent="yes">
 						<File Id="cmp__tutorial_basic_1TXT" Name="_tutorial_basic_1.txt" 
 						DiskId='1' Source='..\userdata\_tutorial_basic_1.txt' KeyPath='yes'>				
@@ -316,6 +322,7 @@
 		<ComponentRef Id='cmp_astro_wars_1TXT' />
 		<ComponentRef Id='cmp_pure_psg_toneTXT' />
 		<ComponentRef Id='cmp_astro_effectTXT' />
+		<ComponentRef Id='cmp_sawtooth_wave_testTXT' />
 		<ComponentRef Id='cmp__tutorial_repeatsTXT' />	
 		<ComponentRef Id='cmp__tutorial_drumsTXT' />
 		<ComponentRef Id='cmp__tutorial_basic_1TXT' />

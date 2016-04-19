@@ -256,6 +256,8 @@ void GUI::initialize()
 	
 	// clock for auto-saving (every 5 min.)
 	autoSaveClock.restart();
+	
+	// clock for checking portaudio.. (every second)
 
 	window.requestFocus();
 	
@@ -348,6 +350,7 @@ void GUI::run()
 
 		handleInputs();
 		handleTimedSaving();
+		handleAudioChecking();
 		updateDisplay();
 
 		// check for termination request
@@ -1104,6 +1107,7 @@ void GUI::handleInputs()
 		mplayer.pause();
 		mplayer.close();
 		cout << "Reinitializing portaudio...\n";
+		help.setQuickMessage("Resetting audio...");
 		mplayer.initialize();
 	}
 	
@@ -1116,6 +1120,24 @@ void GUI::handleInputs()
 		string exeCommand = "mmsys.cpl";
 		ShellExecute( NULL, NULL, exeCommand.c_str(), NULL, NULL, SW_SHOWNORMAL );
 		cout << "Open - audio device properties\n";
+	}
+	
+	//
+	//	DEBUG! - test automatic restart of portaudio stream...
+	//  (this forces stream to STOP)
+	if(kbd.altZ() && kbd.ctrl())
+	{
+		while(kbd.altZ() &&kbd.ctrl())
+		{ updateDisplay(); }
+		mplayer.stopStream();
+		cout << "DEBUG - stopping audio stream for testing purposes....\n";
+		cout << "portaudio state: " << mplayer.getStreamState() << endl;
+	}
+	
+	// DEBUG - just to get portaudio stream state...
+	if(kbd.altX())
+	{
+		cout << "portaudio state: " << mplayer.getStreamState() << endl;
 	}
 
 	// EXPORT button or F12
@@ -1235,9 +1257,51 @@ endOfButtonRoutines:
 	{
 		while(kbd.ctrlV()){}
 		cout << "CTRL-V!" << endl;
-
+		
+		// DEBUG - if you want to restore to original, just use following two lines
+		//
 		// if anything is highlighted, clear
-		emptySelection();
+		// emptySelection();
+		//
+		//
+		//
+		//
+		
+		int charPosToStore = charPos; // we'll store this to undo history as original charPos
+		int performedAtToStore = charPos;
+		string strToErase = "";
+		
+		// if anything is highlighted, erase that first
+		if(selectFinished && source.length()>1)
+		{
+			cout << "CTRL + V: erase selection first - from " << selectStart << " to " << selectEnd << endl;
+			
+			int eraseFrom = selectStart;
+			int eraseTo = selectEnd;
+			if(eraseTo < eraseFrom) // if selected upwards, swap
+			{
+				int temp = eraseTo;
+				eraseTo = eraseFrom;
+				eraseFrom = temp;
+			}
+			if(eraseTo >= (source.length()-1)) // if EOF is selected, back up by one
+				eraseTo = source.length()-2;
+			int nCharsToErase = (eraseTo - eraseFrom) + 1;
+			int newCharPos = eraseFrom;
+			strToErase = source.substr(eraseFrom, nCharsToErase); // erase this before pasting
+			
+			// now amend the source string
+			source.erase(eraseFrom, nCharsToErase);
+			performedAtToStore = eraseFrom; // storing record for undo
+			emptySelection(); // take out highlighter..
+			charPos = newCharPos; // adjust charPos
+		}
+		
+		//
+		//
+		//
+		//
+		//
 
 		// get content of clipboard and paste into str
 		string strToPaste = getClipBd();
@@ -1266,7 +1330,7 @@ endOfButtonRoutines:
 		}
 
 		// store this action in history (undo history stack)
-		addHistory("", strToPaste, charPos, charPos, topRenderLine);
+		addHistory(strToErase, strToPaste, performedAtToStore, charPosToStore, topRenderLine);
 
 		// DEBUG!!!
 		cout << "Just about to insert for CTRL-V..\n";
@@ -1368,10 +1432,27 @@ endOfButtonRoutines:
 	{
 		if(!selecting && typedWithShift==false) // shift-down (mouseL-Down) has just now begun
 		{
+			// update pointed char coordinates
+			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
+			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			int lastScreenY = (nLines-1) - topRenderLine; // Y of last line shown on screen
+		
 			// exclude case where mouse pressed but out of text edit area
-			if(mouseLPressed && mouseX > 674.0)
+			if(mouseLPressed && (mouseX > 674.0 || mouseX < 0.0))
 			{
 				cout << "Clicked, but out of text area!\n";
+			}
+			// exclude case where clicked x is past posInLine
+			else if(mouseLPressed && (posInLine < cx))
+			{
+				cout << "clicked, but cx is past posInLine!\n";
+				emptySelection();
+			}
+			// exclude case where clicked y is past lastScreenY
+			else if(mouseLPressed && (lastScreenY < cy))
+			{
+				cout << "clicked, but cy is past lastScreenY!\n";
+				emptySelection();
 			}
 			// if dragging the volume knob, won't start selection
 			else if(mouseLPressed && knob.isActive())
@@ -1380,9 +1461,6 @@ endOfButtonRoutines:
 			}
 			else
 			{
-				// update pointed char coordinates
-				cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
-				cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);				
 				
 				selectStart = charPos;
 				selectEnd = charPos;
@@ -2023,6 +2101,19 @@ void GUI::undo()
 			charPos = charPosHist[previous];
 			historyLevel--;
 		}
+		// if previous step was 'REPLACE'
+		else if (deleted[previous].length()>=1 && inserted[previous].length()>=1)
+		{
+			// then we will INSERT the deleted and DELETE the inserted
+			cout << "Undo: now INSERTING+DELETING to undo REPLACING!\n";
+			
+			// DELETE (inserted) then INSERT (deleted) to roll back
+			source.erase(performedAt[previous], inserted[previous].length());
+			source.insert(performedAt[previous], deleted[previous]);
+			charPos = charPosHist[previous];
+			historyLevel--;
+		}
+		
 		else
 			return;
 
@@ -2272,4 +2363,24 @@ void GUI::quickSave()
 	// save the file!
 	mml.setSource(source);
 	mml.saveFile(currentPathAndFileName, &mplayer);
+}
+
+// check portaudio status every so often - if dropped out, restart...
+void GUI::handleAudioChecking()
+{
+	if(audioCheckClock.getElapsedTime().asSeconds() < 5.0f) // if not time yet, exit
+		return;
+	else
+	{
+		if(!mplayer.getStreamState())
+		{
+			mplayer.initialize(); // reinitialize portaudio...
+			mplayer.pause();
+			mplayer.close();
+			cout << "Reinitializing portaudio...\n";
+			mplayer.initialize();
+			help.setQuickMessage("Resetting audio...");
+		}
+		audioCheckClock.restart();
+	}
 }

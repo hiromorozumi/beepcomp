@@ -337,6 +337,7 @@ public:
 	sf::Clock blinkClock;
 	sf::Clock meterClock;
 	sf::Clock autoSaveClock;
+	sf::Clock audioCheckClock;
 
 	float charHeight;
 	float charWidth;
@@ -464,6 +465,7 @@ public:
 	void adjustWindowSize();
 	void autoSave();
 	void quickSave();
+	void handleAudioChecking();
 
 private:
 
