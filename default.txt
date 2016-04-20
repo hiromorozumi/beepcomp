@@ -19,59 +19,212 @@
 //                                  - Hiro
 //
 
-// global channel
+// global section ///////////////////////////////
 
 @G
 
-MASTERVOLUME=80 TEMPO=132
-V1=9 V2=9 V3=5 VD=0
+MASTERVOLUME=80
+DELAYTIME=428
+DELAYLEVEL=24
+TEMPO=140
+V1=5 V2=5 V3=5 V4=8 V5=8 V6=5
+V7=7 V8=7 V9=7 VD=10
 
-// channel 1 - melody
-	
+// channel 1 ////////////////////////////////////
+
 @1
 
+WAVEFORM=2 // sawtooth wave...
+ATTACKTIME=5
+DECAYTIME=80
+SUSTAINLEVEL=50
+RELEASETIME=30
+
 LFO=ON
-O5L8
+LFOSPEED=6
+LFOWAIT=180
+LFORANGE=40
 
-::C<B~AbB~AbG~[8AbGF]
-G~~G~~:GFDAbG
-::>C<B~AbB~AbG~[8AbGF]
-G~~G~~:GFDAbG
-Ab~AbG~GAb~AbG>C<B
-Ab~AbG~GAb~Ab:G~
-Ab~AbG~GAb~AbG>C<B
-Ab~AbG~GAb~AbL16G~~G~~G~~G~~
+L8
 
-// channel 2 - bass
-	
+{3
+ {4:[G:]Ab~[G:]Ab~[G:]Ab~[G:]Ab~~~:}
+}
+
+// channel 2 ////////////////////////////////////
+
 @2
 
-O3L8
-
-CEb~DF~EbG~DF~
-CEb~DF~:<BbAbF>C<B>
-CEb~DF~EbG~DF~
-CEb~DF~:<BbAbF>C<B>
-L16F~~EF~Eb~~DEb~F~~EF~Eb~~DEb~
-F~~EF~Eb~~DEb~F~~EF~::Eb~~~
-L16F~~EF~Eb~~DEb~F~~EF~Eb~~DEb~
-F~~EF~Eb~~DEb~F~~EF~D~~D~~D~~D~~
-C~EbDEb~D~FEF~Eb~GF#G~D~FEF~
-
-// channel 3 - harmony line
-	
-@3
+WAVEFORM=2
+ATTACKTIME=5
+DECAYTIME=80
+SUSTAINLEVEL=50
+RELEASETIME=30
 
 LFO=ON
-O4L8
+LFOSPEED=6
+LFOWAIT=180
+LFORANGE=40
 
-::::::::::::::::::::::::
-L8EbG>EbD~<B>D~C<B~>[8C<BAb]
-B~~B~~:BAbF>C<B
-::::::::::::::::::::::::
-L16>C~~<B>C~C~~<B>C~C~~<B>C~C~Eb~D~
-C~~<B>C~C~~<B>C~C~~<B>C~<B~~B~~B~~B~~
+L8
 
-// drum channel - is not used
+{3
+ {4:[Eb:]F~[Eb:]F~[Eb:]F~[Eb:]F~~~:}
+}
+
+// channel 3 ////////////////////////////////////
+
+@3
+
+WAVEFORM=2
+ATTACKTIME=5
+DECAYTIME=80
+SUSTAINLEVEL=50
+RELEASETIME=30
+
+LFO=ON
+LFOSPEED=6
+LFOWAIT=180
+LFORANGE=40
+
+L8 O3
+
+{3
+ {4:[Bb:]>C~<[Bb:]>C~<[Bb:]>C~<[Bb:]>C~~~:<}
+}
+
+// channel 4 ////////////////////////////////////
+
+@4
+
+ATTACKTIME=0
+PEAKLEVEL=100
+PEAKTIME=50
+DECAYTIME=50
+SUSTAINLEVEL=40
+RELEASETIME=0
+
+L8 O2
+
+{3
+ {8F[F:]}
+ {8Db[Db:]}<
+ {8Bb[Bb:]}>
+ {8Eb[Eb:]}
+}
+
+// channel 5 ////////////////////////////////////
+
+@5
+
+DEFAULTTONE // this clears the envelope settings
+WAVEFORM=3 // triangle wave...
+RELEASETIME=80
+LFO=ON
+
+O6
+L1 :: :: :: ::
+
+{
+L8:::::::[Ab:] L16G~~<Bb ~~Ab~
+~~>F~ ~~~~
+L8:::::::[F:] L16Eb~~<G ~~F~
+~~>Eb~ ~~~~
+L8:::::::[Db:] L16C~~<Eb ~~Db~
+~~>C~ ~~~[DbC]<
+Bb~~~ ~~~~ ~~~~ ~~~~ 
+~~~[BbAb] GAbBb>C DbEbFG AbG AbBb
+}
+
+// channel 6 ////////////////////////////////////
+
+@6
+
+DEFAULTTONE
+WAVEFORM=3
+RELEASETIME=80
+LFO=ON
+
+O6
+
+L1 {:: :: :: ::}
+
+L8:::::::>[C:] L16<Bb~~Db ~~C~
+~~Ab~ ~~~~
+L8:::::::[Ab:] L16G~~<Bb ~~Ab~
+~~>G~ ~~~~
+L8:::::::[F:] L16Eb~~<G ~~F~
+~~>Eb~ ~~~[FEb]
+Db~~~ ~~~~ ~~~~ ~~~~ 
+~~~[DbC] <Bb>CDbEb FGAbBb >C<Bb>CDb
+
+// channel 7 ////////////////////////////////////
+
+@7
+
+DEFAULTTONE
+WAVEFORM=1 // square wave
+           // - you can do a lot with this 
+ATTACKTIME=0
+PEAKLEVEL=100 // attacky
+DECAYTIME=50 // decays very fast
+SUSTAINLEVEL=0 // because it sustain is off :)
+
+O4
+{2
+ { V10 L4 :::: :: L16F::_F::_F:
+   :_F:: _F::_F ::_F: :F::_ F::: L4::: }
+}
+O5
+ { V10 L4 :::: :: L16F::_F::_F:
+   :_F:: _F::_F ::_F: :F::_ F::: L4::: }
+
+// channel 8 ////////////////////////////////////
+
+@8
+
+DEFAULTTONE
+WAVEFORM=1
+ATTACKTIME=0
+PEAKLEVEL=100
+DECAYTIME=50
+SUSTAINLEVEL=0
+
+O4
+{2
+ { V10 L4 :::: :: L16Ab::_Ab::_Ab:
+   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::: L4::: }
+}
+O5
+ { V10 L4 :::: :: L16Ab::_Ab::_Ab:
+   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::: L4::: }
+
+// channel 9 ////////////////////////////////////
+
+@9
+
+DEFAULTTONE
+WAVEFORM=1
+ATTACKTIME=0
+PEAKLEVEL=100
+DECAYTIME=50
+SUSTAINLEVEL=0
+
+L1 {:: :: :: ::}
+
+O6
+{ V10 L4 :::: :: L16C::_C::_C:
+  :_C:: _C::_C ::_C: :C::_ C::: L4::: }
+}
+
+// channel 'D' - drums //////////////////////////
 
 @D
+
+L16
+{2
+ {3 K:hhS~hh K:hhS~hk K:hhS~hh K:hhS~hh }
+    K:hhS~hh K:hhS~hk K:hhS~hh K:hs[sss]SSS
+}
+ {3 K:hhS~hh K:hhS~hk K:hhS~hh K:hhS~hh }
+    K:hhS~hh K:hhS~KK KsS~sSK[ss] [ss]SSS[ss]SSS

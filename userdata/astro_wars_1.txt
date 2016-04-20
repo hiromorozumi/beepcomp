@@ -16,7 +16,7 @@ MASTERVOLUME=95
 V1=10 V2=4 V3=4 V4=4 V5=6 VD=9
 
 TEMPO=124
-DELAYTIME=496
+DELAYTIME=322
 DELAYLEVEL=30
 
 // ch 1 melody //////////////////////////////////

@@ -1,19 +1,36 @@
-BeepComp Release Notes
-======================
+====================
+Release Notes v0.1.7
+====================
 
-New features in version 0.1.7:
+Dear users,
 
-- Your work now gets saved every 5 minutes
+Boy, we have many exciting new features here! :)
+I focused on making the program more robust, and I will continue on this path.
+Thank you for using BeepComp.
+I'm grateful for the people who got in touch with me about the bugs, too.
+Hope you enjoy this!
+
+Hiro
+
+-----
+
+New features in BeepComp version 0.1.7:
+
+- A new default demo song! :)
+
+- The user's work now gets automatically saved every 5 minutes
 - If the audio device drops out, it gets re-initialized automatically
   (automatic check performed every 5 seconds)
-- Now you can specify a set number to repeat a phrase by {n---}
+- Now you can specify a set number to repeat a phrase, by {n---}
 - Minor bug fix: empty tuplet braces [] caused crash
 - Minor bug fix: made rests ":" work correctly inside tuplet markings
+- Minor bug fix: a problem with fast-forwarding for drum channel was fixed
 - PRESET=BEEP sets up for a raw PC beep tone
-- WAVEFORM=n specifies a waveform to use
+  (This is great for simulating vintage PC sounds)
+- New feature to select waveforms: WAVEFORM=n can specify for each channel
   (0..sine, 1..square(default), 2..saw, 3..triangle, 4&5..hybrid sine)
 - DEFAULTTONE sets up for default square tone beep (similar to PRESET=BEEP)
 - A couple of new example source files were added
 - Better pasting: CTRL + V will paste over selection if a selection is present
 
-----------
+-----
