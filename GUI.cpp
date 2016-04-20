@@ -3,6 +3,7 @@
 #include <cstring>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System/String.hpp>
 #include "GUI.h"
@@ -853,9 +854,13 @@ void GUI::handleInputs()
 		forwardButton.activate();
 		while(kbd.f4() || mouse.left())
 		{ updateDisplay(); }
-	
+
 		if(mplayer.isPlaying())
 		{
+			
+			cout << "getNextSeekPoint()=" << mplayer.getNextSeekPoint() << endl;
+			cout << "getSongLastFramePure()=" << mplayer.getSongLastFramePure() << endl;
+			
 			// forward to the next seek position relative to current framePos
 			long forwardTo = mplayer.getNextSeekPoint();
 			mplayer.pause();
@@ -1104,11 +1109,20 @@ void GUI::handleInputs()
 		while(kbd.altI())
 		{ updateDisplay(); }
 	
+		help.setQuickMessage("Resetting audio...");
+		bool playerWasPlaying = mplayer.isPlaying();
+		long seekTo = mplayer.getFramePos(); // will clean seek again to current position
 		mplayer.pause();
 		mplayer.close();
 		cout << "Reinitializing portaudio...\n";
-		help.setQuickMessage("Resetting audio...");
 		mplayer.initialize();
+		mplayer.resetForNewSong();
+		mml.parse(&mplayer);
+		mplayer.goToBeginning();
+		if(playerWasPlaying)
+			mplayer.seekAndStart(seekTo);
+		else
+			mplayer.seek(seekTo);
 	}
 	
 	// open up system audio device control
@@ -1441,6 +1455,7 @@ endOfButtonRoutines:
 			if(mouseLPressed && (mouseX > 674.0 || mouseX < 0.0))
 			{
 				cout << "Clicked, but out of text area!\n";
+				emptySelection();
 			}
 			// exclude case where clicked x is past posInLine
 			else if(mouseLPressed && (posInLine < cx))
@@ -1461,7 +1476,6 @@ endOfButtonRoutines:
 			}
 			else
 			{
-				
 				selectStart = charPos;
 				selectEnd = charPos;
 				selectStartLine = getLineNumber(selectStart);
@@ -2374,13 +2388,32 @@ void GUI::handleAudioChecking()
 	{
 		if(!mplayer.getStreamState())
 		{
-			mplayer.initialize(); // reinitialize portaudio...
+			help.setQuickMessage("Resetting audio...");
+			bool playerWasPlaying = mplayer.isPlaying();
+			long seekTo = mplayer.getFramePos(); // will clean seek again to current position
 			mplayer.pause();
 			mplayer.close();
+			mplayer.initialize(); // reinitialize portaudio...
 			cout << "Reinitializing portaudio...\n";
-			mplayer.initialize();
-			help.setQuickMessage("Resetting audio...");
+			mplayer.resetForNewSong();
+			mml.parse(&mplayer); // reparse tone settings etc...
+			mplayer.goToBeginning();
+			if(playerWasPlaying)
+				mplayer.seekAndStart(seekTo);
+			else
+				mplayer.seek(seekTo);
 		}
 		audioCheckClock.restart();
 	}
+}
+
+
+
+// debugging utility function - dumps variables to a text file
+void GUI::dump(const std::string &dump)
+{
+	ofstream outFile;
+	outFile.open("_dump_.txt", ios::out);
+	outFile << dump << endl;
+	outFile.close();
 }

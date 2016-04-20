@@ -466,6 +466,8 @@ public:
 	void autoSave();
 	void quickSave();
 	void handleAudioChecking();
+	
+	void dump(const std::string &dump); // debug utility function
 
 private:
 

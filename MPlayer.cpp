@@ -652,6 +652,10 @@ long MPlayer::getSongLastFramePure()
 	return maxLen;
 }
 
+// returns the current framePos (where player's position in music)
+long MPlayer::getFramePos()
+	{ return framePos; }
+
 // checks if player is currently playing
 bool MPlayer::isPlaying()
 	{ return playing; }
@@ -1333,7 +1337,8 @@ void MPlayer::seek(long destination)
 					
 					while(!eventsAtThisPosDone)
 					{
-						int readValue = static_cast<int>(ddata.drumNote[noteIndex[dNoteIndex]]);
+						
+						int readValue = static_cast<int>(ddata.drumNote[dNoteIndex]);
 						if(readValue==70000.0) // 'specify volume'
 						{
 							// convert the passed value(1-10) to float (0.0 to 0.5f)
@@ -1369,8 +1374,11 @@ void MPlayer::seek(long destination)
 				// if not finished yet, advance note index.. til very last note before destination
 				if(!dChannelDone)
 				{
+					
+					long nextDNoteLen = static_cast<long>( ddata.len[dNoteIndex] );
+					
 					// if adding next note will cause to go past destination, stop here
-					if( ( seekPos + static_cast<long>(ddata.len[dNoteIndex]) ) >= destination )
+					if( ( seekPos + nextDNoteLen ) >= destination )
 					{
 						zappingDone = true;
 						// DEBUG

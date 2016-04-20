@@ -1,11 +1,77 @@
-// sawtooth wave test... :)
+//
+//  Welcome to ** BeepComp ** !
+//
+//    ... this app lets you compose
+//    nice chip tunes on text files. 
+//
+//  Press [F1] to play
+//    .. hear what the source below sounds like.
+//
+//  Press [F10] to load
+//     .. explore example / tutorial files.
+//
+//    I'll be adding more features
+//    So your feedback and bug reports will be
+//    greatly appreciated!
+//
+//  Enjoy!! :)
+//
+//                                  - Hiro
+//
 
+// global channel
+
+@G
+
+MASTERVOLUME=80 TEMPO=132
+V1=9 V2=9 V3=5 VD=0
+
+// channel 1 - melody
+	
 @1
 
-DEFAULTTONE
-WAVEFORM=2 // you can try different value :)
-           // 2 is sawtooth wave... 
+LFO=ON
+O5L8
 
-F~~:Ab~:F:FBb:F:Eb:
-F~~:>C~:<F:F>Db:C:<Ab:
-F:>C:F:<FEb:EbC:G:F~ ~~~~ ~~~~ :::: ::::
+::C<B~AbB~AbG~[8AbGF]
+G~~G~~:GFDAbG
+::>C<B~AbB~AbG~[8AbGF]
+G~~G~~:GFDAbG
+Ab~AbG~GAb~AbG>C<B
+Ab~AbG~GAb~Ab:G~
+Ab~AbG~GAb~AbG>C<B
+Ab~AbG~GAb~AbL16G~~G~~G~~G~~
+
+// channel 2 - bass
+	
+@2
+
+O3L8
+
+CEb~DF~EbG~DF~
+CEb~DF~:<BbAbF>C<B>
+CEb~DF~EbG~DF~
+CEb~DF~:<BbAbF>C<B>
+L16F~~EF~Eb~~DEb~F~~EF~Eb~~DEb~
+F~~EF~Eb~~DEb~F~~EF~::Eb~~~
+L16F~~EF~Eb~~DEb~F~~EF~Eb~~DEb~
+F~~EF~Eb~~DEb~F~~EF~D~~D~~D~~D~~
+C~EbDEb~D~FEF~Eb~GF#G~D~FEF~
+
+// channel 3 - harmony line
+	
+@3
+
+LFO=ON
+O4L8
+
+::::::::::::::::::::::::
+L8EbG>EbD~<B>D~C<B~>[8C<BAb]
+B~~B~~:BAbF>C<B
+::::::::::::::::::::::::
+L16>C~~<B>C~C~~<B>C~C~~<B>C~C~Eb~D~
+C~~<B>C~C~~<B>C~C~~<B>C~<B~~B~~B~~B~~
+
+// drum channel - is not used
+
+@D

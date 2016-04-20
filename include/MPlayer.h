@@ -143,6 +143,7 @@ public:
 	void goToBeginning();
 	long getSongLastFrame();
 	long getSongLastFramePure();
+	long getFramePos();
 	bool isPlaying();
 	int getTableType();
 	void setTableType(int type);
