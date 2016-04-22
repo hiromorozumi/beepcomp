@@ -13,7 +13,7 @@
 
 /*-----[BCPLAYER][STARTCOMMENTOUT]-----*/
 
-#include <sndfile.hh>
+#include <sndfile.h>
 #include <lame/lame.h>
 
 /*-----[BCPLAYER][ENDCOMMENTOUT]-----*/
@@ -422,6 +422,10 @@ void MPlayer::resetForNewSong()
 	songLastFrame = 0;
 	songLastFramePure = 0;
 	songFinished = true;
+	
+	// initialize oscillators for first note (so that if starting song with rest, OSC is muted)
+	//for(int i=0; i<9; i++)
+	//	osc[i].initializeForFirstNote();
 
 	// clear delay buffer
 	delay[0].clearBuffer(); // left delay
@@ -551,9 +555,8 @@ void MPlayer::goToBeginning()
 
 		remainingFrames[i] = data[i].len[noteIndex[i]];
 		freqNote[i] = data[i].freqNote[noteIndex[i]];
-		setNewNote(i, freqNote[i]);
 
-		// if this is a rest (freq = 65535), silence channel
+		// if very first note is a rest (freq = 65535), silence channel
 		if(freqNote[i]==65535.0)
 		{
 			setToRest(i); // set this channel to rest
@@ -563,6 +566,8 @@ void MPlayer::goToBeginning()
 			channelDone[i] = true;
 			disableChannel(i);
 		}
+		else // otherwise, we have a legit note! go ahead and set to play that note
+			setNewNote(i, freqNote[i]);
 	}
 
 	// handle drum channel!
@@ -964,7 +969,7 @@ std::string MPlayer::exportToFile(string filename)
 			int nFramesWritten = fillExportBuffer(sndBuffer, writeChunkSize, currentFrame, songFrameLen);
 
 			// write to file just this much
-			// int framesWrittenFile = sf_writef_float(sndFile, sndBuffer, writeChunkSize);
+			int framesWrittenFile = sf_writef_float(sndFile, sndBuffer, writeChunkSize);
 
 			currentFrame += nFramesWritten; // update current position
 			if(currentFrame >= songFrameLen) // reached end...

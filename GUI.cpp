@@ -11,6 +11,8 @@
 
 using namespace std;
 
+const std::string GUI::STR_VERSION = "0.1.8";
+
 void GUI::initialize()
 {
 	anotherThreadRunning = false;
@@ -169,7 +171,7 @@ void GUI::initialize()
 	mouseWheelMoved = 0;
 
 	// meter related
-	meter.initialize(685, 94, 138, 92, 0.5f); // set size and position
+	meter.initialize(685, 90, 138, 96, 0.5f); // set size and position
 
 	for(int i=0; i<10; i++)
 		meter.set(i, 0.0f);
@@ -235,6 +237,11 @@ void GUI::initialize()
 	
 	help.setBlackOut(3, 3, 360, helpYSpacing*14+10);	
 	help.deactivate(); // start inactive...
+	
+	string vText = "VERSION " + STR_VERSION;
+	string authorText = "by Hiro Morozumi"; // if you mod this program, you can express yourself here, hehe :)
+	help.setVersionText(vText, authorText);
+	help.deactivateVersionText();
 	
 	//
 	//
@@ -872,18 +879,7 @@ void GUI::handleInputs()
 		forwardButton.highlight();
 	else
 		forwardButton.unhighlight();
-	
-	/*
-	if(kbd.f5())
-	{
-		int type = mplayer.getTableType();
-		type++;
-		if(type==2)
-			type = 0;
-		mplayer.setTableType(type);
-		while(kbd.f5()){}
-	}
-	*/
+
 	
 	// KEYs help button or F5 key
 	if( kbd.f5() || (mouse.left() && keyButton.hovering(mouseX, mouseY)) )
@@ -1384,8 +1380,11 @@ endOfButtonRoutines:
 		if(selecting) // only when selecting - out-of-bound selecting allows for scrolling for cy
 		{
 			// update pointed char coordinates
-			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
-			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			if(mouseX < 674.0)
+			{
+				cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
+				cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			}
 			
 			// safeguarding for negative x values
 			if(cx < 0) cx = 0;
@@ -1423,7 +1422,6 @@ endOfButtonRoutines:
 		selectFinished = false;
 	}
 	
-
 	if(kbd.home())
 	{
 		while(kbd.home()){}
@@ -1447,8 +1445,11 @@ endOfButtonRoutines:
 		if(!selecting && typedWithShift==false) // shift-down (mouseL-Down) has just now begun
 		{
 			// update pointed char coordinates
-			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
-			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			if(mouseX<674.0)
+			{
+				cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
+				cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			}
 			int lastScreenY = (nLines-1) - topRenderLine; // Y of last line shown on screen
 		
 			// exclude case where mouse pressed but out of text edit area
@@ -1491,9 +1492,11 @@ endOfButtonRoutines:
 		if(selecting && typedWithShift==false)
 		{
 			// update pointed char coordinates
-			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
-			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);			
-			
+			if(mouseX < 674.0)
+			{
+				cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
+				cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);			
+			}
 			if(charPos != selectEnd)
 			{
 				selectEnd = charPos;
@@ -1508,9 +1511,12 @@ endOfButtonRoutines:
 		if(selecting)
 		{
 			// update pointed char coordinates
-			cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
-			cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
-
+			if(mouseX < 674.0)
+			{
+				cx = (mouseX - TEXT_TOP_X) / static_cast<double>(charWidth);
+				cy = (mouseY - TEXT_TOP_Y) / static_cast<double>(charHeight);
+			}
+			
 			// EXPERIMENT - safeguarding for negative x, y values
 			if(cx < 0) cx = 0;
 			if(cy < 0) cy = 0;
@@ -1538,6 +1544,7 @@ endOfButtonRoutines:
 		typedWithShift = false;
 	}
 
+	// if alt is pressed, empty selection
 	if(kbd.alt() || mouseRPressed)
 	{
 		if(selecting || selectFinished)
@@ -1545,6 +1552,12 @@ endOfButtonRoutines:
 			emptySelection();
 		}
 	}
+	
+	// if clicked on logo, show version info x = 672 to 827, y = 12 to 73, logo is 155 x 61
+	if(mouseLPressed && (672<mouseX) && (mouseX<827) && (12<mouseY) && (mouseY<73))
+		help.activateVersionText();
+	else
+		help.deactivateVersionText();
 }
 
 // every five mintues, your work gets saved!
@@ -1682,6 +1695,10 @@ void GUI::updateDisplay()
 	// if quickMessage is on, display...
 	if(help.quickMessageActive)
 		help.drawQuickMessage();
+	
+	// if version text is on, display
+	if(help.versionTextIsActive())
+		help.drawVersionText();
 
 	// now show the updated screen!
 	window.display();
@@ -1869,6 +1886,8 @@ void GUI::startNewDialog()
 		cout << "Start new!\n";
 		cout << "Now current path and filename is\n" << currentPathAndFileName << "\n";
 
+		lastSavedPathAndFileName = ""; // we just started a new song to work on! - clear quick-saving
+		
 		// set the window title
 		window.setTitle(windowTitle);
 		autoSaveClock.restart();
@@ -1944,6 +1963,8 @@ void GUI::loadDialog()
 		mml.parse(&mplayer);
 		mplayer.goToBeginning();
 		renewForNewSong();
+		
+		lastSavedPathAndFileName = ""; // we just loaded a new song to work on! - clear quick saving
 		
 		// set the window title
 		window.setTitle(windowTitle + " ... " + currentFileName);

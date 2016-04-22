@@ -113,6 +113,10 @@ public:
 	bool quickMessageActive;
 	sf::Clock quickMessageClock;
 	
+	sf::Text versionText;
+	sf::Text authorText; // goes with version text (right below)
+	bool versionTextActive;
+	
 	Help(){}
 	~Help(){}
 	
@@ -137,6 +141,15 @@ public:
 		quickMessageText.setCharacterSize(FONTSIZE);
 		quickMessageText.setColor(sf::Color(255,220,220));
 		quickMessageFrame.setFillColor(sf::Color(100,10,10));
+		
+		// initialize version text (author text goes with this)
+		versionText.setFont(helpFont);
+		versionText.setCharacterSize(FONTSIZE);
+		versionText.setColor(sf::Color(200,200,200));
+		authorText.setFont(helpFont);
+		authorText.setCharacterSize(FONTSIZE);
+		authorText.setColor(sf::Color(200,200,200));
+		deactivateVersionText(); // begin inactive...
 	}
 	// set text for given index
 	void set(int index, const std::string &helpText, float xx, float yy)
@@ -217,6 +230,31 @@ public:
 		// while we're at it, let's check for expiration
 		checkQuickMessageExpiration();
 	}
+	
+	// version information to display at bottom of logo
+	void setVersionText(const std::string &strVersion, const std::string &strAuthor)
+	{
+		versionText.setString(strVersion);
+		sf::FloatRect fRect = versionText.getGlobalBounds();
+		versionText.setPosition(sf::Vector2f(827 - fRect.width, 80 - fRect.height));
+		authorText.setString(strAuthor);
+		fRect = authorText.getGlobalBounds();
+		authorText.setPosition(sf::Vector2f(827 - fRect.width, 96 - fRect.height));		
+	}
+	void activateVersionText()
+		{ versionTextActive = true; }
+	void deactivateVersionText()
+		{ versionTextActive = false; }
+	bool versionTextIsActive()
+		{ return versionTextActive; }
+	
+	// draw the version text with number at the bottom of logo
+	void drawVersionText()
+	{
+		w->draw(versionText);	
+		w->draw(authorText);
+	}
+	
 	
 private:
 
@@ -305,6 +343,7 @@ public:
 	static const int TEXT_HEIGHT = 22;
 	static const int TEXT_TOP_X = 10;
 	static const int TEXT_TOP_Y = 10;
+	static const std::string STR_VERSION;
 
 	sf::RenderWindow window;
 	sf::RenderWindow* wPtr;

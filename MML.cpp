@@ -283,6 +283,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 		if(found != string::npos)
 		{
 			configDone = false;
+			player->osc[channel].setTable(1); // square wave
 			player->osc[channel].setEnvelope(0, 0, 0, 0, 0.99f, 0.99f);
 			str.erase(found, 11); // erase this statement
 		}
@@ -697,8 +698,8 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			i++;
 
 			bool tupletReadDone = false;
-			int notes[20] = {0};
-			int tie[20] = {0};
+			int notes[32] = {0};
+			int tie[32] = {0};
 			int nNotes = 0;
 			int nTied = 0;
 			int tupletIndex = 0;
@@ -755,7 +756,27 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 						toneNum--;
 						i++;
 					}
-
+					
+					// process ties here...
+					//
+					
+					// if a tie follows a note name
+					if(str.at(i)=='~')
+					{
+						tie[tupletIndex]++;
+						nTied++;
+						i++;
+						while(str.at(i)=='~') // we might even have more ties!
+						{
+							tie[tupletIndex]++;
+							nTied++;
+							i++;
+						}
+					}
+					
+					//
+					//
+					
 					notes[tupletIndex] = toneNum;
 
 					nNotes++;
@@ -769,6 +790,8 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 					nNotes++;
 					tupletIndex++;
 				}
+				
+				/*
 
 				else if(str.at(i)=='~') // tie last note
 				{
@@ -776,6 +799,8 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 					nTied++;
 					i++;
 				}
+				
+				*/
 
 				else if(str.at(i)=='<') // oct down
 				{
@@ -929,7 +954,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 			// cout << "Dividing by quarter note length, remainder=" << r << endl << endl;
 
 			// record the total frame length for this channel
-			// output->totalFrames = framesWritten;
+			output->totalFrames = framesWritten;
 
 			done = true;
 		}
@@ -1117,8 +1142,8 @@ string MML::parseDrumSource(MPlayer* player)
 			i++;
 
 			bool tupletReadDone = false;
-			int notes[20] = {0};
-			int tie[20] = {0};
+			int notes[32] = {0};
+			int tie[32] = {0};
 			int nNotes = 0;
 			int nTied = 0;
 			int tupletIndex = 0;
@@ -1162,12 +1187,31 @@ string MML::parseDrumSource(MPlayer* player)
 
 					// advance index...
 					i++;
+					
+					//
+					// process ties here...
+					//
+					
+					// if a tie follows a note name
+					if(str.at(i)=='~')
+					{
+						tie[tupletIndex]++;
+						nTied++;
+						i++;
+						while(str.at(i)=='~') // we might even have more ties!
+						{
+							tie[tupletIndex]++;
+							nTied++;
+							i++;
+						}
+					}
 
 					notes[tupletIndex] = drumNote;
 
 					nNotes++;
 					tupletIndex++;
 				}
+				/*
 
 				else if(str.at(i)=='~') // tie last note
 				{
@@ -1175,6 +1219,7 @@ string MML::parseDrumSource(MPlayer* player)
 					nTied++;
 					i++;
 				}
+				*/
 				
 				else if(str.at(i)==':') // we have a rest...
 				{
@@ -1320,7 +1365,7 @@ string MML::parseDrumSource(MPlayer* player)
 			// cout << "Dividing by quarter note length, remainder=" << r << endl << endl;
 
 			// write the total frame length written
-			// output->totalFrames = framesWritten;
+			output->totalFrames = framesWritten;
 
 			done = true;
 		}

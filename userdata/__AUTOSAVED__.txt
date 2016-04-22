@@ -1,22 +1,36 @@
-/////////////////////////////////////////////////
 //
-// demo song to test out different waveforms :)
+//  Welcome to ** BeepComp ** !
 //
-//                   version 0.1.7 and later
-//                   is required for this song :)
+//    ... this app lets you compose
+//    nice chip tunes on text files. 
 //
-/////////////////////////////////////////////////
+//  Press [F1] to play
+//    .. hear what the source below sounds like.
+//
+//  Press [F10] to load
+//     .. explore example / tutorial files.
+//
+//    I'll be adding more features
+//    So your feedback and bug reports will be
+//    greatly appreciated!
+//
+//  Enjoy!! :)
+//
+//                                  - Hiro
+//
+
+// global section ///////////////////////////////
 
 @G
 
-MASTERVOLUME=80
+MASTERVOLUME=90
 DELAYTIME=428
-DELAYLEVEL=24
+DELAYLEVEL=28
 TEMPO=140
 V1=5 V2=5 V3=5 V4=8 V5=8 V6=5
 V7=7 V8=7 V9=7 VD=10
 
-/////////////////////////////////////////////////
+// channel 1 ////////////////////////////////////
 
 @1
 
@@ -37,7 +51,7 @@ L8
  {4:[G:]Ab~[G:]Ab~[G:]Ab~[G:]Ab~~~:}
 }
 
-/////////////////////////////////////////////////
+// channel 2 ////////////////////////////////////
 
 @2
 
@@ -58,7 +72,7 @@ L8
  {4:[Eb:]F~[Eb:]F~[Eb:]F~[Eb:]F~~~:}
 }
 
-/////////////////////////////////////////////////
+// channel 3 ////////////////////////////////////
 
 @3
 
@@ -79,7 +93,7 @@ L8 O3
  {4:[Bb:]>C~<[Bb:]>C~<[Bb:]>C~<[Bb:]>C~~~:<}
 }
 
-/////////////////////////////////////////////////
+// channel 4 ////////////////////////////////////
 
 @4
 
@@ -99,7 +113,7 @@ L8 O2
  {8Eb[Eb:]}
 }
 
-/////////////////////////////////////////////////
+// channel 5 ////////////////////////////////////
 
 @5
 
@@ -116,13 +130,13 @@ L8:::::::[Ab:] L16G~~<Bb ~~Ab~
 ~~>F~ ~~~~
 L8:::::::[F:] L16Eb~~<G ~~F~
 ~~>Eb~ ~~~~
-L8:::::::[Db:] L16C~~<Eb ~~Db~
+L8:::::::[Ebb:] L16Db~~<F ~~Eb~
 ~~>C~ ~~~[DbC]<
 Bb~~~ ~~~~ ~~~~ ~~~~ 
 ~~~[BbAb] GAbBb>C DbEbFG AbG AbBb
 }
 
-/////////////////////////////////////////////////
+// channel 6 ////////////////////////////////////
 
 @6
 
@@ -139,12 +153,12 @@ L8:::::::>[C:] L16<Bb~~Db ~~C~
 ~~Ab~ ~~~~
 L8:::::::[Ab:] L16G~~<Bb ~~Ab~
 ~~>G~ ~~~~
-L8:::::::[F:] L16Eb~~<G ~~F~
+L8:::::::[G:] L16F~~<Ab ~~G~
 ~~>Eb~ ~~~[FEb]
 Db~~~ ~~~~ ~~~~ ~~~~ 
 ~~~[DbC] <Bb>CDbEb FGAbBb >C<Bb>CDb
 
-/////////////////////////////////////////////////
+// channel 7 ////////////////////////////////////
 
 @7
 
@@ -154,18 +168,18 @@ WAVEFORM=1 // square wave
 ATTACKTIME=0
 PEAKLEVEL=100 // attacky
 DECAYTIME=50 // decays very fast
-SUSTAINLEVEL=0 // because it sustain is off :)
+SUSTAINLEVEL=0 // because the sustain is off :)
 
 O4
 {2
  { V10 L4 :::: :: L16F::_F::_F:
-   :_F:: _F::_F ::_F: :F::_ F::: L4::: }
+   :_F:: _F::_F ::_F: :F::_ F::_F L4::: }
 }
 O5
  { V10 L4 :::: :: L16F::_F::_F:
-   :_F:: _F::_F ::_F: :F::_ F::: L4::: }
+   :_F:: _F::_F ::_F: :F::_ F::_F L4::: }
 
-/////////////////////////////////////////////////
+// channel 8 ////////////////////////////////////
 
 @8
 
@@ -179,13 +193,13 @@ SUSTAINLEVEL=0
 O4
 {2
  { V10 L4 :::: :: L16Ab::_Ab::_Ab:
-   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::: L4::: }
+   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::_Ab L4::: }
 }
 O5
  { V10 L4 :::: :: L16Ab::_Ab::_Ab:
-   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::: L4::: }
+   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::_Ab L4::: }
 
-/////////////////////////////////////////////////
+// channel 9 ////////////////////////////////////
 
 @9
 
@@ -200,10 +214,10 @@ L1 {:: :: :: ::}
 
 O6
 { V10 L4 :::: :: L16C::_C::_C:
-  :_C:: _C::_C ::_C: :C::_ C::: L4::: }
+  :_C:: _C::_C ::_C: :C::_ C::_C L4::: }
 }
 
-/////////////////////////////////////////////////
+// channel 'D' - drums //////////////////////////
 
 @D
 

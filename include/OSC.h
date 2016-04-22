@@ -38,6 +38,7 @@ public:
 	float gain;
 	
 	bool resting;
+	bool firstNoteDone;
 	
 	int nEnvFrames;
 	int nAttackFrames;
@@ -70,6 +71,7 @@ public:
 	void setTable(int type);	
 	void advance();
 	void setToRest();
+	void initializeForFirstNote();
 	void setNewNote(double newFreq);
 	void setFrequency(double noteFreq);
 	void setIncrement(double noteFreq);

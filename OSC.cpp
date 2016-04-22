@@ -24,6 +24,7 @@ OSC::OSC()
 	gain = 0.5f; // default gain
 	
 	resting = false;
+	firstNoteDone = false;
 	
 	nAttackFrames = 1000;
 	nPeakFrames = 1000;
@@ -250,7 +251,7 @@ float OSC::getEnvelopeOutput()
 	// if resting flag is on, means you're in release stage
 	if(resting)
 	{
-		if(!envRfinished)
+		if(!envRfinished && firstNoteDone)
 			output = sustainLevel * ( static_cast<float>(nReleaseFrames - releasePos) / static_cast<float>(nReleaseFrames) );
 		else
 			output = 0.0f;
@@ -262,6 +263,11 @@ float OSC::getEnvelopeOutput()
 void OSC::setToRest()
 {
 	resting = true;
+}
+
+void OSC::initializeForFirstNote()
+{
+	firstNoteDone = false;
 }
 
 void OSC::advance()
@@ -295,6 +301,7 @@ void OSC::advance()
 
 void OSC::setNewNote(double newFreq)
 {
+	firstNoteDone = true;
 	setFrequency(newFreq);
 	initializePhase();
 	refreshEnvelope();

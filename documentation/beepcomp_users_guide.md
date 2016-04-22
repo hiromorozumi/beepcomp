@@ -46,6 +46,8 @@
 	* [Global Section](#syntax_reference_global_section)
 	* [Music Channel](#syntax_reference_music_channel)
 	* [Drum Channel](#syntax_reference_drum_channel)
+* [Uninstalling BeepComp](#uninstalling_beepcomp)
+* [Staying Updated](#staying_updated)
 * [If you found issues/bugs...](#if_you_found_issues_bugs)
 * [BeepComp on the Web](#beepcomp_on_the_web)
 * [Contact Me!](#contact_me)
@@ -565,7 +567,7 @@ You can use this pitch LFO effect for each channel to give it a nice vibrato. He
     LFOWAIT=300
     L2 CDEFG
 
-`LFO=` turns on the pitch LFO effect. It's turned off by default. `LFOSPEED=` sets the number of cycles for the pitch change. `LFORANGE=` determines how big the pitch change should occur, specified by the cent of semitones (so 100 will set it to one semitone). `LFOWAIT=` sets the time to wait to start the LFO effect, specified in milliseconds.
+`LFO=` turns on the pitch LFO effect. It's turned off by default. `LFOSPEED=` sets the number of cycles per second for the pitch change. `LFORANGE=` determines how big the pitch change should occur, specified by the cent of semitones (so 100 will set it to one semitone). `LFOWAIT=` sets the time to wait to start the LFO effect, specified in milliseconds.
 
 You could even use this LFO effect to get really wacky results. Try setting `LFOSPEED=1` and `LFORANGE=2400` :)
 
@@ -698,10 +700,28 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 * `^` ... Increase channel volume by 10%
 * `_` ... Decrease channel volume by 10%
 
+<div id="uninstalling_beepcomp" />
+## Uninstalling BeepComp ##
+
+You can uninstall the application by using the "Programs and Features" under the Control Panel / Programs menu to uninstall BeepComp. Typing in "appwiz.cpl" in the command prompt or in the search box will direct you to this dialog, also. Please note that your "userdata" folder will not be removed, just in case you still have some of your work in this folder.
+
+<div id="staying_updated" />
+## Staying Updated ##
+
+New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix and improve the bugs or issues found on the previous versions. I announce new versions through [the SourceForge Blog page](https://sourceforge.net/p/beepcomp/blog/). I also upload [patches](https://sourceforge.net/projects/beepcomp/files/patches/) whenever there is a critical issue.
+
+Alternatively, you can scroll down the [SourceForge project top page](http://beepcomp.sourceforge.net) and press the button that says "Follow" to receive automatic updates, but be alerted that you will receive third-party junk mail as well. I will find a better newsgroup format that's clean. If anyone knows of a good service, let me know! :)
+
+You can find out the version of BeepComp you're using by clicking the logo in the main editor screen.
+
+When you update to a new release, you will have to first [uninstall](#uninstalling_beepcomp) your current version.
+
 <div id="if_you_found_issues_bugs" />
 ## If you found issues/bugs...
 
-BeepComp is still in its development stage... so I really appreciate you letting me know about any issues you experience. You're welcome to write in our [forum page](http://beepcomp.freeforums.net/). or contact me via [this page](https://sourceforge.net/u/smokinhiro/profile/send_message). I really want to make a program that is reliable and enjoyable to anyone :)
+BeepComp is still in its development stage... so I really appreciate you letting me know about any issues you experience. You're welcome to write in our [forum page](http://beepcomp.freeforums.net/) or email me at beepcomp-at-hiromorozumi-dot-com. I really want to make a program that is reliable and enjoyable to anyone :)
+
+I am also documenting the issues as they get identified on the [Known Issues page](https://sourceforge.net/p/beepcomp/wiki/known_issues/) on sourceForge. 
 
 <div id="beepcomp_on_the_web" />
 ## BeepComp on the Web ##
@@ -709,7 +729,7 @@ BeepComp is still in its development stage... so I really appreciate you letting
 The home page for BeepComp is at:
 [http://hiromorozumi.com/beepcomp](http://hiromorozumi.com/beepcomp).
 
-Also, there is a [forum page](http://beepcomp.freeforums.net/) where you can join our discussion.
+Also, there is a [forum page](http://beepcomp.freeforums.net/) where you can join our discussion. I have also set up a [Facebook](https://www.facebook.com/beepcomp) page.
 
 The source code is publicly available at the [SourceForge](http://sourceforge.net) repository. I will also welcome patches if you spot issues. The address of the repository is:
 [https://sourceforge.net/p/beepcomp/code/ci/master/tree/](https://sourceforge.net/p/beepcomp/code/ci/master/tree/).
@@ -717,4 +737,4 @@ The source code is publicly available at the [SourceForge](http://sourceforge.ne
 <div id="contact_me" />
 ## Contact Me! ##
 
-I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) To e-mail me, just write through the [SourceForge contact page](https://sourceforge.net/u/smokinhiro/profile/send_message).
+I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) You can contact me by emailing me at beepcomp-at-hiromorozumi-dot-com.

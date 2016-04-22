@@ -1553,6 +1553,11 @@ void Dialog::messageDialog(std::string message)
 // show a dialog to get user input for yes/no
 bool Dialog::yesNoDialog(std::string question)
 {
+	// in case starting with a different-sized window...
+	sf::Vector2u size = w->getSize();
+	adjustedWindowWidth = static_cast<double>(size.x);
+	adjustedWindowHeight = static_cast<double>(size.y);	
+	
 	yesNoDialogResult = false;
 	basicDialogMode = 1; // get yes / no 
 

@@ -5,12 +5,12 @@
 		UpgradeCode='8F81687A-D9C1-4711-AF2A-347CA54ADDD8'
 		Language='1033'
 		Codepage='1252'
-		Version='0.1.0'
+		Version='0.1.8'
 		Manufacturer='Gingerroot Soft'>
 	
 	<Package Id='*' Keywords='Installer' 
 		Description="BeepComp Installer"
-		Comments='This installs BeepComp in your machine'
+		Comments='This installs BeepComp in your machine.'
 		Manufacturer='Gingerroot Soft'
 		InstallerVersion='100' Languages='1033' Compressed='yes'
 		SummaryCodepage='1252' />
