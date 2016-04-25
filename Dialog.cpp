@@ -19,11 +19,12 @@ Dialog::Dialog()
 	adjustedWindowHeight = WINDOW_HEIGHT;
 
 	// load font
-	string fontfile = "fonts/EnvyCodeR.ttf";
+	// string fontfile = "fonts/EnvyCodeR.ttf";
+	string fontfile = "fonts/UbuntuMono-R.ttf";
 	if (!font.loadFromFile(fontfile))
 		{ cout << "Loading font - error!" << endl; }
 	
-	charHeight = font.getLineSpacing(24);
+	charHeight = font.getLineSpacing(25);
 	charWidth = 13;
 
 	// set uniform blue color
@@ -50,21 +51,21 @@ Dialog::Dialog()
 	
 	// create and set position for slider
 	makeSlider(&slider, 16, 30, 294);
-	positionSlider(&slider, 740, TEXT_TOP_Y-6);
+	positionSlider(&slider, 740, TEXT_TOP_Y + 4);
 	
 	// input line section
-	inputLine.setSize(sf::Vector2f(charWidth*(INPUT_WIDTH+2), charHeight*1.25));
+	inputLine.setSize(sf::Vector2f(charWidth*(INPUT_WIDTH+2), charHeight*1.30)); // was *1.25
 	inputLine.setPosition(sf::Vector2f(INPUT_TOP_X, INPUT_TOP_Y));
 	inputLine.setFillColor(sf::Color(200, 88, 66, 80));
 	inputLineLabel.setFont(font);
 	inputLineLabel.setColor(dialogGreen);
-	inputLineLabel.setCharacterSize(24);
+	inputLineLabel.setCharacterSize(22);
 	inputLineLabel.setString("Filename");
-	inputLineLabel.setPosition(sf::Vector2f(92, INPUT_TOP_Y));
+	inputLineLabel.setPosition(sf::Vector2f(94, INPUT_TOP_Y));
 	inputLineText.setFont(font);
 	inputLineText.setColor(dialogRed);
-	inputLineText.setCharacterSize(24);
-	inputLineText.setPosition(220 + charWidth,470 + charHeight*0.05);
+	inputLineText.setCharacterSize(25);
+	inputLineText.setPosition(220 + charWidth, INPUT_TOP_Y - 2 + charHeight*0.05);
 	
 	// selector mask
 	selectMask.setSize(sf::Vector2f(charWidth*(TEXT_WIDTH+1), charHeight*1.12));
@@ -291,11 +292,13 @@ void Dialog::pollEvents()
 {
 		while (w->pollEvent(event))
 		{
-			if (!exitDialog && !exitBasicDialog && event.type == sf::Event::Closed)
+			if (!exitDialog && !exitBasicDialog && (event.type == sf::Event::Closed) )
 			{
 				exitDialog = true;
 				exitBasicDialog = true;
 				windowClosed = true;
+				
+				cancelChosen = true;
 			}
 			// check for mouse events now
 			if (event.type == sf::Event::MouseButtonPressed)
@@ -1016,7 +1019,7 @@ void Dialog::drawFileDialog()
 	if(selectedIndex >= topRenderLine && selectedIndex < topRenderLine+TEXT_HEIGHT)
 	{
 		int lineIndexDisplay = selectedIndex - topRenderLine;
-		selectMask.setPosition(TEXT_TOP_X - charWidth / 2, lineIndexDisplay*charHeight + TEXT_TOP_Y);
+		selectMask.setPosition(TEXT_TOP_X - charWidth / 2, lineIndexDisplay*charHeight + TEXT_TOP_Y + 3);
 		w->draw(selectMask);
 	}
 	
@@ -1136,7 +1139,7 @@ void Dialog::positionButton(Button* b, int xx, int yy)
 	b->x = xx;
 	b->y = yy;
 	b->rect.setPosition(sf::Vector2f(xx, yy));
-	b->label.setPosition(sf::Vector2f(xx + (charWidth*1.15), yy + charHeight * 0.18 ));	
+	b->label.setPosition(sf::Vector2f(xx + (charWidth*1.30), yy + charHeight * 0.10 ));	
 }
 
 void Dialog::highlightButton(Button* b)
@@ -1366,7 +1369,7 @@ void Dialog::initializeStrView()
 		strView[i] = "";
 		itemTypes[i] = 2; // file type
 		itemText[i].setFont(font);
-		itemText[i].setCharacterSize(24);
+		itemText[i].setCharacterSize(25);
 		itemText[i].setString("");
 		itemText[i].setColor(sf::Color(180,255,180,255)); // default color
 		itemText[i].setPosition(sf::Vector2f(TEXT_TOP_X, TEXT_TOP_Y + charHeight * i));
@@ -1376,11 +1379,11 @@ void Dialog::initializeStrView()
 	for(int i=0; i<10; i++)
 	{
 		basicText[i].setFont(font);
-		basicText[i].setCharacterSize(24);
+		basicText[i].setCharacterSize(25);
 		basicText[i].setString("");
 		basicText[i].setColor(dialogGreen);
 		basicTextColor[i].setFont(font);
-		basicTextColor[i].setCharacterSize(24);
+		basicTextColor[i].setCharacterSize(25);
 		basicTextColor[i].setString("");
 		basicTextColor[i].setColor(dialogRed);		
 	}
@@ -1556,7 +1559,9 @@ bool Dialog::yesNoDialog(std::string question)
 	// in case starting with a different-sized window...
 	sf::Vector2u size = w->getSize();
 	adjustedWindowWidth = static_cast<double>(size.x);
-	adjustedWindowHeight = static_cast<double>(size.y);	
+	adjustedWindowHeight = static_cast<double>(size.y);
+	windowClosed = false;
+	exitDialog = false;
 	
 	yesNoDialogResult = false;
 	basicDialogMode = 1; // get yes / no 
@@ -1585,8 +1590,11 @@ void Dialog::runBasicDialog()
 	while(!exitBasicDialog)
 	{
 		pollEvents();
-		handleInputBasicDialog();
-		drawBasicDialog();
+		if(!windowClosed) // in case screen x-ed out
+		{
+			handleInputBasicDialog();
+			drawBasicDialog();
+		}
 	}
 }
 

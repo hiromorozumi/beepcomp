@@ -1,0 +1,7 @@
+NOTICE
+------
+As of version 0.1.9, BeepComp has switched its main screen font from EnvyCodeR to UbuntuMono-R.
+Please know that EnvyCodeR is no longer being used for this project.
+
+Thank you,
+Hiro

@@ -13,16 +13,16 @@ class Dialog
 	
 public:
 
-	static const int TEXT_HEIGHT = 11;
-	static const int TEXT_WIDTH = 44; // DEBUG
-	static const int CWD_WIDTH = 54; // DEBUG
+	static const int TEXT_HEIGHT = 13;
+	static const int TEXT_WIDTH = 46; // DEBUG
+	static const int CWD_WIDTH = 59; // DEBUG
 	static const int INPUT_WIDTH = 39;
 	static const int WINDOW_WIDTH = 840;
 	static const int WINDOW_HEIGHT = 640;
 	static const int TEXT_TOP_X = 92;
-	static const int TEXT_TOP_Y = 112;
+	static const int TEXT_TOP_Y = 102;
 	static const int INPUT_TOP_X = 220;
-	static const int INPUT_TOP_Y = 470;
+	static const int INPUT_TOP_Y = 482;
 	static const int HIST_SIZE = 32;
 	
 	int adjustedWindowWidth;

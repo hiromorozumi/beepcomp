@@ -63,7 +63,7 @@ void Knob::setSize(float s)
 	// set circule radius
 	circle.setRadius(outRadius);
 	circle.setOutlineThickness(1);
-	circle.setOutlineColor(sf::Color(100, 100, 100));
+	circle.setOutlineColor(sf::Color(70, 70, 40));
 	
 	// set marker radius
 	markerSize = size * 0.30;

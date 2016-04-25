@@ -5,7 +5,7 @@
 		UpgradeCode='8F81687A-D9C1-4711-AF2A-347CA54ADDD8'
 		Language='1033'
 		Codepage='1252'
-		Version='0.1.8'
+		Version='0.1.9'
 		Manufacturer='Gingerroot Soft'>
 	
 	<Package Id='*' Keywords='Installer' 
@@ -138,15 +138,27 @@
 				
 				<Directory Id="FontDir" Name="fonts">
 					
-					<Component Id='cmp_EnvyCodeRTTF' Guid='*'>
-						<File Id="EnvyCodeRTTF" Name="EnvyCodeR.ttf" 
-						DiskId='1' Source='..\fonts\EnvyCodeR.ttf' KeyPath='yes'>				
+					<Component Id='cmp_EnvyCodeRUbuntuMono_RTTF' Guid='*'>
+						<File Id="UbuntuMono_RTTF" Name="UbuntuMono-R.ttf" 
+						DiskId='1' Source='..\fonts\UbuntuMono-R.ttf' KeyPath="yes">				
 						</File>
 					</Component>			
 
-					<Component Id='cmp_uni0563TTF' Guid='*'>
-						<File Id="uni0563TTF" Name="uni0563.ttf" 
-						DiskId='1' Source='..\fonts\uni0563.ttf' KeyPath='yes'>				
+					<Component Id='cmp_ZERO4B09TTF' Guid='*'>
+						<File Id="ZERO4B09TTF" Name="04B09.ttf" 
+						DiskId='1' Source='..\fonts\04B09.ttf' KeyPath="yes">				
+						</File>
+					</Component>
+					
+					<Component Id='cmp_ubuntu_font_licenseTXT' Guid='*'>
+						<File Id="ubuntu_font_licenseTXT" Name="ubuntu_font_license.txt" 
+						DiskId='1' Source='..\fonts\ubuntu_font_license.txt' KeyPath="yes">				
+						</File>
+					</Component>
+
+					<Component Id='cmp_ZERO4B09_font_licenseTXT' Guid='*'>
+						<File Id="ZERO4B09_font_licenseTXT" Name="04B09_font_license.txt" 
+						DiskId='1' Source='..\fonts\04B09_font_license.txt' KeyPath="yes">				
 						</File>
 					</Component>
 					
@@ -164,6 +176,18 @@
 					<Component Id='cmp_beepcomp_logoPNG' Guid='*'>
 						<File Id="beepcomp_logoPNG" Name="beepcomp_logo.png" 
 						DiskId='1' Source='..\images\beepcomp_logo.png' KeyPath='yes'>				
+						</File>		
+					</Component>
+				
+					<Component Id='cmp_fighter_1PNG' Guid='*'>
+						<File Id="fighter_1PNG" Name="fighter_1.png" 
+						DiskId='1' Source='..\images\fighter_1.png' KeyPath='yes'>				
+						</File>		
+					</Component>
+				
+					<Component Id='cmp_fighter_2PNG' Guid='*'>
+						<File Id="fighter_2PNG" Name="fighter_2.png" 
+						DiskId='1' Source='..\images\fighter_2.png' KeyPath='yes'>				
 						</File>		
 					</Component>
 					
@@ -266,7 +290,13 @@
 						DiskId='1' Source='..\userdata\_tutorial_drums.txt' KeyPath='yes'>				
 						</File>
 					</Component>
-			
+
+					<Component Id='cmp__tutorial_delayTXT' Guid='*' Permanent="yes">
+						<File Id="cmp__tutorial_delayTXT" Name="_tutorial_delay.txt" 
+						DiskId='1' Source='..\userdata\_tutorial_delay.txt' KeyPath='yes'>
+						</File>
+					</Component>
+					
 				</Directory>
 				
 			</Directory>
@@ -306,10 +336,15 @@
 		
 		<ComponentRef Id='cmp_defaultTXT' />
 		
-		<ComponentRef Id='cmp_EnvyCodeRTTF' />
-		<ComponentRef Id='cmp_uni0563TTF' />
+		<ComponentRef Id='cmp_EnvyCodeRUbuntuMono_RTTF' />
+		<ComponentRef Id='cmp_ZERO4B09TTF' />
+		<ComponentRef Id='cmp_ubuntu_font_licenseTXT' />
+		<ComponentRef Id='cmp_ZERO4B09_font_licenseTXT' />
+
 		<ComponentRef Id='cmp_beepcomp_iconPNG' />
 		<ComponentRef Id='cmp_beepcomp_logoPNG' />
+		<ComponentRef Id='cmp_fighter_1PNG' />
+		<ComponentRef Id='cmp_fighter_2PNG' />
 		<ComponentRef Id='cmp_beepcomp_users_guideHTML' />
 		<ComponentRef Id='cmp_beepcomp_screen_explainPNG' />
 		<ComponentRef Id='cmp_beepcomp_volume_envelopePNG' />
@@ -326,6 +361,7 @@
 		<ComponentRef Id='cmp__tutorial_repeatsTXT' />	
 		<ComponentRef Id='cmp__tutorial_drumsTXT' />
 		<ComponentRef Id='cmp__tutorial_basic_1TXT' />
+		<ComponentRef Id='cmp__tutorial_delayTXT' />
 		
 		<ComponentRef Id='ProgramMenuDir' />
 		
@@ -335,9 +371,11 @@
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 	
 	<Icon Id="beepcomp.exe" SourceFile="..\beepcomp.exe" />
+	<Property Id="ARPPRODUCTICON" Value="beepcomp.exe" />
 	
 	<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
 	<WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />
+	<WixVariable Id="WixUIBannerBmp" Value="banner.bmp" />
 
 	</Product>
 </Wix>

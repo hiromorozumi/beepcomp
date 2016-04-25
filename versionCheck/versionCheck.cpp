@@ -67,7 +67,7 @@ int main()
 	displaySnippet("README.txt", "This version is: v", 8);
 	displaySnippet("README.md",  "This version is: v", 8);
 	displaySnippet("GUI.cpp",    "STR_VERSION = \"", 8);
-	displaySnippet("wix/beepcomp.wxs",    "Version='0.1.8'", 8);
+	displaySnippet("wix/beepcomp.wxs",    "Version='", 8);
 	
 	// ShellExecute(NULL, "open", "target_cpp", NULL, NULL, SW_SHOWNORMAL);
 	// ShellExecute(NULL, "open", "target_h", NULL, NULL, SW_SHOWNORMAL);

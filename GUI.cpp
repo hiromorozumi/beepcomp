@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const std::string GUI::STR_VERSION = "0.1.8";
+const std::string GUI::STR_VERSION = "0.1.9";
 
 void GUI::initialize()
 {
@@ -35,62 +35,64 @@ void GUI::initialize()
 	// load logo
 	if(!logoTexture.loadFromFile("images/beepcomp_logo.png"))
 		cout << "Logo: load error!\n";
-	logo.setPosition(sf::Vector2f(672,12));
+	logo.setPosition(sf::Vector2f(675,12));
 	logo.setTexture(logoTexture);
 
 	// load font for knob and buttons
-	if (!miniFont.loadFromFile("fonts/uni0563.ttf"))
+	// if (!miniFont.loadFromFile("fonts/uni0563.ttf"))
+	if (!miniFont.loadFromFile("fonts/04B09.ttf"))
 		{ cout << "Error reading font for the Knob object..\n"; }
 	
 	// create a knob - and initialize
-	knob.initialize(std::string("Volume"), 56.0f, wPtr, miniFont);
-	knob.setPosition(682.0f, 355.0f);
+	knob.initialize(std::string("MASTER"), 60.0f, wPtr, miniFont);
+	knob.setPosition(687.0f, 356.0f);
 	
 	// create buttons with shapes...
 	const float XSPACING = 78;
 	const float YSPACING = 70;
-	playButton.initialize   (0, "PLAY",    680+XSPACING*0, 234+YSPACING*0, 60, 52, wPtr, miniFont);
-	pauseButton.initialize  (0, "PAUSE",   680+XSPACING*1, 234+YSPACING*0, 60, 52, wPtr, miniFont);
-	rewindButton.initialize (0, "REWIND",  680+XSPACING*0, 234+YSPACING*1, 60, 20, wPtr, miniFont);	
-	forwardButton.initialize(0, "FORWARD", 680+XSPACING*1, 234+YSPACING*1, 60, 20, wPtr, miniFont);
+	playButton.initialize   (0, "PLAY",    684+XSPACING*0, 234+YSPACING*0, 60, 52, wPtr, miniFont);
+	pauseButton.initialize  (0, "PAUSE",   684+XSPACING*1, 234+YSPACING*0, 60, 52, wPtr, miniFont);
+	rewindButton.initialize (0, "REWIND",  684+XSPACING*0, 234+YSPACING*1, 60, 20, wPtr, miniFont);	
+	forwardButton.initialize(0, "FORWARD", 684+XSPACING*1, 234+YSPACING*1, 60, 20, wPtr, miniFont);
 
 	// create smaller text buttons...
 	const float MINITBSPACING = 42;
-	keyButton.initialize(1, "KEY", 768, 342 + MINITBSPACING * 0, 48, 26, wPtr, miniFont);
-	docButton.initialize(1, "DOC", 768, 342 + MINITBSPACING * 1, 48, 26, wPtr, miniFont);
-	dlyButton.initialize(1, "DLY", 768, 342 + MINITBSPACING * 2, 48, 26, wPtr, miniFont);
+	keyButton.initialize(1, "KEY", 772, 342 + MINITBSPACING * 0, 48, 26, wPtr, miniFont);
+	docButton.initialize(1, "DOC", 772, 342 + MINITBSPACING * 1, 48, 26, wPtr, miniFont);
+	dlyButton.initialize(1, "DLY", 772, 342 + MINITBSPACING * 2, 48, 26, wPtr, miniFont);
 	
 	// create bigger text buttons...
 	const float TXBSPACING = 42;
-	newButton.initialize   (1, "NEW",    680, 470 + TXBSPACING * 0, 136, 26, wPtr, miniFont);
-	loadButton.initialize  (1, "LOAD",   680, 470 + TXBSPACING * 1, 136, 26, wPtr, miniFont);
-	saveButton.initialize  (1, "SAVE",   680, 470 + TXBSPACING * 2, 136, 26, wPtr, miniFont);
-	exportButton.initialize(1, "EXPORT", 680, 470 + TXBSPACING * 3, 136, 26, wPtr, miniFont);
+	newButton.initialize   (1, "NEW",    684, 470 + TXBSPACING * 0, 136, 26, wPtr, miniFont);
+	loadButton.initialize  (1, "LOAD",   684, 470 + TXBSPACING * 1, 136, 26, wPtr, miniFont);
+	saveButton.initialize  (1, "SAVE",   684, 470 + TXBSPACING * 2, 136, 26, wPtr, miniFont);
+	exportButton.initialize(1, "EXPORT", 684, 470 + TXBSPACING * 3, 136, 26, wPtr, miniFont);
 	
 	// set default userdata path
 	defaultPath = "userdata/";
 	currentPathAndFileName = defaultPath;
 
 	// load work area font
-	string fontfile = "fonts/EnvyCodeR.ttf";
+	// string fontfile = "fonts/EnvyCodeR.ttf";
+	string fontfile = "fonts/UbuntuMono-R.ttf";
 	if (!font.loadFromFile(fontfile))
 		{ cout << "Loading main font - error!" << endl; }
 
-	charHeight = font.getLineSpacing(24);
+	charHeight = font.getLineSpacing(25) * 1.032f;
 	charWidth = 13;
 
 	// set up text objects array for edit area
 	for(int i=0; i<TEXT_HEIGHT; i++)
 	{
  		text[i].setFont(font); // font is a sf::Font
-		text[i].setCharacterSize(24); // in pixels, not points!
+		text[i].setCharacterSize(25); // in pixels, not points!
 		text[i].setColor(sf::Color::Green);
 		text[i].setPosition(TEXT_TOP_X, i * charHeight + TEXT_TOP_Y - 4);
 	}
 
 	// set up a cursor
 	cursor.setFillColor(sf::Color(255, 225, 225, 128));
-	cursor.setSize(sf::Vector2f(14, 24));
+	cursor.setSize(sf::Vector2f(14, 26));
 
 	// set up the selector mask rectangles (one for each line)
 	for(int i=0; i< TEXT_HEIGHT; i++)
@@ -100,7 +102,7 @@ void GUI::initialize()
 		highlighter[i].setPosition(0,0);
 	}
 
-	source = "// MML source not set yet... //" + CH_EOF;
+	source = std::string("// MML source not set yet... //") + CH_EOF;
 
 	// reset text display variables
 	cursorX = 0;
@@ -171,14 +173,14 @@ void GUI::initialize()
 	mouseWheelMoved = 0;
 
 	// meter related
-	meter.initialize(685, 90, 138, 96, 0.5f); // set size and position
+	meter.initialize(689, 90, 138, 96, 0.5f); // set size and position
 
 	for(int i=0; i<10; i++)
 		meter.set(i, 0.0f);
 	
 	// meter back panel
 	backPanel.setSize(sf::Vector2f(138, 96));
-	backPanel.setPosition(sf::Vector2f(680, 90));
+	backPanel.setPosition(sf::Vector2f(684, 90));
 	backPanel.setFillColor(sf::Color(40,40,40));
 	backPanel.setOutlineThickness(2.0f);
 	backPanel.setOutlineColor(sf::Color(80,80,80));
@@ -243,9 +245,8 @@ void GUI::initialize()
 	help.setVersionText(vText, authorText);
 	help.deactivateVersionText();
 	
-	//
-	//
-	//
+	// this adds a little animation.. just some silly fun :)
+	omake.initialize(&window);
 	
 	// clock to track meter update interval
 	meterClock.restart();
@@ -1555,9 +1556,16 @@ endOfButtonRoutines:
 	
 	// if clicked on logo, show version info x = 672 to 827, y = 12 to 73, logo is 155 x 61
 	if(mouseLPressed && (672<mouseX) && (mouseX<827) && (12<mouseY) && (mouseY<73))
+	{
 		help.activateVersionText();
+		if(mplayer.isPlaying())
+			omake.activate();
+	}
 	else
+	{
 		help.deactivateVersionText();
+		omake.deactivate();
+	}
 }
 
 // every five mintues, your work gets saved!
@@ -1598,7 +1606,7 @@ void GUI::updateDisplay()
 	// if exiting app... skip display updating
 	if(exitApp)
 		return;
-
+	
 	blinkCursor();
 	updatePanel();	
 	
@@ -1620,7 +1628,7 @@ void GUI::updateDisplay()
 	}
 	
 	// update objects on display
-
+	
 	// cursor.. toggle according to blink state
 	if(blinkState==0)
 	{
@@ -1633,8 +1641,14 @@ void GUI::updateDisplay()
 		cursor.setPosition(cursorX * charWidth + TEXT_TOP_X, cursorY * charHeight + TEXT_TOP_Y + 12);
 	}
 
+	/////////////////////////////////////////////////////////////////////
+	
 	// display all elements on screen
 	window.clear();
+	
+	// start with omake stars + fighter.. if active (when version info is showing)
+	if(omake.isActive())
+		omake.draw();
 
 	// draw text objects..
 	for(int i=0; i<TEXT_HEIGHT; i++)
