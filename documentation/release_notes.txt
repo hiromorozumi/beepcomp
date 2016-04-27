@@ -1,4 +1,49 @@
 ====================
+Release Notes v0.1.9
+====================
+
+Dear users,
+
+I hope BeepComp is contributing to your creative endeavors! Thank you for using this software. It has gotten a lot more stable than it once was. There are always many new things for me to learn and improve on, but your kind support and feedback keep me going. Enjoy beep-making! :)
+
+Hiro
+
+What's new in BeepComp version 0.1.9
+
+- The userdata folder location has been migrated to inside user's 'Documents' folder
+  (Easier access, plus any users can access directly without going to the mirrored location)
+- now using new typefaces that work better (clearer, hopefully!)
+- With the new font, the screen fits a couple of more lines in the editor area
+- Minor rebalancing of the screen components
+- Minor bug-fix: X-ing out the window was not working properly in file dialogs
+- Minor bug-fix: made the file type switch work properly when the selected item went off-screen
+- A tutorial was added to give you tips on setting a good delay timing
+- Made the license notices more appropriate
+
+====================
+Release Notes v0.1.8
+====================
+
+Dear users,
+
+Exciting news! The Softpedia website's editorial team has given BeepComp a nice 4-star review, and a 100% Free award certification :) I thank you for using BeepComp! Please always let me know about any issues you might find and things I can do to improve the program.
+
+The version 0.1.8 is a maintenance release (addressing the issue with quick-saving was important).
+
+Sincerely,
+Hiro
+
+New in BeepComp version 0.1.8:
+
+- Bug-fix: to prevent the quick-saving function from overwriting the previous save target
+  when the user has started a new file or loaded a file
+- Now you can use multiple ties within tuplet braces []
+- In the previous versions, writing multiple ties in a tuplet group would cause disposition
+- Minor bug-fix: opening a NEW dialog after resizing the window was setting incorrect mouse coordinates
+- Minor bug-fix: starting a song with a rest was causing a small click noise
+- You can now check the version number by clicking the logo
+
+====================
 Release Notes v0.1.7
 ====================
 

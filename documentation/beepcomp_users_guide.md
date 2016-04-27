@@ -66,7 +66,7 @@ Use the latest installer package available on the [Sourceforge top page](https:/
 
 #### Windows ####
 
-Launch the MSI installer file, **beepcomp.msi**, which you just downloaded. Your program will be installed in the folder:
+Launch the MSI installer file, **beepcomp_vx-x-x.msi**, (x-x-x fills the version number) which you just downloaded. Your program will be installed in the folder:
 
 - **C:\Program Files\BeepComp\\** on 32-bit Windows
 - **C:\Program Files (x86)\BeepComp\\** on 64-bit Windows
@@ -82,12 +82,12 @@ I'll be working on these versions soon :)
 
 The BeepComp homepage has section named [Your First Tutorial](http://hiromorozumi.com/beepcomp/first_tutorial_1.html), which will be your great starting point. The later section [Writing Your First Track](#basics_writing_your_first_track) on this documentation has a similar content.
 
-After exploring those tutorials, exploring the tutorial files included in the **/userdata** folder inside your installed directory will be helpful, also. Simply load one of these files named **\_tutorial\_---.txt**, read and play to see writing what produces what result. I recommend starting from **\_tutorial\_basic\_1.txt**.
+After exploring those tutorials, exploring the tutorial files included in the **userdata** folder (the program's default save location) will be helpful, also. Simply load one of these files named **\_tutorial\_---.txt**, read and play to see writing what produces what result. I recommend starting from **\_tutorial\_basic\_1.txt**.
 
 These files are located in:
 
-- **C:\Program Files\BeepComp\userdata** on 32-bit Windows
-- **C:\Program Files (x86)\BeepComp\userdata** on 64-bit Windows
+- **C:\Documents and Settings\\{USERNAME}\My Documents\BeepComp\userdata** on XP
+- **C:\Users\\{username}\\Documents\BeepComp\userdata** on Vista and later
 
 <div id="basics" />
 ## Basics ##
@@ -165,14 +165,16 @@ Note that you see some white spaces in above examples. You can insert any amount
 <div id="basics_saving_and_loading_your_work" />
 ### Saving and Loading Your Work ###
 
-Now let's save your work. Click the SAVE button (or F11), type in **hellobeep.txt**, and click the Save button. Now open NotePad or any text editor of your choice, choose to open a file, navigate to the **userdata** folder in your installation directory, and open up the **hellobeep.txt** file we just created.
+Now let's save your work. Click the SAVE button (or F11), type in **hellobeep.txt**, and click the Save button. Now open NotePad or any text editor of your choice, choose to open a file, navigate to the **userdata** folder, the default user folder, and open up the **hellobeep.txt** file we just created.
 
 (Note that default **userdata** folder will be at following locations:)
 
-* **C:\Program Files\BeepComp\userdata** (32bit Windows)
-* **C:\Program Files (x86)\BeepComp\userdata** (64bit Windows)
+* **C:\Documents and Settings\\{USERNAME}\My Documents\BeepComp\userdata** on XP
+* **C:\Users\\{username}\\Documents\BeepComp\userdata** on Vista and later
 
 See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.
+
+By the way, you can use the ALT + O shortcut from the main editor to open up your **userdata** folder anytime.
 
 <div id="basics_copying_and_pasting_source" />
 ### Copying and Pasting Source ###
@@ -231,7 +233,8 @@ Here is a tip if you want the exported data to be looped (so you can fade out af
 * **ALT + S** ... Quick-save to last saved file
 * **ALT + V** ... Open the system volume control
 * **ALT + D** ... Open the audio device control
-* **ALT + I** ... Initialize the audio device 
+* **ALT + I** ... Initialize the audio device
+* **ALT + O** ... Open "userdata" folder 
 * **HOME** ... Go to the very top
 * **END** ... Go to the very bottom
 

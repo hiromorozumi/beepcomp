@@ -368,7 +368,7 @@ img {
 <h2>Getting Started</h2>
 <p>Use the latest installer package available on the <a href="https://sourceforge.net/projects/beepcomp/">Sourceforge top page</a>. Run this set up file, and you'll be all set for your journey!</p>
 <h4>Windows</h4>
-<p>Launch the MSI installer file, <strong>beepcomp.msi</strong>, which you just downloaded. Your program will be installed in the folder:</p>
+<p>Launch the MSI installer file, <strong>beepcomp_vx-x-x.msi</strong>, (x-x-x fills the version number) which you just downloaded. Your program will be installed in the folder:</p>
 <ul>
 <li><strong>C:\Program Files\BeepComp\</strong> on 32-bit Windows</li>
 <li><strong>C:\Program Files (x86)\BeepComp\</strong> on 64-bit Windows</li>
@@ -379,11 +379,11 @@ img {
 <div id="tutorials" />
 <h2>Tutorials</h2>
 <p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> on this documentation has a similar content.</p>
-<p>After exploring those tutorials, exploring the tutorial files included in the <strong>/userdata</strong> folder inside your installed directory will be helpful, also. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
+<p>After exploring those tutorials, exploring the tutorial files included in the <strong>userdata</strong> folder (the program's default save location) will be helpful, also. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
 <p>These files are located in:</p>
 <ul>
-<li><strong>C:\Program Files\BeepComp\userdata</strong> on 32-bit Windows</li>
-<li><strong>C:\Program Files (x86)\BeepComp\userdata</strong> on 64-bit Windows</li>
+<li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
+<li><strong>C:\Users\{username}\Documents\BeepComp\userdata</strong> on Vista and later</li>
 </ul>
 <div id="basics" />
 <h2>Basics</h2>
@@ -444,13 +444,14 @@ L4 KKKSSS
 <p>Note that you see some white spaces in above examples. You can insert any amount of white space between commands because they're ignored by the interpreter.</p>
 <div id="basics_saving_and_loading_your_work" />
 <h3>Saving and Loading Your Work</h3>
-<p>Now let's save your work. Click the SAVE button (or F11), type in <strong>hellobeep.txt</strong>, and click the Save button. Now open NotePad or any text editor of your choice, choose to open a file, navigate to the <strong>userdata</strong> folder in your installation directory, and open up the <strong>hellobeep.txt</strong> file we just created.</p>
+<p>Now let's save your work. Click the SAVE button (or F11), type in <strong>hellobeep.txt</strong>, and click the Save button. Now open NotePad or any text editor of your choice, choose to open a file, navigate to the <strong>userdata</strong> folder, the default user folder, and open up the <strong>hellobeep.txt</strong> file we just created.</p>
 <p>(Note that default <strong>userdata</strong> folder will be at following locations:)</p>
 <ul>
-<li><strong>C:\Program Files\BeepComp\userdata</strong> (32bit Windows)</li>
-<li><strong>C:\Program Files (x86)\BeepComp\userdata</strong> (64bit Windows)</li>
+<li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
+<li><strong>C:\Users\{username}\Documents\BeepComp\userdata</strong> on Vista and later</li>
 </ul>
 <p>See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.</p>
+<p>By the way, you can use the ALT + O shortcut from the main editor to open up your <strong>userdata</strong> folder anytime.</p>
 <div id="basics_copying_and_pasting_source" />
 <h3>Copying and Pasting Source</h3>
 <p>A nice thing about working with text is that you can easily copy and paste between BeepComp and other sources!</p>
@@ -498,7 +499,8 @@ L4 KKKSSS
 <li><strong>ALT + S</strong> ... Quick-save to last saved file</li>
 <li><strong>ALT + V</strong> ... Open the system volume control</li>
 <li><strong>ALT + D</strong> ... Open the audio device control</li>
-<li><strong>ALT + I</strong> ... Initialize the audio device </li>
+<li><strong>ALT + I</strong> ... Initialize the audio device</li>
+<li><strong>ALT + O</strong> ... Open &quot;userdata&quot; folder </li>
 <li><strong>HOME</strong> ... Go to the very top</li>
 <li><strong>END</strong> ... Go to the very bottom</li>
 </ul>

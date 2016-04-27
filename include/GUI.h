@@ -24,12 +24,14 @@
 #include "Dialog.h"
 #include "Button.h"
 #include "Knob.h"
+#include "Config.h"
 
 class MPlayer;
 class MML;
 class Dialog;
 class Button;
 class Knob;
+class Config;
 // class OpenFileDialog;
 
 class Meter
@@ -535,6 +537,8 @@ public:
 	static const int TEXT_TOP_X = 10;
 	static const int TEXT_TOP_Y = 10;
 	static const std::string STR_VERSION;
+	
+	Config config;
 
 	sf::RenderWindow window;
 	sf::RenderWindow* wPtr;

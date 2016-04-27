@@ -1,5 +1,6 @@
 <?hml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+
 	<Product Name='BeepComp' 
 		Id='2BB9BD67-0B46-4FC4-AEEF-D170D2AEF8FD'
 		UpgradeCode='8F81687A-D9C1-4711-AF2A-347CA54ADDD8'
@@ -16,8 +17,9 @@
 		SummaryCodepage='1252' />
 
 	<Media Id='1' Cabinet='beepcomp.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
-	
+
 	<Property Id='DiskPrompt' Value="BeepComp Installation [1]" />
+
 	
 	
 	<Directory Id="TARGETDIR" Name="SourceDir">
@@ -48,8 +50,12 @@
 		<Directory Id="ProgramFilesFolder" Name="PFiles">
 			<Directory Id="INSTALLDIR" Name="BeepComp">
 			
+				<Component Id="removeInstallDir" Guid="{CE454BE4-82E7-4319-8275-21480B5DDC70}">
+					<RemoveFile Id="RemoveInstalledFiles" On ="uninstall" Name="*.*"/>
+					<RemoveFolder Id="RemoveInstallFolder" On="uninstall"/>
+				</Component>			
 			
-
+			
 			
 				<Component Id='cmp_beepcompEXE' Guid='*'>
 					<File Id="beepcompEXE" Name="beepcomp.exe" DiskId='1' Source='..\beepcomp.exe' KeyPath='yes'>
@@ -137,8 +143,13 @@
 
 				
 				<Directory Id="FontDir" Name="fonts">
-					
-					<Component Id='cmp_EnvyCodeRUbuntuMono_RTTF' Guid='*'>
+
+					<Component Id="removeFontDir" Guid="{EF0CA272-EAF9-4082-B3A5-8B7796F77FB3}">
+						<RemoveFile Id="RemoveAllFontFiles" On ="uninstall" Name="*.*"/>
+						<RemoveFolder Id="RemoveFontFolder" On="uninstall"/>
+					</Component>
+				
+					<Component Id='cmp_UbuntuMono_RTTF' Guid='*'>
 						<File Id="UbuntuMono_RTTF" Name="UbuntuMono-R.ttf" 
 						DiskId='1' Source='..\fonts\UbuntuMono-R.ttf' KeyPath="yes">				
 						</File>
@@ -166,6 +177,11 @@
 				
 				
 				<Directory Id="ImagesDir" Name="images" >
+				
+					<Component Id="removeImagesDir" Guid="{4A40B8C6-4A78-4489-B1A8-F03C6D3EF84F}">
+						<RemoveFile Id="RemoveAllImageFiles" On ="uninstall" Name="*.*"/>
+						<RemoveFolder Id="RemoveImagesFolder" On="uninstall"/>
+					</Component>
 					
 					<Component Id='cmp_beepcomp_iconPNG' Guid='*'>
 						<File Id="beepcomp_iconPNG" Name="beepcomp_icon.png" 
@@ -195,6 +211,11 @@
 
 				
 				<Directory Id="DocumentationDir" Name="documentation" >
+				
+					<Component Id="removeDocumentationDir" Guid="{9DFFCC03-28DD-4DE3-B6BF-16ECF7739AE6}">
+						<RemoveFile Id="RemoveAllDocFiles" On ="uninstall" Name="*.*"/>
+						<RemoveFolder Id="RemoveDocumentationFolder" On="uninstall"/>
+					</Component>
 					
 					<Component Id='cmp_beepcomp_users_guideHTML' Guid='*'>
 						<File Id="beepcomp_users_guideHTML" Name="beepcomp_users_guide.html" 
@@ -219,83 +240,95 @@
 				
 				<Directory Id="UserDataDir" Name="userdata" >
 					
-					<Component Id='cmp_xanaduTXT' Guid='*' Permanent="yes">
+					<Component Id="removeUserDataDir" Guid="{96D7359E-844F-4846-A393-0011565B8503}">
+						<RemoveFile Id="RemoveTxtFiles" On ="uninstall" Name="*.txt"/>
+						<RemoveFolder Id="RemoveUserDataFolder" On="uninstall"/>
+					</Component>
+					
+					<Component Id='cmp_xanaduTXT' Guid='*' >
 						<File Id="xanaduTXT" Name="xanadu.txt" 
 						DiskId='1' Source='..\userdata\xanadu.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp_some_funky_tuneTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_some_funky_tuneTXT' Guid='*' >
 						<File Id="some_funky_tuneTXT" Name="some_funky_tune.txt" 
 						DiskId='1' Source='..\userdata\some_funky_tune.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 						
-					<Component Id='cmp_romanciaTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_romanciaTXT' Guid='*' >
 						<File Id="romanciaTXT" Name="romancia.txt" 
 						DiskId='1' Source='..\userdata\romancia.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 
-					<Component Id='cmp_ys1_field_musicTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_ys1_field_musicTXT' Guid='*' >
 						<File Id="ys1_field_musicTXT" Name="ys1_field_music.txt" 
 						DiskId='1' Source='..\userdata\ys1_field_music.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 						
-					<Component Id='cmp_ys1_town_musicTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_ys1_town_musicTXT' Guid='*' >
 						<File Id="ys1_town_musicTXT" Name="ys1_town_music.txt" 
 						DiskId='1' Source='..\userdata\ys1_town_music.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp_astro_wars_1TXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_astro_wars_1TXT' Guid='*' >
 						<File Id="astro_wars_1TXT" Name="astro_wars_1.txt" 
 						DiskId='1' Source='..\userdata\astro_wars_1.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp_pure_psg_toneTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_pure_psg_toneTXT' Guid='*' >
 						<File Id="pure_psg_toneTXT" Name="pure_psg_tone.txt" 
 						DiskId='1' Source='..\userdata\pure_psg_tone.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp_astro_effectTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_astro_effectTXT' Guid='*' >
 						<File Id="astro_effectTXT" Name="astro_effect.txt" 
 						DiskId='1' Source='..\userdata\astro_effect.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp_waveforms_testTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp_waveforms_testTXT' Guid='*' >
 						<File Id="waveforms_testTXT" Name="waveforms_test.txt" 
 						DiskId='1' Source='..\userdata\waveforms_test.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp__tutorial_basic_1TXT' Guid='*' Permanent="yes">
+					<Component Id='cmp__tutorial_basic_1TXT' Guid='*' >
 						<File Id="cmp__tutorial_basic_1TXT" Name="_tutorial_basic_1.txt" 
 						DiskId='1' Source='..\userdata\_tutorial_basic_1.txt' KeyPath='yes'>				
 						</File>
 					</Component>					
 
-					<Component Id='cmp__tutorial_repeatsTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp__tutorial_repeatsTXT' Guid='*' >
 						<File Id="cmp__tutorial_repeatsTXT" Name="_tutorial_repeats.txt" 
 						DiskId='1' Source='..\userdata\_tutorial_repeats.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 					
-					<Component Id='cmp__tutorial_drumsTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp__tutorial_drumsTXT' Guid='*' >
 						<File Id="cmp__tutorial_drumsTXT" Name="_tutorial_drums.txt" 
 						DiskId='1' Source='..\userdata\_tutorial_drums.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 
-					<Component Id='cmp__tutorial_delayTXT' Guid='*' Permanent="yes">
+					<Component Id='cmp__tutorial_delayTXT' Guid='*' >
 						<File Id="cmp__tutorial_delayTXT" Name="_tutorial_delay.txt" 
 						DiskId='1' Source='..\userdata\_tutorial_delay.txt' KeyPath='yes'>
 						</File>
 					</Component>
+				
+					<Component Id='cmp__helpful_tipsTXT' Guid='*' >
+						<File Id="cmp__helpful_tipsTXT" Name="_helpful_tips.txt" 
+						DiskId='1' Source='..\userdata\_helpful_tips.txt' KeyPath='yes'>
+						</File>
+					</Component>
+
 					
 				</Directory>
 				
@@ -319,7 +352,9 @@
     <Feature Id='Complete' Level='1'>
 
 		<ComponentRef Id='ApplicationShortcutDesktop' />
-	
+
+		<ComponentRef Id="removeInstallDir" />
+
 		<ComponentRef Id='cmp_beepcompEXE' />
 		<ComponentRef Id='cmp_libwinpthread_1DLL' />
 		<ComponentRef Id='cmp_libgcc_s_dw2_1DLL' />
@@ -336,18 +371,27 @@
 		
 		<ComponentRef Id='cmp_defaultTXT' />
 		
-		<ComponentRef Id='cmp_EnvyCodeRUbuntuMono_RTTF' />
+		<ComponentRef Id="removeFontDir" />
+		
+		<ComponentRef Id='cmp_UbuntuMono_RTTF' />
 		<ComponentRef Id='cmp_ZERO4B09TTF' />
 		<ComponentRef Id='cmp_ubuntu_font_licenseTXT' />
 		<ComponentRef Id='cmp_ZERO4B09_font_licenseTXT' />
+		
+		<ComponentRef Id="removeImagesDir" />
 
 		<ComponentRef Id='cmp_beepcomp_iconPNG' />
 		<ComponentRef Id='cmp_beepcomp_logoPNG' />
 		<ComponentRef Id='cmp_fighter_1PNG' />
 		<ComponentRef Id='cmp_fighter_2PNG' />
+		
+		<ComponentRef Id="removeDocumentationDir" />
+
 		<ComponentRef Id='cmp_beepcomp_users_guideHTML' />
 		<ComponentRef Id='cmp_beepcomp_screen_explainPNG' />
 		<ComponentRef Id='cmp_beepcomp_volume_envelopePNG' />
+
+		<ComponentRef Id="removeUserDataDir" />
 		
 		<ComponentRef Id='cmp_xanaduTXT' />
 		<ComponentRef Id='cmp_some_funky_tuneTXT' />
@@ -362,6 +406,7 @@
 		<ComponentRef Id='cmp__tutorial_drumsTXT' />
 		<ComponentRef Id='cmp__tutorial_basic_1TXT' />
 		<ComponentRef Id='cmp__tutorial_delayTXT' />
+		<ComponentRef Id='cmp__helpful_tipsTXT' />
 		
 		<ComponentRef Id='ProgramMenuDir' />
 		

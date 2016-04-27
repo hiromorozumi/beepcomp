@@ -1,5 +1,7 @@
 //
-//  Welcome to ** BeepComp ** !
+//
+//  Welcome to *** BeepComp *** !
+//
 //
 //    ... this app lets you compose
 //    nice chip tunes on text files. 
@@ -23,7 +25,7 @@
 
 @G
 
-MASTERVOLUME=90
+MASTERVOLUME=80
 DELAYTIME=428
 DELAYLEVEL=28
 TEMPO=140

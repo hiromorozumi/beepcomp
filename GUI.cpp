@@ -15,6 +15,8 @@ const std::string GUI::STR_VERSION = "0.1.9";
 
 void GUI::initialize()
 {
+	config.setVersion(STR_VERSION);
+	
 	anotherThreadRunning = false;
 
 	// create window
@@ -69,11 +71,18 @@ void GUI::initialize()
 	exportButton.initialize(1, "EXPORT", 684, 470 + TXBSPACING * 3, 136, 26, wPtr, miniFont);
 	
 	// set default userdata path
-	defaultPath = "userdata/";
+	// defaultPath = "userdata/"; // DEPRECIATED
+	
+	// call Config class's setup - if config file's not found in current directory (fresh after installation)
+	// it will copy the entire 'userdata' folder and its contents
+	string configSetupResult = config.setup();
+	cout << "From GUI.cpp: " << configSetupResult << endl;
+	defaultPath = config.getUserdataPath();
+	
+	// set this to currently working path
 	currentPathAndFileName = defaultPath;
 
 	// load work area font
-	// string fontfile = "fonts/EnvyCodeR.ttf";
 	string fontfile = "fonts/UbuntuMono-R.ttf";
 	if (!font.loadFromFile(fontfile))
 		{ cout << "Loading main font - error!" << endl; }
@@ -232,12 +241,14 @@ void GUI::initialize()
 	help.set(36, ".... AUDIO DEVICE" ,  6 + helpXTab,  6 + helpYSpacing*10);
 	help.set(37, "ALT + I",    6           ,  6 + helpYSpacing*11);
 	help.set(38, ".... INITIALIZE AUDIO" ,  6 + helpXTab,  6 + helpYSpacing*11);
-	help.set(39, "HOME"            ,  6,             6 + helpYSpacing*12);
-	help.set(40, ".... TO TOP"     ,  6 + helpXTab,  6 + helpYSpacing*12);
-	help.set(41, "END"             ,  6,             6 + helpYSpacing*13);
-	help.set(42, ".... TO END"     ,  6 + helpXTab,  6 + helpYSpacing*13);
+	help.set(39, "ALT + O",    6           ,  6 + helpYSpacing*12);
+	help.set(40, ".... OPEN USERDIR" ,  6 + helpXTab,  6 + helpYSpacing*12);
+	help.set(41, "HOME"            ,  6,             6 + helpYSpacing*13);
+	help.set(42, ".... TO TOP"     ,  6 + helpXTab,  6 + helpYSpacing*13);
+	help.set(43, "END"             ,  6,             6 + helpYSpacing*14);
+	help.set(44, ".... TO END"     ,  6 + helpXTab,  6 + helpYSpacing*14);
 	
-	help.setBlackOut(3, 3, 360, helpYSpacing*14+10);	
+	help.setBlackOut(3, 3, 360, helpYSpacing*15+10);	
 	help.deactivate(); // start inactive...
 	
 	string vText = "VERSION " + STR_VERSION;
@@ -256,7 +267,8 @@ void GUI::initialize()
 	
 	// dialog - bind window in this class
 	dialog.bindWindow(&window);
-	string startFolder = dialog.getCurrentDir() + "\\userdata";
+	// string startFolder = dialog.getCurrentDir() + "\\userdata"; // DEPRECIATED
+	string startFolder = defaultPath;
 	dialog.setStartFolder(startFolder);	
 
 	// clock to track blinking
@@ -1007,6 +1019,8 @@ void GUI::handleInputs()
 		startNewDialog();
 		adjustWindowSize();
 		progress.update(0.0f);
+		mouseLPressed = false; // DEBUG - clear flag
+		emptySelection(); // DEBUG - clean up
 	}
 	else if(newButton.hovering(mouseX, mouseY))
 		newButton.highlight();
@@ -1022,6 +1036,8 @@ void GUI::handleInputs()
 		loadDialog();
 		adjustWindowSize();
 		progress.update(0.0f);
+		mouseLPressed = false; // DEBUG - clear flag
+		emptySelection(); // DEBUG - clean up
 	}
 	else if(loadButton.hovering(mouseX, mouseY))
 		loadButton.highlight();
@@ -1038,6 +1054,8 @@ void GUI::handleInputs()
 		
 		saveDialog();
 		adjustWindowSize();
+		mouseLPressed = false; // DEBUG - clear flag
+		emptySelection(); // DEBUG - clean up
 	}
 	else if(saveButton.hovering(mouseX, mouseY))
 		saveButton.highlight();
@@ -1064,6 +1082,20 @@ void GUI::handleInputs()
 			quickSave();
 			// set up a quick message (turns off automatically after a few seconds)
 			help.setQuickMessage("Quick-saved!");
+		}
+	}
+	
+	// TRY to... open the 'userdata' folder when pressed ALT + O
+	if( kbd.altO() )
+	{
+		if( ( kbd.altO() ) )
+		{
+			while( kbd.altO() )
+			{ updateDisplay(); }; // update display
+		
+			ShellExecute( NULL, "open", defaultPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
+			ShellExecute( NULL, NULL, defaultPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
+			ShellExecute( NULL, "call", defaultPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
 		}
 	}
 	
@@ -1161,6 +1193,8 @@ void GUI::handleInputs()
 		exportDialog();
 		adjustWindowSize();
 		progress.update(0.0f);
+		mouseLPressed = false; // DEBUG - clear flag
+		emptySelection(); // DEBUG - clean up
 	}
 	else if(exportButton.hovering(mouseX, mouseY))
 		exportButton.highlight();

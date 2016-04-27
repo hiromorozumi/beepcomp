@@ -247,6 +247,10 @@ void Dialog::runFileDialog()
 	adjustedWindowWidth = static_cast<double>(size.x);
 	adjustedWindowHeight = static_cast<double>(size.y);
 	
+	// DEBUG - mysterious 'E' character?? - clear buffer anyway
+	typedChar = 0;
+	strTypedChar = "";
+	
 	// initialize values before running...
 	mouseLPressed = false;
 	mouseLReleased = true;
@@ -1338,6 +1342,19 @@ void Dialog::readDir(string path, string strFilter)
 			topRenderLine = nItems - TEXT_HEIGHT;
 			topRenderLine = max(0, topRenderLine); // if went to negative, make it 0
 		}
+		
+		if(topRenderLine>=(nItems-1)) // safeguard - if nItems got reduced, make sure topRenderLine didn't go over the last possible line (nItems-1)
+		{
+			topRenderLine = nItems - TEXT_HEIGHT;
+			topRenderLine = max(0,topRenderLine);
+		}
+		
+		// DEBUG
+		
+		// cout << "selectedIndex=" << selectedIndex << endl;
+		// cout << "nItems=" << nItems << endl;
+		// cout << "topRenderLine=" << topRenderLine << endl;
+		// cout << "TEXT_HEIGHT=" << TEXT_HEIGHT << endl;
 		
 		// wherever you end up... let's adjust slider pos
 		if(nItems < TEXT_HEIGHT) // if everything fits in one screen
