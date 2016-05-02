@@ -48,6 +48,7 @@ public:
 	
 	std::vector<std::string> filesFolders;
 	std::vector<int> itemTypes;
+	std::string installDir;
 	std::string currentDir;
 	std::string defaultDir;
 	std::string requestedStartFolder;
@@ -154,7 +155,8 @@ public:
 	
 	Dialog();
 	~Dialog();
-	
+
+	void setDefaultDir(const std::string &defDir);
 	std::string getCurrentDir();
 	std::vector<std::string> getFileNamesInDir(std::string folder, std::string filter);
 	std::vector<std::string> getDirNamesInDir(std::string folder);	

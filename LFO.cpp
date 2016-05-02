@@ -19,6 +19,7 @@ LFO::LFO()
 	setTable(0); // default table - sine wave
 	
 	// initialize variables with default settings
+	tableType = 0;
 	phase = 0;
 	waitPos = 0;
 	setWaitTime(200); // default wait - n milliseconds
@@ -28,6 +29,25 @@ LFO::LFO()
 
 LFO::~LFO()
 {}
+
+void LFO::initialize()
+{
+	// TODO - if LFO table type set to something else... re-init to sine wave type
+	if(tableType!=0)
+	{
+		//
+		
+		
+	}
+	
+	// initialize variables with default settings
+	tableType = 0;
+	phase = 0;
+	waitPos = 0;
+	setWaitTime(200); // default wait - n milliseconds
+	setRange(24); // default LFO range - n cents of semitone
+	setSpeed(6.0); // defalt LFO speed - n cycles per second 	
+}
 	
 void LFO::setTable(int type)
 {

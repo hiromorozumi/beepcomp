@@ -15,6 +15,7 @@ class LFO
 	
 public:
 
+	int tableType;
 	int waitFrames;
 	int waitTimeMSec;
 	int waitPos;
@@ -26,6 +27,7 @@ public:
 	LFO();
 	~LFO();
 	
+	void initialize();
 	void setTable(int type);
 	void setWaitTime(int milliseconds);
 	void setRange(int cents);

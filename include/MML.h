@@ -19,6 +19,8 @@ class MML
 
 public:
 
+	static const int N_EVENT_TAGS = 256;
+
 	// constructor
 	MML();
 	MML(double sampleRate, double tempo);
@@ -45,6 +47,9 @@ public:
 	
 	// destructor
 	~MML();
+	
+	std::string eventTag[N_EVENT_TAGS];
+	int eventTagLen[N_EVENT_TAGS];
 	
 	// MData data[4];
 	std::string originalSource;

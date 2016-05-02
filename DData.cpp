@@ -13,12 +13,14 @@ DData::DData()
 {
 	sampleRate = SAMPLE_RATE;
 	totalFrames = 0;
+	nEvents = 0;
 }
 
 DData::DData(int sRate)
 {
 	sampleRate = sRate;
 	totalFrames = 0;
+	nEvents = 0;
 }
 
 DData::~DData()
@@ -34,6 +36,15 @@ void DData::clear()
 	len.resize(0);
 	param.clear();
 	param.resize(0);
+	
+	eventType.clear();
+	eventType.resize(0);
+	eventParam.clear();
+	eventParam.resize(0);
+	eventFrame.clear();
+	eventFrame.resize(0);
+	nEvents = 0;
+
 	totalFrames = 0;
 }
 

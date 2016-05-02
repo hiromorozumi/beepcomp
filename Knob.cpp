@@ -63,7 +63,7 @@ void Knob::setSize(float s)
 	// set circule radius
 	circle.setRadius(outRadius);
 	circle.setOutlineThickness(1);
-	circle.setOutlineColor(sf::Color(70, 70, 40));
+	circle.setOutlineColor(sf::Color(70, 60, 40));
 	
 	// set marker radius
 	markerSize = size * 0.30;
@@ -101,7 +101,7 @@ void Knob::activate()
 	labelText.setString(toString(value));
 	
 	// set color scheme to 'active'
-	circle.setFillColor(sf::Color(255,200,200));
+	circle.setFillColor(sf::Color(240,200,180));
 	marker.setFillColor(sf::Color(170,100,80));
 	minLine.setFillColor(sf::Color(0,180,180));
 	maxLine.setFillColor(sf::Color(0,180,180));	
@@ -116,7 +116,7 @@ void Knob::deactivate()
 	labelText.setPosition(x + size/2 - textBounds.width/2, y + (h*1.1));
 	
 	// set color scheme to 'normal'
-	circle.setFillColor(sf::Color(240,220,165));
+	circle.setFillColor(sf::Color(220,180,130));
 	marker.setFillColor(sf::Color(190,150,80));
 	minLine.setFillColor(sf::Color(200,140,140));
 	maxLine.setFillColor(sf::Color(200,140,140));

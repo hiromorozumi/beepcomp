@@ -26,7 +26,14 @@
 	* [Ties](#music_section_ties)
 	* [Tuplets](#music_section_tuplets)
 	* [Volume Changes](#music_section_volume_changes)
-	* [Repeats](#music_section_repeats) 
+	* [Repeats](#music_section_repeats)
+	* [Fall Effect](#fall_effect)
+	* [Rise Effect](#rise_effect)
+	* [Waveform Selection](#waveform_selection)
+	* [Preset Selection](#preset_selection)
+	* [Volume Envelope Commands](#volume_envelope_commands)
+	* [LFO Commands](#lfo_commands)
+	* [Astro Command](#astro_command)
 * [Drum Section in Detail](#drum_section_in_detail)
 	* [Drum Hits](#drum_section_drum_hits)
 	* [Quieter Drum Hits](#drum_section_quieter_drum_hits)
@@ -39,6 +46,7 @@
 * [LFO Effect](#lfo_effect)
 * [Astro Effect](#astro_effect)
 * [Waveforms](#waveforms)
+* [Tone Presets](#tone_presets)
 * [Bookmarking Your Start Position](#bookmarking_your_start_position)
 * [Auto Saving](#auto_saving)
 * [Syntax Reference](#syntax_reference)
@@ -87,7 +95,7 @@ After exploring those tutorials, exploring the tutorial files included in the **
 These files are located in:
 
 - **C:\Documents and Settings\\{USERNAME}\My Documents\BeepComp\userdata** on XP
-- **C:\Users\\{username}\\Documents\BeepComp\userdata** on Vista and later
+- **C:\Users\\{USERNAME}\\Documents\BeepComp\userdata** on Vista and later
 
 <div id="basics" />
 ## Basics ##
@@ -170,7 +178,7 @@ Now let's save your work. Click the SAVE button (or F11), type in **hellobeep.tx
 (Note that default **userdata** folder will be at following locations:)
 
 * **C:\Documents and Settings\\{USERNAME}\My Documents\BeepComp\userdata** on XP
-* **C:\Users\\{username}\\Documents\BeepComp\userdata** on Vista and later
+* **C:\Users\\{USERNAME}\\Documents\BeepComp\userdata** on Vista and later
 
 See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.
 
@@ -237,6 +245,8 @@ Here is a tip if you want the exported data to be looped (so you can fade out af
 * **ALT + O** ... Open "userdata" folder 
 * **HOME** ... Go to the very top
 * **END** ... Go to the very bottom
+* **Page Up** ... Go up by one screen height
+* **Page Down** ... Go down by one screen height
 
 ###Key Commands: File Dialog###
 
@@ -250,6 +260,7 @@ Here is a tip if you want the exported data to be looped (so you can fade out af
 * **LEFT** ... Go to parent folder (when over <<<)
 * **BACKSPACE** ... Backspacing in the file name input
 * **ALT + O** ... Open the currently selected directory in Explorer
+* **ALT + D** ... Go to the 'Desktop'
 
 <div id="global_section_in_detail" />
 ## Global Section in Detail ##
@@ -285,43 +296,6 @@ Here is an example of using the global section to set up the volume, tempo and l
 
 Each section for a music is defined with `@n`. Your first channel section will start with `@1`, your second with `@2` and so forth.
 
-It's important to understand that there are two types of commands:
-
-1. Commands that are processed before the track starts playing
-2. Commands that are processed in real time as your track progresses
-
-Let's break the types of commands into these two groups:
-
-**Commands processed before the track starts playing:**
-
-* Volume envelope commands
-* LFO commands
-* Astro command
-
-Note that these will only be processed at the beginning of the track. Therefore, you cannot change the LFO speed in the middle of a song, for instance.
-
-**Commands processed in real time:**
-
-* Octave command
-* Octave increment/decrement command
-* Note length command
-* Musical notes, ties and rests
-* Tuplets
-* Volume changes
-* Repeats
-
-###Volume Envelope###
-
-See [Volume Envelope](#volume_envelope)
-
-###LFO Commands###
-
-See [LFO Effect](#lfo_effect)
-
-###Astro Command###
-
-See [Astro Effect](#astro_effect)
-
 <div id="music_section_musical_notes" />
 ###Musical Notes###
 
@@ -330,7 +304,7 @@ Musical notes are written with note names `C`, `D`, `E`, `F`, `G`, `A` and `B` i
     @1
     CDEFGAB
 
-A note with a sharp is written with `#` following its note name, `C#`, for example. A note with a flat is written with `b` following its note name, `Ab`. A chromatic scale can be played this way:
+A note with a sharp is written with `#` following its pitch name - `C#`, for example. A note with a flat is written with `b`, for example, `Ab`. A chromatic scale can be played this way:
 
     @1
     CC#DD#EFF#GG#AA#BBbAAbGGbFEEbDDbC
@@ -340,7 +314,7 @@ A note with a sharp is written with `#` following its note name, `C#`, for examp
 
 To specify the current note length, use the `L` command. The letter `L` should be followed by a number ranging from 1 to 64, the factor which should divide the measure length. `L4` sets the 1/4 of the measure length, so you get the quarter note length. `L8` gives you the eighth note length. Your length definition stays effective until the next `L` command.
 
-The below example plays some long, half notes followed by a string of fast 32nd notes:
+The below example plays a few long half notes followed by a series of fast 32nd notes:
 
     @1
     L2 CDE L32 GABAGFED
@@ -429,6 +403,66 @@ You can also specify a certain number of times which a phrase should repeat by a
 
      @1
      {5CDE}{3FGA}
+
+<div id="fall_effect" />
+###Fall Effect###
+
+If a musical note is followed by comma `,`, the Fall effect is added, causing it to decrease its pitch in time. Here is an example where you can observe how this effect works:
+
+    @1
+    FALLSPEED=1200
+    FALLWAIT=500
+    L1
+    C,D,E,
+
+`FALLSPEED` is how many 100ths of a semitone the pitch decreases in a second. 1200 means a range of one octave per second. `FALLWAIT=` specifies the time in milliseconds before the effect starts.
+
+The Fall point can be set in the middle of a tie series. This makes rhythmical timing of the effect easy. Try this example:
+
+    @1
+    FALLSPEED=1200
+    FALLWAIT=0
+    L16 O5
+    FECD~~~~ ~,~~~ <A>CDC
+    FECD~~ ~,~ <A~G~F~E~ ::::
+
+<div id="rise_effect" />
+###Rise Effect###
+
+Placing an asterisk `*` is before a note causes that note to scoop up to its pitch, producing a similar effect of a synthesizer pitch-bend wheel. `RISESPEED=` sets the speed for the rise in 100ths of a semitone per second. `RISERANGE=` determines how wide the pitch change should span. This effect can nicely add liveliness to your musical lines:
+
+    @G TEMPO=160
+    @1
+    RISESPEED=2400
+    RISERANGE=200
+    L8 O4 *EGA> *CCC *CCC *CC *C <AGD#EC<AG>
+     *CCC *CCC *CC ::::::::
+
+<div id="waveform_selection" />
+###Waveform Selection###
+
+You can choose a waveform other than the default square wave for each channel by declaring `WAVEFORM=n`.
+See [Waveforms](#waveforms).
+
+<div id="preset_selection" />
+###Preset Selection###
+
+You may choose a preset to for a quick tone shaping by declaring `PRESET=(presetname)`. See [Tone Presets](#tone_presets).
+
+<div id="volume_envelope_commands" />
+###Volume Envelope Commands###
+
+Each channel has a volume envelope filter to help shape a unique sound. See [Volume Envelope](#volume_envelope).
+
+<div id="lfo_commands" />
+###LFO Commands###
+
+The pitch LFO filter adds a vibrato effect. See [LFO Effect](#lfo_effect).
+
+<div id="astro_command" />
+###Astro Command###
+
+The "Astro" effect is a unique 80's-ish wobble effect. See [Astro Effect](#astro_effect).
 
 <div id="drum_section_in_detail" />
 ## Drum Section in Detail ##
@@ -597,6 +631,16 @@ Here is an example where a different waveform is selected:
     WAVEFORM=2  // sets up a saw tooth wave
 	F~:G~:Ab~:>C~:<Ab:G:F~:Eb~:F~~~~~::::
 
+<div id="tone_presets" />
+## Tone Presets ##
+
+With one line of the command `PRESET=`, you can set your channel to a set of predetermined tone parameters. You are welcome to try out the currently registered presets by declaring one of the following at the top of a channel:
+
+* `PRESET=BEEP` ... (Square wave) Straight PC Beep tone.
+* `PRESET=POPPY` ... (Square wave) Sustained tone with a strong attack.
+* `PRESET=POPPYVIB` ... (Square wave) Preset POPPY with vibrato.
+* `PRESET=BELL` ... (Square wave) Hard tone that decays in time.
+
 <div id="bookmarking_your_start_position" />
 ## Bookmarking Your Start Position ##
 
@@ -645,24 +689,26 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 <div id="syntax_reference_music_channel" />
 ### Music channel ###
 
-##### Commands processed before track starts playing #####
 
-* `ATTACKTIME=` ... Sets the envelope attack time in milliseconds (n=1 to 9999)
-* `PEAKTIME=` ... Sets the envelope peak time in milliseconds (n=1 to 9999)
-* `PEAKLEVEL=` ... Sets the envelope peak level (n=0 to 100)
-* `DECAYTIME=` ... Sets the envelope decay time in milliseconds (n=1 to 9999)
-* `SUSTAINLEVEL=` ... Sets the envelope sustain level (n=0 to 100)
-* `RELEASETIME=` ... Sets the envelope release time in milliseconds (n=1 to 9999)
+* `ATTACKTIME=n` ... Sets the envelope attack time in milliseconds (n=1 to 9999)
+* `PEAKTIME=n` ... Sets the envelope peak time in milliseconds (n=1 to 9999)
+* `PEAKLEVEL=n` ... Sets the envelope peak level (n=0 to 100)
+* `DECAYTIME=n` ... Sets the envelope decay time in milliseconds (n=1 to 9999)
+* `SUSTAINLEVEL=n` ... Sets the envelope sustain level (n=0 to 100)
+* `RELEASETIME=n` ... Sets the envelope release time in milliseconds (n=1 to 9999)
 * `LFO=?` ... Turns the pitch LFO effect on or off (?=ON or OFF) 
 * `LFORANGE=n` ... Sets the LFO range to cents of a semitone (n=1 to 2400)
 * `LFOSPEED=n` ... Sets the LFO speed by cycles per second (n=0 to 100)
-* `ASTRO=n` ... Turns on the astro effect and sets the number of wobbles per second (n=1 to 100)
+* `LFOWAIT=n` ... Sets the time in milliseconds before the LFO effect starts (n=0 to 9999)
+* `ASTRO=n` ... Turns on the Astro effect and sets the number of wobbles per second (n=0 to 100, 0 for OFF)
+* `ASTRO=OFF` ... Turns off the Astro effect
 * `PRESET=?` ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)
-* `DEFAULTTONE` ... Clears the volume envelope settings
-* `WAVEFORM=?` ... Chooses the waveform that the channel uses (n=0 to 5)
-
-##### Commands processed as the track progresses #####
-
+* `DEFAULTTONE` ... Sets up a straight square wave tone
+* `WAVEFORM=n` ... Chooses the waveform that the channel uses (n=0 to 5)
+* `FALLSPEED=n` ... Speed of the Fall effect in 100ths of a semitone per second (n=0 to 9600)
+* `FALLWAIT=n` ... Wait time in milliseconds before the Fall effect starts (n=0 to 9999)
+* `RISESPEED=n` ... Speed of the Rise effect in 100ths of a semitone per second (n=0 to 9600)
+* `RISERANGE=n` ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)  
 * `Vn` ... Sets channel volume (n=0,1,2...10)
 * `Ln` ... Sets the current note length (n=1 to 64)
 * `C` ... Musical note
@@ -682,6 +728,8 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 * `{n---}` ... Repeats the enclosed snippet --- `n` times
 * `^` ... Increase channel volume by 10%
 * `_` ... Decrease channel volume by 10%
+* `,` ... Fall effect, works on the pitch commanded just before
+* `*` ... Rise effect, works on the pitch that comes right after
 
 <div id="syntax_reference_drum_channel" />
 ### Drum Channel ###
@@ -706,7 +754,9 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 <div id="uninstalling_beepcomp" />
 ## Uninstalling BeepComp ##
 
-You can uninstall the application by using the "Programs and Features" under the Control Panel / Programs menu to uninstall BeepComp. Typing in "appwiz.cpl" in the command prompt or in the search box will direct you to this dialog, also. Please note that your "userdata" folder will not be removed, just in case you still have some of your work in this folder.
+You can uninstall the application by using the "Programs and Features" under the Control Panel / Programs menu to uninstall BeepComp. Typing in "appwiz.cpl" in the command prompt or in the search box will direct you to this dialog, also.
+
+Please note that your "userdata" folder inside your "Documents" (or "My Documents" on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your "userdata" folder, please delete it along with its parent folder named BeepComp.
 
 <div id="staying_updated" />
 ## Staying Updated ##

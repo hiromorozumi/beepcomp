@@ -6,7 +6,7 @@
 		UpgradeCode='8F81687A-D9C1-4711-AF2A-347CA54ADDD8'
 		Language='1033'
 		Codepage='1252'
-		Version='0.1.9'
+		Version='0.2.0'
 		Manufacturer='Gingerroot Soft'>
 	
 	<Package Id='*' Keywords='Installer' 
@@ -57,9 +57,9 @@
 			
 			
 			
-				<Component Id='cmp_beepcompEXE' Guid='*'>
+				<Component Id='cmp_beepcompEXE' Guid='{0F9FB186-268B-47BD-B448-A601C987780F}'>
 					<File Id="beepcompEXE" Name="beepcomp.exe" DiskId='1' Source='..\beepcomp.exe' KeyPath='yes'>
-						<Shortcut Id="startmenuBeepComp" Directory="ProgramMenuDir" Name="BeepComp" WorkingDirectory='INSTALLDIR' Icon="beepcomp.exe" IconIndex="0" Advertise="yes" />					
+						<Shortcut Id="startmenuBeepComp" Directory="ProgramMenuDir" Name="BeepComp" WorkingDirectory='INSTALLDIR' Icon="beepcomp_24.ico" IconIndex="0" Advertise="yes" />
 					</File>
 				</Component>
 				
@@ -217,10 +217,11 @@
 						<RemoveFolder Id="RemoveDocumentationFolder" On="uninstall"/>
 					</Component>
 					
-					<Component Id='cmp_beepcomp_users_guideHTML' Guid='*'>
+					<Component Id='cmp_beepcomp_users_guideHTML' Guid='{CC91693D-5AED-4A08-B997-E5353BF07C06}'>
 						<File Id="beepcomp_users_guideHTML" Name="beepcomp_users_guide.html" 
-						DiskId='1' Source='..\documentation\beepcomp_users_guide.html' KeyPath='yes'>				
-						</File>		
+						DiskId='1' Source='..\documentation\beepcomp_users_guide.html' KeyPath='yes'>
+							<Shortcut Id="startmenuDocumentation" Directory="ProgramMenuDir" Name="User's Guide" WorkingDirectory='DocumentationDir' Icon="documentation_24.ico" IconIndex="0" Advertise="yes" />						
+						</File>
 					</Component>
 
 					<Component Id='cmp_beepcomp_screen_explainPNG' Guid='*'>
@@ -332,18 +333,59 @@
 					
 				</Directory>
 				
+				<Component Id="UninstallShortcutMenu" Guid="{353BFD4C-AC67-42B3-829C-68291E11B34B}">
+					<Shortcut Id="UninstallProduct" Name="Uninstall BeepComp"
+					Target="[SystemFolder]msiexec.exe" Directory="ProgramMenuDir"
+					Arguments="/x [ProductCode]" />
+					<RemoveFolder Id="INSTALLDIR" On="uninstall" />
+					<RegistryValue Root="HKCU" Key="Software\[Manufacturer]\[ProductName]" Name="installed" Type="integer"
+					Value="1" KeyPath="yes" />
+				</Component>
+				
+				
 			</Directory>
 		</Directory>
 		
 		
 		<Directory Id="ProgramMenuFolder" Name="Programs">
 			<Directory Id="ProgramMenuDir" Name="BeepComp">
+
 				<Component Id="ProgramMenuDir" Guid="*">
 					<RemoveFolder Id='ProgramMenuDir' On='uninstall' />
 					<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
 				</Component>
+
 			</Directory>
         </Directory>
+		
+		
+		<Directory Id="AppDataFolder">
+			<Directory Id="BeepCompAppFolder" Name="BeepComp">
+
+				<Component Id="removeConfigDir" Guid="{EDE85211-F705-4392-A427-7DA5229AC646}">
+					<RemoveFile Id="RemoveAllConfigFiles" On ="uninstall" Name="*.*"/>
+					<RemoveFolder Id="RemoveConfigFolder" On="uninstall" />
+					
+					<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]'
+					Type='string'
+					Name='config_folder'
+					Value="installed"
+					KeyPath='yes' />
+				</Component>			
+			
+				<Component Id="cmp_beepcompCONFIG" 
+				Guid="{F398CA9F-7DA3-4B50-801F-F310894DE7D5}">
+					<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]'
+					Type='string'
+					Name='config_file'
+					Value="installed"
+					KeyPath='yes' />
+					<File Id="beepcompCONFIG" Source="..\beepcomp.config">
+					</File>
+				</Component>
+				
+			</Directory>
+		</Directory>
 		
 		
 	</Directory>
@@ -408,15 +450,21 @@
 		<ComponentRef Id='cmp__tutorial_delayTXT' />
 		<ComponentRef Id='cmp__helpful_tipsTXT' />
 		
+		<ComponentRef Id="UninstallShortcutMenu" />
+		
 		<ComponentRef Id='ProgramMenuDir' />
+
+		<ComponentRef Id="removeConfigDir" />		
+		<ComponentRef Id="cmp_beepcompCONFIG" />		
 		
     </Feature>
 	
 	<UIRef Id="WixUI_Minimal" />
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 	
-	<Icon Id="beepcomp.exe" SourceFile="..\beepcomp.exe" />
-	<Property Id="ARPPRODUCTICON" Value="beepcomp.exe" />
+	<Icon Id="beepcomp_24.ico" SourceFile="beepcomp_24.ico" />
+	<Icon Id="documentation_24.ico" SourceFile="documentation_24.ico" />
+	<Property Id="ARPPRODUCTICON" Value="beepcomp_48.ico" />
 	
 	<WixVariable Id="WixUILicenseRtf" Value="license.rtf" />
 	<WixVariable Id="WixUIDialogBmp" Value="dialog.bmp" />

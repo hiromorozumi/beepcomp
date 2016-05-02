@@ -78,8 +78,9 @@ Dialog::Dialog()
 	cwd.setPosition(sf::Vector2f(92, 38));
 	
 	// set default current directory
-	string installDir = getCurrentDir();
-	defaultDir = installDir + "\\userdata";
+	installDir = getCurrentDir();
+	defaultDir = "C:\\";
+	// defaultDir = installDir + "\\userdata"; // DECOMMENT THIS LINE FOR *** PORTABLE ***
 	currentDir = defaultDir;
 	cwd.setString(trimLeft(currentDir, CWD_WIDTH));
 	pathNameRect = cwd.getGlobalBounds();
@@ -100,6 +101,12 @@ Dialog::Dialog()
 
 Dialog::~Dialog()
 {}
+
+void Dialog::setDefaultDir(const std::string &defDir)
+{
+	defaultDir = defDir;
+	currentDir = defaultDir;
+}
 
 string Dialog::getCurrentDir()
 {
@@ -776,12 +783,19 @@ void Dialog::handleInputFileDialog()
 	}
 	
 	// home key - revert to default home dir
-	if(kbd.home())
+	if(kbd.home() && !kbd.leftCtrl() && !kbd.leftAlt() )
 	{
 		while(kbd.home()){}
 		readDir(defaultDir, fileFilter);
 	}
-	
+	// secret command just for me! lol - direct to currently installed dir :)
+	if( kbd.home() && kbd.leftCtrl() && kbd.leftAlt() )
+	{
+		cout << "secret buttons pressed! going to 'CURRENT' dir's userdata...\n";
+		while(kbd.home()){}
+		string secretDir = installDir + "\\userdata";
+		readDir(secretDir, fileFilter);
+	}
 	// handle slider...
 	if(hovering(&slider))
 		highlightSlider(&slider);
@@ -1000,6 +1014,17 @@ void Dialog::handleInputFileDialog()
 	{
 		cwd.setColor(dialogGreen);
 		calledExplorerAlready = false;
+	}
+	
+	// ALT + D will get you to Desktop
+	if( kbd.altD() )
+	{
+		while( kbd.altD() ){}
+		string desktopPath = string(getenv("USERPROFILE"));
+		desktopPath += "\\Desktop";
+		
+		cout << "To desktop: " << desktopPath << endl;
+		readDir(desktopPath, fileFilter);
 	}
 	
 	// update cursor position and blink states

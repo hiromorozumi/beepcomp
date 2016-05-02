@@ -10,6 +10,7 @@ class LFO;
 #include <vector>
 #include "Astro.h"
 #include "LFO.h"
+#include "Fall.h"
 
 using namespace std;
 
@@ -26,6 +27,7 @@ public:
 	
 	vector<float> table;
 	
+	int tableType;
 	double phase;
 	double dblPhaseIntPart;
 	int intPhase;
@@ -38,7 +40,7 @@ public:
 	float gain;
 	
 	bool resting;
-	bool firstNoteDone;
+	bool forceSilenceAtBeginning;
 	
 	int nEnvFrames;
 	int nAttackFrames;
@@ -61,6 +63,12 @@ public:
 	LFO lfo;
 	bool lfoEnabled;
 	
+	Fall fall;
+	bool fallActive;
+	
+	Rise rise;
+	bool riseActive;
+	
 	float history[OSC_HISTORY_SIZE];
 	int historyWriteWait;
 	int historyWriteIndex;
@@ -71,7 +79,7 @@ public:
 	void setTable(int type);	
 	void advance();
 	void setToRest();
-	void initializeForFirstNote();
+	void confirmFirstNoteIsRest();
 	void setNewNote(double newFreq);
 	void setFrequency(double noteFreq);
 	void setIncrement(double noteFreq);
@@ -87,9 +95,20 @@ public:
 	void setAstroSpeed(int nCyclesPerSecond);
 	void enableLFO();
 	void disableLFO();
+	void initializeLFO();
 	void setLFOwaitTime(int milliseconds);
 	void setLFOrange(int cents);
 	void setLFOspeed(double cyclePerSeconds);
+	void startFall();
+	void stopFall();
+	void setFallSpeed(double fallSpeed);
+	void setFallWait(double waitTimeMS);
+	void setFallToDefault();
+	void startRise();
+	void stopRise();
+	void setRiseSpeed(double riseSpeed);
+	void setRiseRange(double riseRange);
+	void setRiseToDefault();
 	void setAttackTime(int attackTimeMS);
 	void setPeakTime(int peakTimeMS);
 	void setDecayTime(int decayTimeMS);

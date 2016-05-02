@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const std::string GUI::STR_VERSION = "0.1.9";
+const std::string GUI::STR_VERSION = "0.2.0";
 
 void GUI::initialize()
 {
@@ -75,9 +75,11 @@ void GUI::initialize()
 	
 	// call Config class's setup - if config file's not found in current directory (fresh after installation)
 	// it will copy the entire 'userdata' folder and its contents
-	string configSetupResult = config.setup();
-	cout << "From GUI.cpp: " << configSetupResult << endl;
-	defaultPath = config.getUserdataPath();
+	string configSetupResult = config.setup();  			// COMMENT OUT THIS LINE FOR *** PORTABLE ***
+	cout << "From GUI.cpp: " << configSetupResult << endl; 	// COMMENT OUT THIS LINE FOR *** PORTABLE ***
+	defaultPath = config.getUserdataPath(); 				// COMMENT OUT THIS LINE FOR *** PORTABLE ***
+	// defaultPath = "userdata/";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
+	dialog.setDefaultDir(defaultPath); // don't forget to set default for Dialog!
 	
 	// set this to currently working path
 	currentPathAndFileName = defaultPath;
@@ -95,7 +97,8 @@ void GUI::initialize()
 	{
  		text[i].setFont(font); // font is a sf::Font
 		text[i].setCharacterSize(25); // in pixels, not points!
-		text[i].setColor(sf::Color::Green);
+		//text[i].setColor(sf::Color::Green);
+		text[i].setColor(sf::Color(90,255,90));
 		text[i].setPosition(TEXT_TOP_X, i * charHeight + TEXT_TOP_Y - 4);
 	}
 
@@ -267,8 +270,8 @@ void GUI::initialize()
 	
 	// dialog - bind window in this class
 	dialog.bindWindow(&window);
-	// string startFolder = dialog.getCurrentDir() + "\\userdata"; // DEPRECIATED
 	string startFolder = defaultPath;
+	// startFolder = dialog.getCurrentDir() + "\\userdata"; // DECOMMENT THIS LINE FOR *** PORTABLE ***
 	dialog.setStartFolder(startFolder);	
 
 	// clock to track blinking
@@ -368,6 +371,10 @@ void GUI::run()
 				adjustedWindowHeight = static_cast<double>(event.size.height) ;
 			}
         }
+		
+		// mouse! this might just be a better way to get coordinates
+		mouseX = static_cast<double>(sf::Mouse::getPosition().x - window.getPosition().x -4)  * WINDOW_WIDTH / adjustedWindowWidth;
+		mouseY = static_cast<double>(sf::Mouse::getPosition().y - window.getPosition().y - 23)  * WINDOW_HEIGHT / adjustedWindowHeight;
 
 		handleInputs();
 		handleTimedSaving();
@@ -1002,6 +1009,7 @@ void GUI::handleInputs()
 		cout << "getLineNumber(charPos) = " << getLineNumber(charPos) << endl;
 		cout << "getStartPosInLine(getLineNumber(charPos)) = " << getStartPosInLine(getLineNumber(charPos)) << endl;
 		cout << "mouse -> " << mouseX << ", " << mouseY << endl;
+		cout << "sf:: Mouse.x(), .y() -> " << static_cast<double>(sf::Mouse::getPosition().x - window.getPosition().x -4)  * WINDOW_WIDTH / adjustedWindowWidth << ", " << static_cast<double>(sf::Mouse::getPosition().y - window.getPosition().y - 23)  * WINDOW_HEIGHT / adjustedWindowHeight << endl;
 		cout << "current cx & cy -> " << cx << ", " << cy << endl;
 		
 		// DEBUG
@@ -1081,7 +1089,7 @@ void GUI::handleInputs()
 		{
 			quickSave();
 			// set up a quick message (turns off automatically after a few seconds)
-			help.setQuickMessage("Quick-saved!");
+			help.setQuickMessage("QUICK-SAVED!");
 		}
 	}
 	
@@ -1138,7 +1146,7 @@ void GUI::handleInputs()
 		while(kbd.altI())
 		{ updateDisplay(); }
 	
-		help.setQuickMessage("Resetting audio...");
+		help.setQuickMessage("RESETTING AUDIO...");
 		bool playerWasPlaying = mplayer.isPlaying();
 		long seekTo = mplayer.getFramePos(); // will clean seek again to current position
 		mplayer.pause();
@@ -1472,6 +1480,36 @@ endOfButtonRoutines:
 		updateScreenCoordinates(); 	// reconfigure posInLine and currentLine
 		setStrView(); // update the whole text line info..
 		updateCursorPos();	// re-update... topRenderLine etc.
+	}
+	if(kbd.pageDown())
+	{
+		while(kbd.pageDown()){}
+		int screenY = currentLine - topRenderLine; // remember distance on Y axis from top
+		posInLine = 0;
+		currentLine += TEXT_HEIGHT;
+		currentLine = min(currentLine, nLines-1);
+		topRenderLine = currentLine - screenY;
+		if(topRenderLine > currentLine) topRenderLine = currentLine;
+		calculateCharPos();
+		updateScreenCoordinates();
+		setStrView(); // update the whole text line info..
+		updateCursorPos();	// re-update... topRenderLine etc.
+		emptySelection();
+	}
+	if(kbd.pageUp())
+	{
+		while(kbd.pageUp()){}
+		int screenY = currentLine - topRenderLine; // remember distance on Y axis from top
+		posInLine = 0;
+		currentLine -= TEXT_HEIGHT;
+		currentLine = max(currentLine, 0);
+		topRenderLine = currentLine - screenY;
+		if(topRenderLine < 0) topRenderLine = 0;
+		calculateCharPos();
+		updateScreenCoordinates();
+		setStrView(); // update the whole text line info..
+		updateCursorPos();	// re-update... topRenderLine etc.
+		emptySelection();
 	}
 	// shift or mouse drag -> select snipet
 	// (exlude shift-typing case!)
@@ -1922,6 +1960,7 @@ void GUI::startNewDialog()
 		source.append<int>(1,0xFF);
 		mplayer.resetForNewSong();
 		mml.setSource(source);
+		mplayer.setMasterGain(0.7f); // just as a courtesy...	
 		mml.parse(&mplayer);
 		renewForNewSong();
 		mplayer.goToBeginning(); // empty source... but this helps completely initialize
@@ -2006,6 +2045,7 @@ void GUI::loadDialog()
 
 		cout << "Open: " << currentPathAndFileName << endl;
 		mplayer.pause();
+		mplayer.setMasterGain(0.7f); // in case new file doesn't specify master volume
 		mplayer.resetForNewSong();
 		source = mml.loadFile(currentPathAndFileName, &mplayer); // must pass a c++ string
 		mml.parse(&mplayer);
@@ -2398,7 +2438,7 @@ void GUI::setMessage(string strMessage)
 {
 	message.setFont(font); // font is a sf::Font
 	message.setCharacterSize(24); // in pixels, not points!
-	message.setColor(sf::Color::Green);
+	message.setColor(sf::Color(90,255,90));
 	int messageX = (WINDOW_WIDTH/2) - (strMessage.length() * charWidth) / 2;
 	message.setPosition(sf::Vector2f(messageX, (WINDOW_HEIGHT/2) - charHeight * 3));
 	message.setString(strMessage);
@@ -2425,12 +2465,12 @@ void GUI::adjustWindowSize()
 // autosaving (done every so often or when exiting...)
 void GUI::autoSave()
 {
-	string autoSavePath = defaultPath + "/__AUTOSAVED__.txt";
+	string autoSavePath = defaultPath + "\\__AUTOSAVED__.txt";
 	cout << "Autosaving to... " << autoSavePath << endl;
 	// save the file!
 	mml.setSource(source);
 	mml.saveFile(autoSavePath, &mplayer);
-	help.setQuickMessage("Auto-saving...");
+	help.setQuickMessage("AUTO-SAVING...");
 }
 
 // quick-save ... called when ALT + S is pressed
@@ -2457,7 +2497,7 @@ void GUI::handleAudioChecking()
 	{
 		if(!mplayer.getStreamState())
 		{
-			help.setQuickMessage("Resetting audio...");
+			help.setQuickMessage("RESETTING AUDIO...");
 			bool playerWasPlaying = mplayer.isPlaying();
 			long seekTo = mplayer.getFramePos(); // will clean seek again to current position
 			mplayer.pause();

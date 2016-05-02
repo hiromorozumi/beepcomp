@@ -198,15 +198,16 @@ public:
 		strQuickMessage = qText;
 		activateQuickMessage();
 		
-		int wWidth = w->getSize().x;
+		// int wWidth = w->getSize().x;
+		int wWidth = 840;
 		int qmFrameX;
 
 		quickMessageText.setString(strQuickMessage);
 		sf::FloatRect fRect = quickMessageText.getGlobalBounds();
-		quickMessageFrame.setSize(sf::Vector2f(fRect.width + 60, fRect.height + 10));
-		qmFrameX = wWidth - fRect.width - 60;
+		quickMessageFrame.setSize(sf::Vector2f(fRect.width + 40, fRect.height + 10));
+		qmFrameX = wWidth - fRect.width - 40;
 		quickMessageFrame.setPosition(sf::Vector2f(qmFrameX, 0));
-		quickMessageText.setPosition(sf::Vector2f(qmFrameX + 30, 3));
+		quickMessageText.setPosition(sf::Vector2f(qmFrameX + 20, 3));
 		
 		// reset the timer...
 		quickMessageClock.restart();

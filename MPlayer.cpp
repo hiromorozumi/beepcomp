@@ -43,7 +43,7 @@ int MPlayer::playerCallback (
 	float soundAmplitudeLeft;
 	float soundAmplitudeRight;
 
-	for(unsigned long i=0; i<framesPerBuffer; i++)
+	for(unsigned long ii=0; ii<framesPerBuffer; ii++)
 	{
 		if(!playing) // if player is not playing or finished playing, just pass 0
 		{
@@ -70,40 +70,27 @@ int MPlayer::playerCallback (
 			{
 				if(!channelDone[i])
 				{
+					
+					// if there are event requests, digest those first
+					bool eventsDone = false;
+					
+					while(!eventsDone)
+					{
+						// if next event in vector is set to happen at this frame pos, process
+						if( (data[i].eventFrame[eventIndex[i]] <= framePos) && (eventIndex[i] < data[i].nEvents) )
+						{
+							processEvent(i, data[i].eventType[eventIndex[i]], 
+											data[i].eventParam[eventIndex[i]]);
+							eventIndex[i]++;
+						}
+						else
+							eventsDone = true;
+					}					
+					
 					remainingFrames[i]--;
 					if(remainingFrames[i] <= 0)
 					{
 						noteIndex[i]++;
-
-						// if there are event requests (freq >= 70000), digest those first
-						bool eventsDone = false;
-
-						while(!eventsDone)
-						{
-							int readValue = static_cast<int>(data[i].freqNote[noteIndex[i]]);
-							if(readValue==70000.0) // 'specify volume'
-							{
-								// convert the passed value(1-10) to float (0.0 to 0.5f)
-								float gainToSet
-									= static_cast<float>(data[i].param[noteIndex[i]]) / 20.0f;
-								setChannelGain(i, gainToSet);
-								noteIndex[i]++;
-							}
-							else if(readValue==71000.0) // 'increment volume'
-							{
-								float gainToSet = min(0.5f, getChannelGain(i)+0.05f);
-								setChannelGain(i, gainToSet);
-								noteIndex[i]++;
-							}
-							else if(readValue==72000.0) // 'decrement volume'
-							{
-								float gainToSet = max(0.001f, getChannelGain(i)-0.05f);
-								setChannelGain(i, gainToSet);
-								noteIndex[i]++;
-							}
-							else // next freq value is not any event request, so we're done here
-								eventsDone = true;
-						}
 
 						// and if you get to the end of MML signal (freq = -1.0), set flag
 						if(data[i].freqNote[noteIndex[i]] < 0)
@@ -131,40 +118,26 @@ int MPlayer::playerCallback (
 			// now handle drum channel!
 			if(!dChannelDone)
 			{
+				// if there are event requests, digest those first
+				bool eventsDone = false;
+
+				while(!eventsDone)
+				{
+					// if next event in vector is set to happen at this frame pos, process
+					if( (ddata.eventFrame[dEventIndex] <= framePos) && (dEventIndex < ddata.nEvents) )
+					{
+						// cout << "event found! for drums" << endl;
+						processDrumEvent(ddata.eventType[dEventIndex], ddata.eventParam[dEventIndex]);
+						dEventIndex++;
+					}
+					else
+						eventsDone = true;
+				}
+				
 				dRemainingFrames--;
 				if(dRemainingFrames <= 0)
 				{
 					dNoteIndex++; // move onto the next drum note index
-
-						// if there are event requests (freq >= 70000), digest those first
-						bool eventsDone = false;
-
-						while(!eventsDone)
-						{
-							int readValue = ddata.drumNote[dNoteIndex];
-							if(readValue==70000) // 'specify volume'
-							{
-								// convert the passed value(1-10) to float (0.0 to 0.5f)
-								float gainToSet
-									= static_cast<float>(ddata.param[dNoteIndex]) / 20.0f;
-								setDChannelGain(gainToSet);
-								dNoteIndex++;
-							}
-							else if(readValue==71000) // 'increment volume'
-							{
-								float gainToSet = min(0.5f, getDChannelGain()+0.05f);
-								setDChannelGain(gainToSet);
-								dNoteIndex++;
-							}
-							else if(readValue==72000) // 'decrement volume'
-							{
-								float gainToSet = max(0.001f, getDChannelGain()-0.05f);
-								setDChannelGain(gainToSet);
-								dNoteIndex++;
-							}
-							else // next freq value is not any event request, so we're done here
-								eventsDone = true;
-						}
 
 					// and if you get to the end of MML signal (drumNote = -1.0), set flag
 					if(ddata.drumNote[dNoteIndex] < 0 || dNoteIndex >= ddata.getSize())
@@ -278,8 +251,8 @@ MPlayer::MPlayer()
 		osc[0].detune = 0;
 
 	tableType = 1; // OSC's default type - square table
-	masterGain = 0.8f;
-	masterOutCap = 0.85f;
+	masterGain = 0.7f;
+	masterOutCap = 0.88f;
 
 	compThreshold = 0.5f;
 	compRatio = 8;
@@ -288,6 +261,9 @@ MPlayer::MPlayer()
 	songLastFrame = 0;
 	songLastFramePure = 0;
 	bookmark = 0;
+	for(int i=0; i<9; i++)
+		eventIndex[i] = 0;
+	dEventIndex = 0;
 
 	// call this function once to set various parameters settings to default
 	resetForNewSong();
@@ -441,11 +417,15 @@ void MPlayer::resetForNewSong()
 	for(int i=0; i<9; i++)
 	{
 		// back to default envelope setting
+		osc[i].setTable(1); // back to square wave
 		osc[i].setEnvelope(22, 18, 250, 40, 0.9f, 0.5f);
 		enableChannel(i);
 		disableAstro(i);
 		osc[i].disableLFO();
+		osc[i].initializeLFO(); // resets lfo parameters
 		osc[i].detune = 0;
+		osc[i].setRiseToDefault();
+		osc[i].setFallToDefault();
 	}
 	enableDrumChannel();
 
@@ -512,6 +492,7 @@ void MPlayer::goToBeginning()
 		remainingFrames[i] = 0;
 		freqNote[i] = 0;
 		noteIndex[i] = 0;
+		eventIndex[i] = 0;
 	}
 
 	// for drum channel
@@ -519,37 +500,24 @@ void MPlayer::goToBeginning()
 	dRemainingFrames = 0;
 	currentDrumNote = 0;
 	dNoteIndex = 0;
+	dEventIndex = 0;
 
 	// set the starting note for each music channel (ch 1 to 9)
 	for(int i=0; i<9; i++)
 	{
 		// if there are event requests (freq >= 70000), digest those first
 		bool eventsDone = false;
-
+		
 		while(!eventsDone)
 		{
-			int readValue = static_cast<int>(data[i].freqNote[noteIndex[i]]);
-			if(readValue==70000.0) // 'specify volume'
+			// if next event in vector is set to happen at this frame pos, process
+			if( (data[i].eventFrame[eventIndex[i]] == 0) && (eventIndex[i] < data[i].nEvents) )
 			{
-				// convert the passed value(1-10) to float (0.0 to 0.5f)
-				float gainToSet
-					= static_cast<float>(data[i].param[noteIndex[i]]) / 20.0f;
-				setChannelGain(i, gainToSet);
-				noteIndex[i]++;
+				processEvent(i, data[i].eventType[eventIndex[i]], 
+								data[i].eventParam[eventIndex[i]]);
+				eventIndex[i]++;
 			}
-			else if(readValue==71000.0) // 'increment volume'
-			{
-				float gainToSet = min(0.5f, getChannelGain(i)+0.05f);
-				setChannelGain(i, gainToSet);
-				noteIndex[i]++;
-			}
-			else if(readValue==72000.0) // 'decrement volume'
-			{
-				float gainToSet = max(0.001f, getChannelGain(i)-0.05f);
-				setChannelGain(i, gainToSet);
-				noteIndex[i]++;
-			}
-			else // next freq value is not any event request, so we're done here
+			else
 				eventsDone = true;
 		}
 
@@ -560,6 +528,7 @@ void MPlayer::goToBeginning()
 		if(freqNote[i]==65535.0)
 		{
 			setToRest(i); // set this channel to rest
+			osc[i].confirmFirstNoteIsRest();
 		}
 		else if(freqNote[i]<0) // if first note is already end flag (empty MML data)
 		{
@@ -576,31 +545,16 @@ void MPlayer::goToBeginning()
 
 	// if there are event requests (freq >= 70000), digest those first
 	bool eventsDone = false;
-
+	
 	while(!eventsDone)
 	{
-		int readValue = ddata.drumNote[dNoteIndex];
-		if(readValue==70000) // 'specify volume'
+		// if next event in vector is set to happen at this frame pos, process
+		if( (ddata.eventFrame[dEventIndex] == 0) && (dEventIndex < ddata.nEvents) )
 		{
-			// convert the passed value(1-10) to float (0.0 to 0.5f)
-			float gainToSet
-				= static_cast<float>(ddata.param[dNoteIndex]) / 20.0f;
-			setDChannelGain(gainToSet);
-			dNoteIndex++;
+			processDrumEvent(ddata.eventType[dEventIndex], ddata.eventParam[dEventIndex]);
+			dEventIndex++;
 		}
-		else if(readValue==71000) // 'increment volume'
-		{
-			float gainToSet = min(0.5f, getDChannelGain()+0.05f);
-			setDChannelGain(gainToSet);
-			dNoteIndex++;
-		}
-		else if(readValue==72000) // 'decrement volume'
-		{
-			float gainToSet = max(0.001f, getDChannelGain()-0.05f);
-			setDChannelGain(gainToSet);
-			dNoteIndex++;
-		}
-		else // next freq value is not any event request, so we're done here
+		else
 			eventsDone = true;
 	}
 
@@ -870,6 +824,255 @@ void MPlayer::setMasterGain(float g)
 	{ masterGain = g; }
 
 
+// process one event at current frame for a specified channel
+void MPlayer::processEvent(int channel, int eType, int eParam)
+{
+	// cout << "Event: ch=" << channel << " type=" << eType << " param=" << eParam << "\t";
+
+	// -1 is end of event series for the channel
+	if(eType==-1)
+	{
+		// cout << "Channel " << channel << ": end of events!\n";
+	}
+	
+	// type 0 - specify the volume
+	else if(eType==0)
+	{
+		// convert the passed value(1-10) to float (0.0 to 0.5f)
+		float gainToSet
+			= static_cast<float>(eParam) / 20.0f;
+		setChannelGain(channel, gainToSet);
+		// cout << "VOLUME=" << eParam << endl;
+	}
+	// type 1 - increment volume
+	else if(eType==1)
+	{
+		float gainToSet = min(0.5f, getChannelGain(channel)+0.05f);
+		setChannelGain(channel, gainToSet);		
+		// cout << "VOLUME++\n";
+	}
+	// type 2 - decrement volume
+	else if(eType==2)
+	{
+		float gainToSet = max(0.001f, getChannelGain(channel)-0.05f);
+		setChannelGain(channel, gainToSet);
+		// cout << "VOLUME--\n";
+	}
+	// type 10 - set waveform 
+	else if(eType==10)
+	{
+		osc[channel].setTable(eParam); // set wavetable for this value
+		// cout << "WAVEFORM=" << eParam << endl;
+	}
+	// type 1000 - "DEFAULTTONE"
+	else if(eType==1000)
+	{
+		osc[channel].setTable(1); // square wave
+		osc[channel].setEnvelope(0, 0, 0, 0, 0.65f, 0.65f);
+		// cout << "DEFAULTTONE\n";
+	}
+	// type 1001 - "PRESET=BEEP"
+	else if(eType==1001)
+	{
+		osc[channel].setTable(1); // square wave
+		osc[channel].setEnvelope(0, 0, 0, 0, 0.65f, 0.65f);
+		// cout << "PRESET=BEEP\n";
+	}
+	// type 1002 - "PRESET=POPPY"
+	else if(eType==1002)
+	{
+		osc[channel].setTable(1); // square wave
+		osc[channel].setEnvelope(0, 50, 10, 50, 0.90f, 0.40f);
+		// cout << "PRESET=POPPY\n";
+	}
+	// type 1002 - "PRESET=POPPYVIB"
+	else if(eType==1003)
+	{
+		osc[channel].setTable(1); // square wave
+		osc[channel].setEnvelope(0, 50, 10, 50, 0.90f, 0.40f);
+		osc[channel].enableLFO();
+		osc[channel].setLFOrange(22);
+		osc[channel].setLFOwaitTime(250);
+		osc[channel].setLFOspeed(6.0);
+		// cout << "PRESET=POPPYVIB\n";
+	}
+	// type 1003 - "PRESET=BELL"
+	else if(eType==1004)
+	{
+		osc[channel].setTable(1); // square wave
+		osc[channel].setEnvelope(0, 0, 800, 0, 0.80f, 0.0f);
+		// cout << "PRESET=BELL\n";
+	}
+	// type 20 - "ATTACKTIME="
+	else if(eType==20)
+	{
+		osc[channel].setAttackTime(eParam); // set attack time to this value
+		// cout << "ATTACKTIME=" << eParam << endl;
+	}
+	// type 21 - "PEAKTIME="
+	else if(eType==21)
+	{
+		osc[channel].setPeakTime(eParam); // set peak time to this value
+		// cout << "PEAKTIME=" << eParam << endl;
+	}
+	// type 22 - "DECAYTIME="
+	else if(eType==22)
+	{
+		osc[channel].setDecayTime(eParam); // set decay time to this value
+		// cout << "DECAYTIME=" << eParam << endl;
+	}
+	// type 23 - "RELEASETIME="
+	else if(eType==23)
+	{
+		osc[channel].setReleaseTime(eParam); // set release time to this value
+		// cout << "RELEASETIME=" << eParam << endl;
+	}
+	// type 24 - "PEAKLEVEL="
+	else if(eType==24)
+	{
+		float valuef = static_cast<float>(eParam) / 100.0f;
+		osc[channel].setPeakLevel(valuef); // set peak level to this value
+		// cout << "PEAKLEVEL=" << eParam << endl; 
+	}
+	// type 25 - "SUSTAINLEVEL="
+	else if(eType==25)
+	{
+		float valuef = static_cast<float>(eParam) / 100.0f;
+		osc[channel].setSustainLevel(valuef); // set sustain level to this value
+		// cout << "SUSTAINLEVEL=" << eParam << endl;
+	}
+	// type 30 - "LFO=ON/OFF"
+	else if(eType==30)
+	{
+		if(eParam==1)
+		{
+			osc[channel].enableLFO();
+			// cout << "LFO=ON\n";
+		}
+		else if(eParam==0)
+		{
+			osc[channel].disableLFO();
+			// cout << "LFO=ON\n";
+		}
+	}
+	// type 31 - "LFORANGE="
+	else if(eType==31)
+	{
+		osc[channel].setLFOrange(eParam); // set LFO range to this value
+		// cout << "LFORANGE=" << eParam << endl;
+	}
+	// type 32 - "LFOSPEED="
+	else if(eType==32)
+	{
+		double valued = static_cast<double>(eParam);
+		osc[channel].setLFOspeed(valued); // set LFO speed to this value
+		// cout << "LFOSPEED=" << eParam << endl;
+	}
+	// type 33 - "LFOWAIT="
+	else if(eType==33)
+	{
+		osc[channel].setLFOwaitTime(eParam); // set LFO wait time to this value
+		// cout << "LFOWAIT=" << eParam << endl;
+	}
+	// type 40 - "ASTRO="
+	else if(eType==40)
+	{
+		if(eParam==0)
+		{
+			disableAstro(channel);
+		}
+		else
+			setAstro(channel, eParam); // set astro to this value
+		// cout << "ASTRO=" << eParam << endl;
+	}
+	// type 41 - "ASTRO=OFF"
+	else if(eType==41)
+	{
+		disableAstro(channel);
+		// cout << "ASTRO=OFF" << endl;
+	}
+	// type 50 - "FALL"
+	else if(eType==50)
+	{
+		osc[channel].startFall();
+		// cout << "FALL!" << endl;
+	}
+	// type 51 - "FALLSPEED="
+	else if(eType==51)
+	{
+		double valued = static_cast<double>(eParam);
+		osc[channel].setFallSpeed(valued); // set LFO speed to this value
+		// cout << "FALLSPEED=" << eParam << endl;
+	}
+	// type 52 - "FALLWAIT="
+	else if(eType==52)
+	{
+		double valued = static_cast<double>(eParam);
+		osc[channel].setFallWait(valued); // set LFO speed to this value
+		// cout << "FALLWAIT=" << eParam << endl;
+	}
+	// type 60 - "RISE"
+	else if(eType==60)
+	{
+		osc[channel].startRise();
+		// cout << "RISE!" << endl;
+	}
+	// type 61 - "RISESPEED="
+	else if(eType==61)
+	{
+		double valued = static_cast<double>(eParam);
+		osc[channel].setRiseSpeed(valued); // set LFO speed to this value
+		// cout << "RISESPEED=" << eParam << endl;
+	}
+	// type 62 - "RISERANGE="
+	else if(eType==62)
+	{
+		double valued = static_cast<double>(eParam);
+		osc[channel].setRiseRange(valued); // set LFO speed to this value
+		// cout << "RISERANGE=" << eParam << endl;
+	}
+}
+
+
+// process one event at current frame for a specified channel
+void MPlayer::processDrumEvent(int eType, int eParam)
+{
+	// cout << "Event: Drums type=" << eType << "\t";
+
+	// -1 is end of event series for the channel
+	if(eType==-1)
+	{
+		// cout << "Drum channel : end of events!\n";
+	}
+	
+	// type 0 - specify the volume
+	else if(eType==0)
+	{
+		// convert the passed value(1-10) to float (0.0 to 0.5f)
+		float gainToSet
+			= static_cast<float>(eParam) / 20.0f;
+		setDChannelGain(gainToSet);	
+		// cout << "VOLUME=" << eParam << endl;
+	}
+	// type 1 - increment volume
+	else if(eType==1)
+	{
+		float gainToSet = min(0.5f, getDChannelGain()+0.05f);
+		setDChannelGain(gainToSet);		
+		// cout << "VOLUME++\n";
+	}
+	// type 2 - decrement volume
+	else if(eType==2)
+	{
+		float gainToSet = max(0.001f, getDChannelGain()-0.05f);
+		setDChannelGain(gainToSet);
+		// cout << "VOLUME--\n";
+	}
+}
+
+	
+
+
 /*-----[BCPLAYER][STARTCOMMENTOUT]-----*/
 
 std::string MPlayer::exportToFile(string filename)
@@ -1022,42 +1225,29 @@ int MPlayer::fillExportBuffer(float* buffer, int framesToWrite, long startFrame,
 		{
 			if(!channelDone[i])
 			{
+				
+				// if there are event requests, digest those first
+				bool eventsDone = false;
+				
+				while(!eventsDone)
+				{
+					// if next event in vector is set to happen at this frame pos, process
+					if( (data[i].eventFrame[eventIndex[i]] <= framePos) && (eventIndex[i] < data[i].nEvents) )
+					{
+						processEvent(i, data[i].eventType[eventIndex[i]], 
+										data[i].eventParam[eventIndex[i]]);
+						eventIndex[i]++;
+					}
+					else
+						eventsDone = true;
+				}	
+				
 				remainingFrames[i]--;
 				if(remainingFrames[i] <= 0)
 				{
 					noteIndex[i]++;
 
 					// cout << "Frame " << framePos << " channel " << i << " - note index = " <<  noteIndex[i];
-
-					// if there are event requests (freq >= 70000), digest those first
-					bool eventsDone = false;
-
-					while(!eventsDone)
-					{
-						int readValue = static_cast<int>(data[i].freqNote[noteIndex[i]]);
-						if(readValue==70000.0) // 'specify volume'
-						{
-							// convert the passed value(1-10) to float (0.0 to 0.5f)
-							float gainToSet
-								= static_cast<float>(data[i].param[noteIndex[i]]) / 20.0f;
-							setChannelGain(i, gainToSet);
-							noteIndex[i]++;
-						}
-						else if(readValue==71000.0) // 'increment volume'
-						{
-							float gainToSet = min(0.5f, getChannelGain(i)+0.05f);
-							setChannelGain(i, gainToSet);
-							noteIndex[i]++;
-						}
-						else if(readValue==72000.0) // 'decrement volume'
-						{
-							float gainToSet = max(0.001f, getChannelGain(i)-0.05f);
-							setChannelGain(i, gainToSet);
-							noteIndex[i]++;
-						}
-						else // next freq value is not any event request, so we're done here
-							eventsDone = true;
-					}
 
 					// and if you get to the end of MML signal (freq = -1.0), set flag
 					if(data[i].freqNote[noteIndex[i]] < 0)
@@ -1085,40 +1275,26 @@ int MPlayer::fillExportBuffer(float* buffer, int framesToWrite, long startFrame,
 		// now handle drum channel!
 		if(!dChannelDone)
 		{
+			
+			// if there are event requests, digest those first
+			bool eventsDone = false;
+			
+			while(!eventsDone)
+			{
+				// if next event in vector is set to happen at this frame pos, process
+				if( (ddata.eventFrame[dEventIndex] <= framePos) && (dEventIndex < ddata.nEvents) )
+				{
+					processDrumEvent(ddata.eventType[dEventIndex], ddata.eventParam[dEventIndex]);
+					dEventIndex++;
+				}
+				else
+					eventsDone = true;
+			}
+			
 			dRemainingFrames--;
 			if(dRemainingFrames <= 0)
 			{
 				dNoteIndex++; // move onto the next drum note index
-
-					// if there are event requests (freq >= 70000), digest those first
-					bool eventsDone = false;
-
-					while(!eventsDone)
-					{
-						int readValue = ddata.drumNote[dNoteIndex];
-						if(readValue==70000) // 'specify volume'
-						{
-							// convert the passed value(1-10) to float (0.0 to 0.5f)
-							float gainToSet
-								= static_cast<float>(ddata.param[dNoteIndex]) / 20.0f;
-							setDChannelGain(gainToSet);
-							dNoteIndex++;
-						}
-						else if(readValue==71000) // 'increment volume'
-						{
-							float gainToSet = min(0.5f, getDChannelGain()+0.05f);
-							setDChannelGain(gainToSet);
-							dNoteIndex++;
-						}
-						else if(readValue==72000) // 'decrement volume'
-						{
-							float gainToSet = max(0.001f, getDChannelGain()-0.05f);
-							setDChannelGain(gainToSet);
-							dNoteIndex++;
-						}
-						else // next freq value is not any event request, so we're done here
-							eventsDone = true;
-					}
 
 				// and if you get to the end of MML signal (drumNote = -1.0), set flag
 				if(ddata.drumNote[dNoteIndex] < 0 || dNoteIndex >= ddata.getSize())
@@ -1230,38 +1406,25 @@ void MPlayer::seek(long destination)
 			// zap through until very last note before the seekpoint
 			// including events
 			
+			// first process all the events up to destination
+			bool eventsZappingDone = false;
+			while(!eventsZappingDone)
+			{
+				// if next event in vector is set to happen at this frame pos, process
+				if( (data[i].eventFrame[eventIndex[i]] <= destination) && (eventIndex[i] < data[i].nEvents) )
+				{
+					processEvent(i, data[i].eventType[eventIndex[i]], 
+									data[i].eventParam[eventIndex[i]]);
+					eventIndex[i]++;
+				}
+				else
+					eventsZappingDone = true;
+			}
+			
 			bool zappingDone = false;
 			
 			while(!zappingDone)
 			{
-					bool eventsAtThisPosDone = false;
-					
-					while(!eventsAtThisPosDone)
-					{
-						int readValue = static_cast<int>(data[i].freqNote[noteIndex[i]]);
-						if(readValue==70000.0) // 'specify volume'
-						{
-							// convert the passed value(1-10) to float (0.0 to 0.5f)
-							float gainToSet
-								= static_cast<float>(data[i].param[noteIndex[i]]) / 20.0f;
-							setChannelGain(i, gainToSet);
-							noteIndex[i]++;
-						}
-						else if(readValue==71000.0) // 'increment volume'
-						{
-							float gainToSet = min(0.5f, getChannelGain(i)+0.05f);
-							setChannelGain(i, gainToSet);
-							noteIndex[i]++;
-						}
-						else if(readValue==72000.0) // 'decrement volume'
-						{
-							float gainToSet = max(0.001f, getChannelGain(i)-0.05f);
-							setChannelGain(i, gainToSet);
-							noteIndex[i]++;
-						}
-						else // next freq value is not any event request, so we're done here
-							eventsAtThisPosDone = true;
-					}
 
 				// if the next note is end signal, finish this channel
 				if(data[i].freqNote[noteIndex[i]] < 0)
@@ -1330,6 +1493,21 @@ void MPlayer::seek(long destination)
 
 			long seekPos = 0;
 			
+			// first process all the events up to destination
+			bool eventsZappingDone = false;
+
+			while(!eventsZappingDone)
+			{
+				// if next event in vector is set to happen at this frame pos, process
+				if( (ddata.eventFrame[dEventIndex] <= destination) && (dEventIndex < ddata.nEvents) )
+				{
+					processDrumEvent(ddata.eventType[dEventIndex], ddata.eventParam[dEventIndex]);
+					dEventIndex++;
+				}
+				else
+					eventsZappingDone = true;
+			}
+			
 			// for each music channel...
 			// zap through until very last note before the seekpoint
 			// including events
@@ -1338,35 +1516,6 @@ void MPlayer::seek(long destination)
 			
 			while(!zappingDone)
 			{
-					bool eventsAtThisPosDone = false;
-					
-					while(!eventsAtThisPosDone)
-					{
-						
-						int readValue = static_cast<int>(ddata.drumNote[dNoteIndex]);
-						if(readValue==70000.0) // 'specify volume'
-						{
-							// convert the passed value(1-10) to float (0.0 to 0.5f)
-							float gainToSet
-								= static_cast<float>(ddata.param[dNoteIndex]) / 20.0f;
-							setDChannelGain(gainToSet);
-							dNoteIndex++;
-						}
-						else if(readValue==71000.0) // 'increment volume'
-						{
-							float gainToSet = min(0.5f, getDChannelGain()+0.05f);
-							setDChannelGain(gainToSet);
-							dNoteIndex++;
-						}
-						else if(readValue==72000.0) // 'decrement volume'
-						{
-							float gainToSet = max(0.001f, getDChannelGain()-0.05f);
-							setDChannelGain(gainToSet);
-							dNoteIndex++;
-						}
-						else // next freq value is not any event request, so we're done here
-							eventsAtThisPosDone = true;
-					}
 
 				// if the next note is end signal, finish this channel
 				if(ddata.drumNote[dNoteIndex] < 0 || dNoteIndex >= ddata.getSize())

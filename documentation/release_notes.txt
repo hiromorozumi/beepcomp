@@ -1,4 +1,35 @@
 ====================
+Release Notes v0.2.0
+====================
+
+Dear users,
+
+I am excited to introduce the new pitch-bend effects! The pitch fall and rise add so much life to melodies. Have fun playing around with these.
+
+(write some more...)
+
+Thank you for using BeepComp. Beep on!
+
+Kind regards,
+Hiro
+
+What's new in BeepComp version 0.2.0:
+
+- Pitch-bend effects: Fall and Rise (',' comma for fall, '*' asterisk for rise)
+- Now any music channel command can be written to be effective anywhere within the song
+  (You can change LFO settings or start the Astro effect in the middle of a song, for instance)
+- New tone presets added: POPPY, POPPYVIB, and BELL
+- An uninstaller and documentation shortcuts were added to start menu
+- Improved the installer package size
+- Page Down and Page Up keys to move vertically by one screen height
+- ALT + D in file dialogs will direct you to the 'Desktop' folder
+- Minor bug-fix: short messages were showing at displaced coordinates when the window was scaled
+- Minor bug-fix: made [HOME] key in file dialogs work correctly
+- Minor bug-fix: fixed the buttons that sometimes lingered on
+- Minor rebalancing of the color scheme
+
+
+====================
 Release Notes v0.1.9
 ====================
 

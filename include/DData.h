@@ -19,6 +19,11 @@ public:
 	int sampleRate;
 	int totalFrames;
 	
+	std::vector<int> eventType;
+	std::vector<int> eventParam;
+	std::vector<long> eventFrame;
+	int nEvents;
+	
 	DData();
 	DData(int sRate);
 	~DData();

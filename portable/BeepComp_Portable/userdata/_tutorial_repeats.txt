@@ -1,0 +1,59 @@
+/////////////////////////////////////////////////
+//
+//  How to use repeat signs...
+//
+
+/////////////////////////////////////// Global //
+
+@G
+
+LOOP=OFF
+
+///////////////////////////////////////// Ch 1 //
+
+@1
+
+  // to repeat a part
+  // just embrace the part with { }
+
+{ CDE }
+
+::::::
+
+  // you can nest repeats
+
+{ DEF {GAG} }
+
+::::::
+
+  // but be aware
+  // num of repeat times grows exponentially
+  // below example repeats 2 * 2 * 2 = 8 times!
+
+{{{ EFG }}}
+
+::::::
+
+  // be careful also to have
+  // matching left/right braces
+  // one of the left braces below will be ignored
+
+{{ FGA }
+
+::::::
+
+  // repeats work independently in each channel
+  // see notation in channel 2
+
+{ G~~A { B~G~ } B~~~ }
+
+///////////////////////////////////////// Ch 2 //
+
+@2
+
+{:::} :::::: {:::{:::}} ::::::
+{{{:::}}} :::::: {:::} ::::::
+
+  // this goes with last phrase in channel 1 :)
+
+D~~F#G~D~G~D~G~~~ D~~C<B~~>CD~<D~<G~~~

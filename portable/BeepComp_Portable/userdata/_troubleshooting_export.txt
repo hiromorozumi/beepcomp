@@ -1,0 +1,62 @@
+-------------------------------------------------
+*** If you're having trouble exporting        ***
+***                to default userdata folder ***
+-------------------------------------------------
+
+It is probably the UAC (User Account Control) that is blocking write access to to the folder.
+You can resolve this by these steps:
+
+1. Go to the folder the program is installed in:
+
+ 32-bit OS:
+   C:\Program Files\BeepComp
+
+ 64-bit OS:
+   C:\Program Files(x86)\BeepComp
+
+ You can copy and paste one of the above path
+ in the search box.
+ You can also go:
+   Start > Computer > C: drive > Program Files
+                          (with (x86) if 64-bit)
+                                     > BeepComp
+
+2. Right-click on the file named beepcomp.exe
+  (should show up as an icon image)
+
+3. Select Properties, then open the tab named
+  'Compatibility'
+
+4. Check the box that says 'Run this program as
+  an administrator'.
+
+5. Press Apply, then close the dialog.
+
+Alternatively, you can install and use BeepComp in an administrator account - you will not have to deal with UAC this way.
+
+-------------------------------------------------
+
+You will probably see a popup every time you run BeepComp now. This is UAC checking in for you. This might be okay for people who like to be reassured that programs they download and run won't make unwanted changes to their computer.
+
+But some people might get annoyed by this warning popping up every time. If this is the case, you can do the following...
+
+-------------------------------------------------
+*** How To Turn Off UAC (User Account Control) **
+-------------------------------------------------
+
+1. Type in UAC in the search box
+
+2. Click on the search result titled
+   "Change User Account Control Settings"
+
+3. Turn the slider all the way down to the
+   "Never Notify" setting
+
+4. You might have to restart for the change to
+   take effect
+
+...Alternatively, the pop up you get when launching the program has a link to this dialog. Look for the line that says 'Change when these notifications appear'.
+
+-------------------------------------------------
+
+I hope this resolves the issue you might be experiencing! If not, please email me to let me know... at beepcomp-at-hiromorozumi.com. In the next releases, I will try to redesign the file dialogs so it gets easier to navigate to usual places for people, like Desktop and Documents folders :)

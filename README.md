@@ -1,7 +1,7 @@
 BeepComp - Chiptune Creator
 ===========================
 
-This version is: v0.1.9
+This version is: v0.2.0
 
 This software assists you in making music that sounds like 8-bit game consoles or old PCs.
 The latest release is always available at the SourceForge project top page:
@@ -12,7 +12,7 @@ The main features:
 - Easy, MML-like syntax for composing
 - Save music to text files (lightweight)
 - Export to WAV, mp3 and ogg files
-- Sound-shaping: LFO, delay, volume envelope, wavetable types
+- Sound-shaping: LFO, delay, volume envelope, pitch bend, wavetable types
 
 BeepComp Homepage
 -----------------

@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const int OSC::OSC_TABLE_SIZE = 8192;
+const int OSC::OSC_TABLE_SIZE = 4096;
 const int OSC::ENV_TABLE_SIZE = 1024;
 const double OSC::OSC_SAMPLE_RATE = 44100.0;
 const float OSC::TWO_PI = 6.283185307;
@@ -15,7 +15,9 @@ OSC::OSC()
 {
 	table.resize(OSC_TABLE_SIZE); // wave table (vector)
 	
+	tableType = 0; // FORCE setTable() to rewrite wavetable
 	setTable(1); // default - set up a square table
+	tableType = 1;
 	phase = 0.0;
 	increment = 0.0;
 	freq = 10.0; // not to set to zero to safeguard
@@ -24,7 +26,7 @@ OSC::OSC()
 	gain = 0.5f; // default gain
 	
 	resting = false;
-	firstNoteDone = false;
+	forceSilenceAtBeginning = false;
 	
 	nAttackFrames = 1000;
 	nPeakFrames = 1000;
@@ -45,6 +47,9 @@ OSC::OSC()
 	astroEnabled = false;
 	lfoEnabled = false;
 	
+	fallActive = false;
+	riseActive = false;
+	
 	// initialize history table
 	clearHistory();
 }
@@ -54,6 +59,17 @@ OSC::~OSC()
 
 void OSC::setTable(int type)
 {
+	// DEBUG
+	//if(tableType==type)
+	//	cout << "NO CHANGE TO WAVEFORM! YEY!!\n";
+	
+	// if requested type is the currently set type
+	// don't have to make any change... skip
+	if(tableType==type)
+		return;
+	
+	tableType = type;
+	
 	switch(type)
 	{
 		float maxAmp;
@@ -251,7 +267,7 @@ float OSC::getEnvelopeOutput()
 	// if resting flag is on, means you're in release stage
 	if(resting)
 	{
-		if(!envRfinished && firstNoteDone)
+		if(!envRfinished && !forceSilenceAtBeginning)
 			output = sustainLevel * ( static_cast<float>(nReleaseFrames - releasePos) / static_cast<float>(nReleaseFrames) );
 		else
 			output = 0.0f;
@@ -265,15 +281,18 @@ void OSC::setToRest()
 	resting = true;
 }
 
-void OSC::initializeForFirstNote()
+void OSC::confirmFirstNoteIsRest()
 {
-	firstNoteDone = false;
+	forceSilenceAtBeginning = true;
 }
 
 void OSC::advance()
 {
 	// advance on the sample table
 	phase += increment;
+	
+	adjustedFreq = freq;
+	
 	while(phase >= OSC_TABLE_SIZE)
 	{
 		phase -= OSC_TABLE_SIZE;
@@ -285,7 +304,22 @@ void OSC::advance()
 		adjustedFreq = astro.process(freq);
 		if(astro.stateChanged())
 			setIncrement(adjustedFreq);
+		
+		// if Fall is enabled, process and adjust frequency
+		if(fallActive)
+		{
+			adjustedFreq = fall.process(adjustedFreq);
+			setIncrement(adjustedFreq);
+		}
+
+		// if Rise is enabled, process and adjust frequency
+		if(riseActive)
+		{
+			adjustedFreq = rise.process(adjustedFreq);
+			setIncrement(adjustedFreq);
+		}		
 	}
+	
 	// if LFO is enabled, process and adjust frequency
 	else if(lfoEnabled)
 	{
@@ -295,17 +329,35 @@ void OSC::advance()
 		setIncrement(adjustedFreq);
 	}
 	
+	// if Fall is enabled, process and adjust frequency
+	if(fallActive && !astroEnabled)
+	{
+		adjustedFreq = fall.process(freq);
+		setIncrement(adjustedFreq);
+	}
+	
+	// if Rise is enabled, process and adjust frequency
+	if(riseActive && !astroEnabled)
+	{
+		adjustedFreq = rise.process(adjustedFreq);
+		setIncrement(adjustedFreq);
+	}
+	
 	// advance envelope also
 	advanceEnvelope();
 }
 
 void OSC::setNewNote(double newFreq)
 {
-	firstNoteDone = true;
+	forceSilenceAtBeginning = false;
 	setFrequency(newFreq);
 	initializePhase();
 	refreshEnvelope();
 	resting = false;
+	if(fallActive && fall.octTraveled > 0.0)
+		stopFall();
+	if(riseActive && rise.pos > 30)
+		stopRise();
 }
 
 // set the frequency and phase increment at once
@@ -352,6 +404,9 @@ void OSC::enableLFO()
 void OSC::disableLFO()
 	{ lfoEnabled = false; }
 	
+void OSC::initializeLFO()
+	{ lfo.initialize();	}
+	
 void OSC::setLFOwaitTime(int milliseconds)
 	{ lfo.setWaitTime(milliseconds); }
 
@@ -360,6 +415,62 @@ void OSC::setLFOrange(int cents)
 
 void OSC::setLFOspeed(double cyclePerSeconds)
 	{ lfo.setSpeed(cyclePerSeconds); }
+
+void OSC::startFall()
+{
+	fallActive = true;
+	fall.start();
+}
+
+void OSC::stopFall()
+{
+	fallActive = false;
+	fall.stop();
+}
+
+void OSC::setFallSpeed(double fallSpeed)
+{
+	fall.setSpeed(fallSpeed);
+}
+
+void OSC::setFallWait(double waitTimeMS)
+{
+	fall.setWaitTime(waitTimeMS);
+}
+
+void OSC::setFallToDefault()
+{
+	stopFall();	
+	fall.setToDefault();
+}
+
+void OSC::startRise()
+{
+	riseActive = true;
+	rise.start();
+}
+
+void OSC::stopRise()
+{
+	riseActive = false;
+	rise.stop();
+}
+
+void OSC::setRiseSpeed(double riseSpeed)
+{
+	rise.setSpeed(riseSpeed);
+}
+
+void OSC::setRiseRange(double riseRange)
+{
+	rise.setRange(riseRange);
+}
+
+void OSC::setRiseToDefault()
+{
+	stopRise();
+	rise.setToDefault();
+}
 
 void OSC::setAttackTime(int attackTimeMS)
 {

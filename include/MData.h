@@ -16,8 +16,14 @@ public:
 	std::vector<double> freqNote;
 	std::vector<int> len;
 	std::vector<int> param;
+	
+	std::vector<int> eventType;
+	std::vector<int> eventParam;
+	std::vector<long> eventFrame;
+	int nEvents;
+	
+	long totalFrames;
 	int sampleRate;
-	int totalFrames;
 	
 	MData();
 	MData(int sRate);

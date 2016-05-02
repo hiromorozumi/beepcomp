@@ -65,6 +65,8 @@ public:
 	double freqNote[9];
 	int noteIndex[9];
 	int dNoteIndex;
+	int eventIndex[9];
+	int dEventIndex;
 	int currentDrumNote;
 
 	float sndBuffer[88200];
@@ -152,6 +154,8 @@ public:
 	void disableDelay();
 	void setAstro(int channel, int nCyclesPerSecond);
 	void disableAstro(int channel);
+	void processEvent(int channel, int eType, int eParam);
+	void processDrumEvent(int eType, int eParam);
 	std::string exportToFile(string filename);
 	int fillExportBuffer(float* buffer, int framesToWrite, long startFrame, int songFrameLen);
 	float getHistoricalAverage(int channel);

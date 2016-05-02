@@ -48,8 +48,14 @@ public:
 		{ if(sf::Keyboard::isKeyPressed(sf::Keyboard::Home)) return true; else return false; }
 	bool end()
 		{ if(sf::Keyboard::isKeyPressed(sf::Keyboard::End)) return true; else return false; }
+	bool pageUp()
+		{ if(sf::Keyboard::isKeyPressed(sf::Keyboard::PageUp)) return true; else return false; }		
+	bool pageDown()
+		{ if(sf::Keyboard::isKeyPressed(sf::Keyboard::PageDown)) return true; else return false; }
 	bool ctrl()
 		{ if ( sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl) ) return true; else return false; }
+	bool leftCtrl()
+		{ if ( sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ) return true; else return false; }
 	bool ctrlA()
 		{ if( sf::Keyboard::isKeyPressed(sf::Keyboard::A)
 			&& ( sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl) ) )
@@ -115,6 +121,9 @@ public:
 			return true; else return false; }
 	bool alt()
 		{ if( sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) || sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt) )
+			return true; else return false; }
+	bool leftAlt()
+		{ if( sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) )
 			return true; else return false; }
 	bool y()
 		{ if(sf::Keyboard::isKeyPressed(sf::Keyboard::Y)) return true; else return false; }
