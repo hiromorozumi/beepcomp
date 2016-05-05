@@ -4,13 +4,11 @@ Release Notes v0.2.0
 
 Dear users,
 
-I am excited to introduce the new pitch-bend effects! The pitch fall and rise add so much life to melodies. Have fun playing around with these.
+I am excited to introduce the new pitch-bend effects! Pitch falls and rises add so much life to melodies. I included a song example where you can see how these bend effects work - play "ys2_palace_of_solomon.txt" and look into the source text... I hope you enjoy these new tools!
+For this release, I compiled and uploaded a portable version. If you want a version that can run out of your thumb drive, go to Sourceforge release folder and look for a folder named "portable." 
+Thank you for using BeepComp. Your feedback and issue reports are always welcome. Beep on!
 
-(write some more...)
-
-Thank you for using BeepComp. Beep on!
-
-Kind regards,
+Sincerely,
 Hiro
 
 What's new in BeepComp version 0.2.0:

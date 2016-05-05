@@ -276,6 +276,12 @@
 						</File>
 					</Component>
 					
+					<Component Id='cmp_ys2_palace_of_salmonTXT' Guid='*' >
+						<File Id="ys2_palace_of_salmonTXT" Name="ys2_palace_of_salmon.txt" 
+						DiskId='1' Source='..\userdata\ys2_palace_of_salmon.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
 					<Component Id='cmp_astro_wars_1TXT' Guid='*' >
 						<File Id="astro_wars_1TXT" Name="astro_wars_1.txt" 
 						DiskId='1' Source='..\userdata\astro_wars_1.txt' KeyPath='yes'>				
@@ -440,6 +446,7 @@
 		<ComponentRef Id='cmp_romanciaTXT' />
 		<ComponentRef Id='cmp_ys1_field_musicTXT' />
 		<ComponentRef Id='cmp_ys1_town_musicTXT' />
+		<ComponentRef Id='cmp_ys2_palace_of_salmonTXT' />
 		<ComponentRef Id='cmp_astro_wars_1TXT' />
 		<ComponentRef Id='cmp_pure_psg_toneTXT' />
 		<ComponentRef Id='cmp_astro_effectTXT' />

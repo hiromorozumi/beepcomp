@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>beepcomp_users_guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+
+/* RESET
+=============================================================================*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<hr>
+<hr>
+<h1>BeepComp User's Guide</h1>
+<hr>
+<hr>
+<p><br /></p>
+<h2>Contents</h2>
+<ul>
+<li><a href="#about_beepcomp">About BeepComp</a></li>
+<li><a href="#getting_started">Getting Started</a></li>
+<li><a href="#tutorials">Tutorials</a></li>
+<li>
+<a href="#basics">Basics</a>
+<ul>
+<li><a href="#basics_main_editor">Main Editor</a></li>
+<li><a href="#basics_writing_your_first_track">Writing Your First Track</a></li>
+<li><a href="#basics_saving_and_loading_your_work">Saving and Loading Your Work</a></li>
+<li><a href="#basics_copying_and_pasting_source">Copying and Pasting Source</a></li>
+<li><a href="#basics_exporting_your_work">Exporting Your Work</a></li>
+</ul>
+</li>
+<li><a href="#key_commands">Key Commands</a></li>
+<li><a href="#global_section_in_detail">Global Section in Detail</a></li>
+<li>
+<a href="#music_section_in_detail">Music Section in Detail</a>
+<ul>
+<li><a href="#music_section_musical_notes">Musical Notes</a></li>
+<li><a href="#music_section_note_length">Note Length</a></li>
+<li><a href="#music_section_rests">Rests</a></li>
+<li><a href="#music_section_octave_changes">Octave changes</a></li>
+<li><a href="#music_section_ties">Ties</a></li>
+<li><a href="#music_section_tuplets">Tuplets</a></li>
+<li><a href="#music_section_volume_changes">Volume Changes</a></li>
+<li><a href="#music_section_repeats">Repeats</a></li>
+<li><a href="#fall_effect">Fall Effect</a></li>
+<li><a href="#rise_effect">Rise Effect</a></li>
+<li><a href="#waveform_selection">Waveform Selection</a></li>
+<li><a href="#preset_selection">Preset Selection</a></li>
+<li><a href="#volume_envelope_commands">Volume Envelope Commands</a></li>
+<li><a href="#lfo_commands">LFO Commands</a></li>
+<li><a href="#astro_command">Astro Command</a></li>
+</ul>
+</li>
+<li>
+<a href="#drum_section_in_detail">Drum Section in Detail</a>
+<ul>
+<li><a href="#drum_section_drum_hits">Drum Hits</a></li>
+<li><a href="#drum_section_quieter_drum_hits">Quieter Drum Hits</a></li>
+<li><a href="#drum_section_note_length">Note Length</a></li>
+<li><a href="#drum_section_rests">Rests</a></li>
+<li><a href="#drum_section_ties">Ties</a></li>
+<li><a href="#drum_section_tuplets">Tuplets</a></li>
+</ul>
+</li>
+<li><a href="#delay_effect">Delay Effect</a></li>
+<li><a href="#volume_envelope">Volume Envelope</a></li>
+<li><a href="#lfo_effect">LFO Effect</a></li>
+<li><a href="#astro_effect">Astro Effect</a></li>
+<li><a href="#waveforms">Waveforms</a></li>
+<li><a href="#tone_presets">Tone Presets</a></li>
+<li><a href="#bookmarking_your_start_position">Bookmarking Your Start Position</a></li>
+<li><a href="#auto_saving">Auto Saving</a></li>
+<li>
+<a href="#syntax_reference">Syntax Reference</a>
+<ul>
+<li><a href="#syntax_reference_general">General</a></li>
+<li><a href="#syntax_reference_global_section">Global Section</a></li>
+<li><a href="#syntax_reference_music_channel">Music Channel</a></li>
+<li><a href="#syntax_reference_drum_channel">Drum Channel</a></li>
+</ul>
+</li>
+<li><a href="#uninstalling_beepcomp">Uninstalling BeepComp</a></li>
+<li><a href="#staying_updated">Staying Updated</a></li>
+<li><a href="#if_you_found_issues_bugs">If you found issues/bugs...</a></li>
+<li><a href="#beepcomp_on_the_web">BeepComp on the Web</a></li>
+<li><a href="#contact_me">Contact Me!</a></li>
+</ul>
+<div id="about_beepcomp" />
+<h2>About BeepComp</h2>
+<p><a href="http://hiromorozumi.com/beepcomp">BeepComp</a> lets you compose chiptune tracks with text files. It features a nice retro-sounding synthesizer engine with 9 music channels and 1 drum channel.</p>
+<p>BeepComp is an open-source project. This means that you're welcome to modify the source code however you want. BeepComp is a also shareware that anyone can use freely. It is distributed under the MIT license.</p>
+<div id="getting_started" />
+<h2>Getting Started</h2>
+<p>Use the latest installer package available on the <a href="https://sourceforge.net/projects/beepcomp/">Sourceforge top page</a>. Run this set up file, and you'll be all set for your journey!</p>
+<h4>Windows</h4>
+<p>Launch the MSI installer file, <strong>beepcomp_vx-x-x.msi</strong>, (x-x-x fills the version number) which you just downloaded. Your program will be installed in the folder:</p>
+<ul>
+<li><strong>C:\Program Files\BeepComp\</strong> on 32-bit Windows</li>
+<li><strong>C:\Program Files (x86)\BeepComp\</strong> on 64-bit Windows</li>
+</ul>
+<p>After installation, BeepComp will be on the list of installed programs. On Windows XP &amp; 7, go to Start-&gt;All Programs-&gt;BeepComp. You can also click the shortcut that has been created on your Desktop.</p>
+<h4>Mac / Linux</h4>
+<p>I'll be working on these versions soon :)</p>
+<div id="tutorials" />
+<h2>Tutorials</h2>
+<p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> on this documentation has a similar content.</p>
+<p>After exploring those tutorials, exploring the tutorial files included in the <strong>userdata</strong> folder (the program's default save location) will be helpful, also. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
+<p>These files are located in:</p>
+<ul>
+<li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
+<li><strong>C:\Users\{USERNAME}\Documents\BeepComp\userdata</strong> on Vista and later</li>
+</ul>
+<div id="basics" />
+<h2>Basics</h2>
+<div id="basics_main_editor" />
+<h3>Main Editor</h3>
+<p><img src="beepcomp_screen_explain.png" alt="Main Editor Screen" /></p>
+<ul>
+<li><strong>Editor Area</strong> ... You edit your music source text here.</li>
+<li><strong>Control Panel</strong> ... Play/pause/save/load/export the music you write and control other things.</li>
+<li><strong>Cursor</strong> ... Your point of control over the text.</li>
+<li><strong>Your Text</strong> ... This single text file is your whole track - simple, eh?</li>
+<li><strong>Gain Meter</strong> ... For visualizing each channel's activity in real time.</li>
+<li><strong>Progress Bar</strong> ... Keeps track your song's progress in time.</li>
+<li><strong>Master Volume</strong> ... Controls how loud the master output is. (Each channel has a separate volume control, too) </li>
+</ul>
+<div id="basics_writing_your_first_track" />
+<h3>Writing Your First Track</h3>
+<p>Let's write a very basic &quot;Hello BeepComp&quot; source. Start up BeepComp, press the NEW button, choose &quot;Yes&quot;, and type the folloing into the text editor:</p>
+<pre><code>// My first BeepComp track! :)
+
+@G
+TEMPO=100
+MASTERVOLUME=80
+
+@1
+CDEFG
+</code></pre>
+
+<p>And press the play button (with a triangle). You heard an endless series of &quot;do-re-mi-fa-sol...,&quot; right? Let me explain the source.</p>
+<p>Two forward slashes <code>//</code> adds a comment. Following two slashes, you can write anything to make a note to yourself or others. The comment ends at the end of the line.</p>
+<p><code>@</code> is used to declare the beginning of each &quot;section.&quot; <code>@G</code> starts the &quot;global section&quot; where you can set parameters that affect your entire track. Your section declaration stays effective until you declare another section (<code>@1</code> in this case).</p>
+<p><code>TEMPO=</code> sets the tempo of the track. <code>MASTERVOLUME=</code> sets the master output gain. The volume knob will change accordingly to the master volume when you play your track from the beginning.</p>
+<p><code>@1</code> declares the start of the first music channel section. Everything you write thereafter will be written to the first channel until you declare another section.</p>
+<p>Then we have the musical notes <code>CDEFG</code>. Note that you have to write musical pitches in UPPERCASE.</p>
+<p>You actually heard <code>CDEFG</code> over and over because BeepComp defaults the player to looping mode. (More about looping later...)</p>
+<p>Easy? Let's expand this a little:</p>
+<pre><code>// My first BeepComp track! :)
+
+@G
+TEMPO=100
+MASTERVOLUME=80
+
+@1
+O5L4 CDEFG~
+
+@2
+O4L4 EFGAB~
+
+@D
+L4 KKKSSS
+</code></pre>
+
+<p>Now play this. You now hear a mix of three channels.</p>
+<p><code>O</code> followed by a single digit number sets the octave. <code>O4</code> is the default octave where the middle C is, so <code>O5</code> is just one above the default octave. <code>L</code> followed by a number ranging from 1 to 64 changes the note length. <code>L4</code> sets up the note length to 1/4 of the measure length (quarter notes).</p>
+<p><code>~</code> is quite useful. It elongates a note by the currently set note length. You can actually chain multiple <code>~</code>s, for instance, <code>B~~~</code>.</p>
+<p>Now we have <code>@2</code> so commands after that goes to the second music channel. You can play up to 9 music channels simultaneously, so you can declare sections up to <code>@9</code>.</p>
+<p>And you can use the drum channel by declaring <code>@D</code>. Write <code>K</code> for kick, <code>S</code> for snare, <code>H</code> for high-hat. In fact, you can use lower case <code>k</code>, <code>s</code>, <code>h</code> which will play a little quieter.</p>
+<p>Note that you see some white spaces in above examples. You can insert any amount of white space between commands because they're ignored by the interpreter.</p>
+<div id="basics_saving_and_loading_your_work" />
+<h3>Saving and Loading Your Work</h3>
+<p>Now let's save your work. Click the SAVE button (or F11), type in <strong>hellobeep.txt</strong>, and click the Save button. Now open NotePad or any text editor of your choice, choose to open a file, navigate to the <strong>userdata</strong> folder, the default user folder, and open up the <strong>hellobeep.txt</strong> file we just created.</p>
+<p>(Note that default <strong>userdata</strong> folder will be at following locations:)</p>
+<ul>
+<li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
+<li><strong>C:\Users\{USERNAME}\Documents\BeepComp\userdata</strong> on Vista and later</li>
+</ul>
+<p>See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.</p>
+<p>By the way, you can use the ALT + O shortcut from the main editor to open up your <strong>userdata</strong> folder anytime.</p>
+<div id="basics_copying_and_pasting_source" />
+<h3>Copying and Pasting Source</h3>
+<p>A nice thing about working with text is that you can easily copy and paste between BeepComp and other sources!</p>
+<p>Try this - Start a new file (NEW button or F9), Go to <a href="http://codrspace.com/hiromorozumi/beepcomp-source-ys-1-field-music/">this page</a>, copy all the code inside the grey box, and press CTRL + V in BeepComp, and play.</p>
+<p>I hope you see how easy it is to share work with each other on the web :)</p>
+<p>Of course, going the other way is easy, too. You can easily copy your work from BeepComp by pressing CTRL + A (select all) then CTRL + C (copy), and paste what you just copied into your external applications like your Outlook to email your music to a friend, for instance.</p>
+<div id="basics_exporting_your_work" />
+<h3>Exporting Your Work</h3>
+<p>You can create audio files of your work by pressing the EXPORT button(or F12). Currently supported formats are: WAV, MP3 and OGG files. After you export your work, you can add fades and other finishing touches on audio editors like Audacity.</p>
+<p>Your music won't be looped in your exported file.</p>
+<p>Here is a tip if you want the exported data to be looped (so you can fade out after the loop point etc.) - Enclose the entire content of each channel with <code>{}</code>. Your exported file will come with your entire music repeated once.</p>
+<div id="key_commands" />
+<h2>Key Commands</h2>
+<h3>Mouse Input</h3>
+<ul>
+<li><strong>Mouse position</strong> ... Navigates cursor position</li>
+<li><strong>Mouse Wheel</strong> ... Helps scrolling text up/down</li>
+<li><strong>Left Button</strong> ... Presses button on screen / selects text</li>
+<li><strong>Right Button</strong> ... Clears text selection</li>
+</ul>
+<h3>Key Commands: Main Editor</h3>
+<ul>
+<li><strong>F1</strong> ... Play from beginning</li>
+<li><strong>F2</strong> ... Pause / Unpause</li>
+<li><strong>F3</strong> ... Rewind</li>
+<li><strong>F4</strong> ... Fast Forward</li>
+<li><strong>F5</strong> ... Show key commands</li>
+<li><strong>F6</strong> ... Show Documentation</li>
+<li><strong>F7</strong> ... Turn delay on/off</li>
+<li><strong>F9</strong> ... Start a new file</li>
+<li><strong>F10</strong> ... Load from a file</li>
+<li><strong>F11</strong> ... Save to a file</li>
+<li><strong>F12</strong> ... Export to an audio file</li>
+<li><strong>ARROW</strong> ... Move cursor</li>
+<li><strong>ESCAPE</strong> ... Quit</li>
+<li><strong>BACKSPACE</strong> ... Backspacing, delete selection</li>
+<li><strong>SHIFT</strong> ... Select text</li>
+<li><strong>SHIFT + ARROW</strong> ... Expand text selection</li>
+<li><strong>ALT</strong> ... Clear text selection</li>
+<li><strong>CTRL + Z</strong> ... Undo</li>
+<li><strong>CTRL + C</strong> ... Copy</li>
+<li><strong>CTRL + V</strong> ... Paste</li>
+<li><strong>CTRL + A</strong> ... Select all</li>
+<li><strong>CTRL + S</strong> ... Save</li>
+<li><strong>ALT + S</strong> ... Quick-save to last saved file</li>
+<li><strong>ALT + V</strong> ... Open the system volume control</li>
+<li><strong>ALT + D</strong> ... Open the audio device control</li>
+<li><strong>ALT + I</strong> ... Initialize the audio device</li>
+<li><strong>ALT + O</strong> ... Open &quot;userdata&quot; folder </li>
+<li><strong>HOME</strong> ... Go to the very top</li>
+<li><strong>END</strong> ... Go to the very bottom</li>
+<li><strong>Page Up</strong> ... Go up by one screen height</li>
+<li><strong>Page Down</strong> ... Go down by one screen height</li>
+</ul>
+<h3>Key Commands: File Dialog</h3>
+<ul>
+<li><strong>ESCAPE</strong> ... Exits dialog</li>
+<li><strong>HOME</strong> ... Go back to the default starting folder</li>
+<li><strong>END</strong> ... Go back to previous folder</li>
+<li><strong>F1</strong> ... Toggle file types to display</li>
+<li><strong>F12</strong> ... Load/Save/Export (as indicated)</li>
+<li><strong>UP/DOWN</strong> ... Navigate through the list of files in the current directory</li>
+<li><strong>RIGHT</strong> ... Selects a file name, Go to child folder (when over &lt;&lt;&lt;)</li>
+<li><strong>LEFT</strong> ... Go to parent folder (when over &lt;&lt;&lt;)</li>
+<li><strong>BACKSPACE</strong> ... Backspacing in the file name input</li>
+<li><strong>ALT + O</strong> ... Open the currently selected directory in Explorer</li>
+<li><strong>ALT + D</strong> ... Go to the 'Desktop'</li>
+</ul>
+<div id="global_section_in_detail" />
+<h2>Global Section in Detail</h2>
+<p>The global section, defined by <code>@G</code>, is where you write commands that influence the entire track. The elements you can control in the global section are:</p>
+<ul>
+<li>Master volume ... <code>MASTERVOLUME=n</code></li>
+<li>Initial channel volume ... <code>V1=n</code>, <code>V2=n</code>, <code>VD=n</code> etc...</li>
+<li>Tempo ... <code>TEMPO=n</code></li>
+<li>Delay ... <code>DELAY=ON</code> / <code>OFF</code>, <code>DELAYTIME=n</code>, <code>DELAYLEVEL=n</code></li>
+<li>Looping ... <code>LOOP=ON</code> / <code>OFF</code></li>
+</ul>
+<p>The master volume is also manually controllable with the volume knob in the control panel. Note that at the start of track, the master volume gets initialized to the declared value by <code>MASTERVOLUME=</code> (or default value 80 if none specified) so the volume knob position gets reset.</p>
+<p>The tempo, measured by beats per measure (BPM), determines how fast your track is played. The <code>TEMPO=</code> command takes a value between 30 and 300.</p>
+<p>The delay effect is applied to the whole track (not to inidividual track). See the Delay Effect section for more. </p>
+<p>By default, your track is set to play in an infinite loop. You can turn off track looping by <code>LOOP=OFF</code>. If you want to loop your track a certain number of times, you could first set <code>LOOP=OFF</code> in your global section and then enclose the entire real time data with <code>{}</code> in each channel.</p>
+<p>Here is an example of using the global section to set up the volume, tempo and looping for your track:</p>
+<pre><code>@G
+MASTERVOLUME=50 // not too loud
+TEMPO=80 // kind of slow
+LOOP=OFF
+
+@1
+GFEDC // this won't be looped
+</code></pre>
+
+<div id="music_section_in_detail" />
+<h2>Music Section in Detail</h2>
+<p>Each section for a music is defined with <code>@n</code>. Your first channel section will start with <code>@1</code>, your second with <code>@2</code> and so forth.</p>
+<div id="music_section_musical_notes" />
+<h3>Musical Notes</h3>
+<p>Musical notes are written with note names <code>C</code>, <code>D</code>, <code>E</code>, <code>F</code>, <code>G</code>, <code>A</code> and <code>B</code> in UPPERCASE. The following example plays an ascending C major scale:</p>
+<pre><code>@1
+CDEFGAB
+</code></pre>
+
+<p>A note with a sharp is written with <code>#</code> following its pitch name - <code>C#</code>, for example. A note with a flat is written with <code>b</code>, for example, <code>Ab</code>. A chromatic scale can be played this way:</p>
+<pre><code>@1
+CC#DD#EFF#GG#AA#BBbAAbGGbFEEbDDbC
+</code></pre>
+
+<div id="music_section_note_length" />
+<h3>Note Length</h3>
+<p>To specify the current note length, use the <code>L</code> command. The letter <code>L</code> should be followed by a number ranging from 1 to 64, the factor which should divide the measure length. <code>L4</code> sets the 1/4 of the measure length, so you get the quarter note length. <code>L8</code> gives you the eighth note length. Your length definition stays effective until the next <code>L</code> command.</p>
+<p>The below example plays a few long half notes followed by a series of fast 32nd notes:</p>
+<pre><code>@1
+L2 CDE L32 GABAGFED
+</code></pre>
+
+<div id="music_section_rests" />
+<h3>Rests</h3>
+<p>Rests can be easily inserted with a symbol <code>:</code>. The length of the rest is determined by the current note length.</p>
+<pre><code>@1
+L4 C:CDE:EFG:G:E:::
+</code></pre>
+
+<p>The above example should show you how rests can be inserted intuitively.</p>
+<div id="music_section_octave_changes" />
+<h3>Octave Changes</h3>
+<p>To specify the current octave range, use the <code>O</code> command followed by a number. The middle octave where the middle C sits is <code>O4</code>, and it's the default starting octave of each channel. The example below plays some notes in a high octave range <code>O6</code> then plays low notes in the octave <code>O2</code>.</p>
+<pre><code>@1
+O5 GG:G:DE:C::: O2 C:::
+</code></pre>
+
+<p>Another way to navigate through octave ranges is to use the <code>&lt;</code> and <code>&gt;</code> symbols. <code>&lt;</code> means go down by one octave, and <code>&gt;</code> means go up by one octave. The example below sweeps up and down the entire possible octave ranges:</p>
+<pre><code>@1
+O1 C&gt;C&gt;C&gt;C&gt;C&gt;C&gt;C&gt;C&lt;C&lt;C&lt;C&lt;C&lt;C&lt;C&lt;C
+</code></pre>
+
+<div id="music_section_ties" />
+<h3>Ties</h3>
+<p>You can elongate a note quite easily by the multiple of the current note length. To do that, use the <code>~</code> symbol after the note you want to elongate. For example, try this example:</p>
+<pre><code>@1
+L8 C~~DE~~CE~C~E~~~
+</code></pre>
+
+<p>You can be pretty liberal with chaining <code>~</code> symbols if you want, for example try <code>L8C~~~~~~~</code> :)</p>
+<div id="music_section_tuplets" />
+<h3>Tuplets</h3>
+<p>Tuplets are useful when you have to insert triplets or any other notes in non-standard subdivisions. Tuplets can be entered using the <code>[]</code> symbols. You simply enclose the notes you want to group in the space of the current note length:</p>
+<pre><code>@1
+L4 C [EDC] D [FED] E [GFE]
+</code></pre>
+
+<p>You should have heard the notes enclosed in brackets as triplets in the space of a quarter note.</p>
+<p>You can specify this grouping space, also. For example, if you want to write a quintuplets in a quarter note space in the midst of 8th notes:</p>
+<pre><code>@1
+L8 C~~~ [4CDbC&lt;B&gt;C] &gt;C&lt;BbAbGFE
+</code></pre>
+
+<div id="music_section_volume_changes" />
+<h3>Volume changes</h3>
+<p>You can specify the volume of a channel at any point by using the <code>V</code> command. Write <code>V</code> followed by a value from 0 to 10, like <code>V10</code> or <code>V4</code>.</p>
+<pre><code>@1
+V10 CDEFG V5 CDEFG
+</code></pre>
+
+<p>The above source will play the first phrase in full volume and the second half as loud.</p>
+<p>If you want to make many gradual changes in your channel, symbols <code>^</code> and <code>_</code> will come in handy. <code>^</code> increases the volume by 10%, and <code>_</code> decreases by 10%. Try this:</p>
+<pre><code>@1
+V0 L32
+AEFD ^ AEFD ^ AEFD ^ AEFD ^ AEFD ^ AEFD ^ AEFD ^ AEFD ^ AEFD  ^
+AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD _ AEFD
+</code></pre>
+
+<div id="music_section_repeats" />
+<h3>Repeats</h3>
+<p>If you want to repeat a phrase or a section of your music, you can use the <code>{}</code> symbols. Anything enclosed in these symbols are repeated.</p>
+<pre><code>@1
+{EbDD:} EbDD: Bb~~~
+</code></pre>
+
+<p>You can actually nest a repeat inside another repeat. For example:</p>
+<pre><code>@1
+{CDEF{GFEF}ED} {{{C~}}}
+</code></pre>
+
+<p>Note that nesting makes the total number of repeats grow exponentially. The latter part of the above example is repeated 2 x 2 x 2 = 8 times.</p>
+<p>You can also specify a certain number of times which a phrase should repeat by adding a single digit number just after the left curly brace like this:</p>
+<pre><code> @1
+ {5CDE}{3FGA}
+</code></pre>
+
+<div id="fall_effect" />
+<h3>Fall Effect</h3>
+<p>If a musical note is followed by comma <code>,</code>, the Fall effect is added, causing it to decrease its pitch in time. Here is an example where you can observe how this effect works:</p>
+<pre><code>@1
+FALLSPEED=1200
+FALLWAIT=500
+L1
+C,D,E,
+</code></pre>
+
+<p><code>FALLSPEED</code> is how many 100ths of a semitone the pitch decreases in a second. 1200 means a range of one octave per second. <code>FALLWAIT=</code> specifies the time in milliseconds before the effect starts.</p>
+<p>The Fall point can be set in the middle of a tie series. This makes rhythmical timing of the effect easy. Try this example:</p>
+<pre><code>@1
+FALLSPEED=1200
+FALLWAIT=0
+L16 O5
+FECD~~~~ ~,~~~ &lt;A&gt;CDC
+FECD~~ ~,~ &lt;A~G~F~E~ ::::
+</code></pre>
+
+<div id="rise_effect" />
+<h3>Rise Effect</h3>
+<p>Placing an asterisk <code>*</code> is before a note causes that note to scoop up to its pitch, producing a similar effect of a synthesizer pitch-bend wheel. <code>RISESPEED=</code> sets the speed for the rise in 100ths of a semitone per second. <code>RISERANGE=</code> determines how wide the pitch change should span. This effect can nicely add liveliness to your musical lines:</p>
+<pre><code>@G TEMPO=160
+@1
+RISESPEED=2400
+RISERANGE=200
+L8 O4 *EGA&gt; *CCC *CCC *CC *C &lt;AGD#EC&lt;AG&gt;
+ *CCC *CCC *CC ::::::::
+</code></pre>
+
+<div id="waveform_selection" />
+<h3>Waveform Selection</h3>
+<p>You can choose a waveform other than the default square wave for each channel by declaring <code>WAVEFORM=n</code>.
+See <a href="#waveforms">Waveforms</a>.</p>
+<div id="preset_selection" />
+<h3>Preset Selection</h3>
+<p>You may choose a preset to for a quick tone shaping by declaring <code>PRESET=(presetname)</code>. See <a href="#tone_presets">Tone Presets</a>.</p>
+<div id="volume_envelope_commands" />
+<h3>Volume Envelope Commands</h3>
+<p>Each channel has a volume envelope filter to help shape a unique sound. See <a href="#volume_envelope">Volume Envelope</a>.</p>
+<div id="lfo_commands" />
+<h3>LFO Commands</h3>
+<p>The pitch LFO filter adds a vibrato effect. See <a href="#lfo_effect">LFO Effect</a>.</p>
+<div id="astro_command" />
+<h3>Astro Command</h3>
+<p>The &quot;Astro&quot; effect is a unique 80's-ish wobble effect. See <a href="#astro_effect">Astro Effect</a>.</p>
+<div id="drum_section_in_detail" />
+<h2>Drum Section in Detail</h2>
+<p>Writing <code>@D</code> starts the drum section.</p>
+<div id="drum_section_drum_hits" />
+<h3>Drum Hits</h3>
+<p>You can write a snare hit with <code>S</code>, and a kick with <code>K</code>. These normal hits come in UPPERCASE alphabets. With <code>:</code> giving a rest, a basic kick-and-snare groove can be written:</p>
+<pre><code>@D
+K:S: KKS:
+</code></pre>
+
+<p>The hi-hat is written with <code>H</code>. A disco groove pattern can be played like this:</p>
+<pre><code>@D
+K:H: S:H: K:H: S:HH
+</code></pre>
+
+<div id="drum_section_quieter_drum_hits" />
+<h3>Quieter Drum Hits</h3>
+<p>If you write the drum hits in lower case, you get quieter drum hits. These can be added to give rich dynamics to your groove:</p>
+<pre><code>@D
+K::k S::k :kK: S:HH K:hh S:kk :shh hsSS  
+</code></pre>
+
+<div id="drum_section_note_length" />
+<h3>Note Length</h3>
+<p>Just as we did for a music channel, we can specify the note length as you go in the drum channel as well. Use the <code>L</code> command with a number ranging from 1 to 64, with the number being the subdivision factor of the measure. For example:</p>
+<pre><code>@D
+L2 S L4 S L8 S L16 SS L32 SSSS L64 SSSSSSSS   
+</code></pre>
+
+<p>But you might want to set to the smallest subdivision once at the beginning and rely more on using rests and ties. You'll find this way much easier especially when working with groove-based music :)</p>
+<div id="drum_section_rests" />
+<h3>Rests</h3>
+<p>A rest is indicated with a <code>:</code> as illustrated above. The length of a rest is determined by the currently set note length by the <code>L</code> command.</p>
+<div id="drum_section_ties" />
+<h3>Ties</h3>
+<p>Instead of using a rest to fill a gap, you can use a tie symbol <code>~</code> to elongate a hit. The difference is that the tie ensures that the note gets played through the elongated space. When you hit and rest, if the note length is set very short, the abrupt cut-off of the hit might become obvious. Try this example to hear the difference:</p>
+<pre><code>@D
+L64
+S::: S::: S::: S:::
+S~~~ S~~~ S~~~ S~~~
+</code></pre>
+
+<div id="drum_section_tuplets" />
+<h3>Tuplets</h3>
+<p>Tuplets make it possible to express quite complicated timings. Just as you saw in tuplets used in a music channel, you have two ways of expressing tuplets. The first way is to enclose hits simply with <code>[]</code> where the total length of grouped hits is the currently set note length. The second way is specifying the total length of grouped hits in the format <code>[n(hits)]</code>.</p>
+<p>Using the both methods, let's illustrate some interesting things you can do to your groove with tuplets:</p>
+<pre><code>@D
+L16
+K::[KK] S~~~ K::: [4SSS]
+K[KK]K[KK] KK[8HHHH] ss[8sss][8SSSS][8SSSSSSSS]
+</code></pre>
+
+<div id="delay_effect" />
+<h2>Delay Effect</h2>
+<p>There is a nice stereo delay effect that is added to your track by default when it first plays. You can turn off the delay by pushing the DELAY button or pressing F7.</p>
+<p>You can set the delay parameters in your source. Your commands will go in the Global section. For instance:</p>
+<pre><code>@G
+DELAY=ON
+DELAYTIME=200
+DELAYLEVEL=50
+
+@1
+CDEFG
+</code></pre>
+
+<p>This gives you a pretty prominent delay effect with a short timing. Play around with <code>DELAYTIME=</code> (in milliseconds) and <code>DELAYLEVEL=</code> (scale of 100). You can turn off delay for the whole track by saying <code>DELAY=OFF</code>.</p>
+<div id="volume_envelope" />
+<h2>Volume Envelope</h2>
+<p>For each channel, you can shape your sound using the volume envelope. The chart below shows the parameters you can set and how they will shape the volume changes in time.</p>
+<p><img src="beepcomp_volume_envelope.png" alt="Volume Envelope" /></p>
+<ul>
+<li><strong>Attack Time</strong> ... Defined with <code>ATTACKTIME=n</code> (n=0 to 9999). The time, in milliseconds, that takes to get to the initial peak stage. A small or no attack time results in a sharp sound. A large attack time gets a soft sound.</li>
+<li><strong>Peak Time</strong> ... Defined with <code>PEAKTIME=n</code> (n=0 to 9999). The time, in milliseconds, that the sound stays in its peak.</li>
+<li><strong>Peak Level</strong> ... Defined with <code>PEAKLEVEL=n</code> (n=0 to 100). How loud the sound is in its peak.</li>
+<li><strong>Decay Time</strong> ... Definied with <code>DECAYTIME=n</code> (n=0 to 9999). Determines how fast it goes downs to the plateau of the sustain stage.</li>
+<li><strong>Sustain Level</strong> ... Defined with <code>SUSTAINLEVEL=n</code> (n=0 to 100). How loud the sound stays in its last plateau stage until the note turns off.</li>
+<li><strong>Release Time</strong> .... Defined with <code>RELEASETIME=n</code> (n=0 to 9999). If the channel rests after a note is turned off, you get into the release stage where the note gradually fades away.</li>
+</ul>
+<p>Let's experiment with these parameters.</p>
+<pre><code>@1
+ATTACKTIME=1000
+L1 CDE
+</code></pre>
+
+<p>Each note starts very slowly.</p>
+<pre><code>@1
+ATTACKTIME=0
+DECAYTIME=1000
+SUSTAINLEVEL=0
+L1 CDE
+</code></pre>
+
+<p>Now you get a hard, bell-like tone. The volume will decay all the way to 0 because the level of the sustain stage is set to 0.</p>
+<p>Note that if you don't set one of these parameters, it'll come in its default value. The default set values are:</p>
+<pre><code>ATTACKTIME=22
+PEAKTIME=18
+PEAKLEVEL=90
+DECAYTIME=250
+SUSTAINLEVEL=50
+RELEASETIME=40
+</code></pre>
+
+<p>I invite you to play around with different settings for each parameter. By the way, you could get a &quot;pure PC beep&quot; tone with an unprocessed square waveform like this:</p>
+<pre><code>ATTACKTIME=0
+PEAKTIME=0
+PEAKLEVEL=70
+DECAYTIME=0
+SUSTAINLEVEL=70
+RELEASETIME=0
+</code></pre>
+
+<div id="lfo_effect" />
+<h2>LFO Effect</h2>
+<p>You can use this pitch LFO effect for each channel to give it a nice vibrato. Here is an example to try:</p>
+<pre><code>@1
+LFO=ON
+LFOSPEED=6
+LFORANGE=30
+LFOWAIT=300
+L2 CDEFG
+</code></pre>
+
+<p><code>LFO=</code> turns on the pitch LFO effect. It's turned off by default. <code>LFOSPEED=</code> sets the number of cycles per second for the pitch change. <code>LFORANGE=</code> determines how big the pitch change should occur, specified by the cent of semitones (so 100 will set it to one semitone). <code>LFOWAIT=</code> sets the time to wait to start the LFO effect, specified in milliseconds.</p>
+<p>You could even use this LFO effect to get really wacky results. Try setting <code>LFOSPEED=1</code> and <code>LFORANGE=2400</code> :)</p>
+<div id="astro_effect" />
+<h2>Astro Effect</h2>
+<p>This is a very fun effect you can add to your music. The name comes from a game titled <em>Astro Wars</em>, which I used to play on a little TV game console. (search with &quot;Astro Wars SCV&quot; on YouTube :)) What this effect does is to add a square wave LFO to the pitches. The resulting sound is an out-of-world, funky and wobbly sound. Try:</p>
+<pre><code>@1
+ASTRO=14
+L4 CDEFG
+</code></pre>
+
+<p>The number you specify after <code>ASTRO=</code> is the number of times that the wobble happens. Between 10 and 20 is good to start with, but try different values to see which value works for you.</p>
+<div id="waveforms" />
+<h2>Waveforms</h2>
+<p>Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring <code>WAVEFORM=</code> in each channel. The currently available waveforms and their assigned number are: sine(0), square(1, default), sawtooth(3), hybrid sine A(4), hybrid sine B(5). The hybrid sine waves combine a basic sign wave with a few added upper harmonics.</p>
+<p>Here is an example where a different waveform is selected:</p>
+<pre><code>@1
+DEFAULTTONE // resets the volume envelope settings to plain beep
+WAVEFORM=2  // sets up a saw tooth wave
+F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
+</code></pre>
+
+<div id="tone_presets" />
+<h2>Tone Presets</h2>
+<p>With one line of the command <code>PRESET=</code>, you can set your channel to a set of predetermined tone parameters. You are welcome to try out the currently registered presets by declaring one of the following at the top of a channel:</p>
+<ul>
+<li><code>PRESET=BEEP</code> ... (Square wave) Straight PC Beep tone.</li>
+<li><code>PRESET=POPPY</code> ... (Square wave) Sustained tone with a strong attack.</li>
+<li><code>PRESET=POPPYVIB</code> ... (Square wave) Preset POPPY with vibrato.</li>
+<li><code>PRESET=BELL</code> ... (Square wave) Hard tone that decays in time.</li>
+</ul>
+<div id="bookmarking_your_start_position" />
+<h2>Bookmarking Your Start Position</h2>
+<p>When you compose a long song, you can take advantage of the bookmarking feature. Placing two percent signs <code>%%</code>in your source forces the player to start from where those percent signs are. Here is an example:</p>
+<pre><code> @1 L8
+ // verse
+ {E~G~G~A~G~G~E~~~}
+ %%
+ // chorus
+ F~G~A~F~&gt;C~C~&lt;G~~~
+</code></pre>
+
+<p>Now that you have finished working on the verse, you can just focus on the chorus part without having to go back to the top every time you press the play button.</p>
+<p>Note that the bookmark will not be effective when you export to an audio file.</p>
+<div id="auto_saving" />
+<h2>Auto Saving</h2>
+<p>Your work gets automatically saved to a hidden file named &quot;__AUTOSAVED__.txt&quot; in your <strong>userdata</strong> folder every 5 minutes and also when you quit the application. If something unexpected ever happens, you can load this file to retrieve your work.</p>
+<div id="syntax_reference" />
+<h2>Syntax Reference</h2>
+<div id="syntax_reference_general" />
+<h3>General</h3>
+<ul>
+<li><code>//</code> ... Commenting</li>
+<li><code>@G</code> ... Declares the global section</li>
+<li><code>@n</code> ... Declares a music channel section (n=1,2,3...9)</li>
+<li><code>@D</code> ... Declares the drum channel section</li>
+<li><code>%%</code> ... Bookmarks the player's starting point (Note: not effective when exporting)</li>
+</ul>
+<div id="syntax_reference_global_section" />
+<h3>Global Section</h3>
+<ul>
+<li><code>MASTERVOLUME=n</code> ... Sets the master output gain (n=1 to 100)</li>
+<li><code>TEMPO=n</code> ... Sets the track tempo (n=40 to 300)</li>
+<li><code>Vn=v</code> ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100)</li>
+<li><code>VD=v</code> ... Sets the volume (v=0 to 10) for the drum channel</li>
+<li><code>LOOP=?</code> ... Turns track looping on or off (?=ON or OFF)</li>
+<li><code>DELAY=?</code> ... Turns the delay effect on or off (?=ON or OFF)</li>
+<li><code>DELAYLEVEL=n</code> ... Sets the delay output level (n=0 to 100)</li>
+<li><code>DELAYTIME=n</code> ... Sets the delay timing in milliseconds (n=0 to 999)</li>
+</ul>
+<div id="syntax_reference_music_channel" />
+<h3>Music channel</h3>
+<ul>
+<li><code>ATTACKTIME=n</code> ... Sets the envelope attack time in milliseconds (n=1 to 9999)</li>
+<li><code>PEAKTIME=n</code> ... Sets the envelope peak time in milliseconds (n=1 to 9999)</li>
+<li><code>PEAKLEVEL=n</code> ... Sets the envelope peak level (n=0 to 100)</li>
+<li><code>DECAYTIME=n</code> ... Sets the envelope decay time in milliseconds (n=1 to 9999)</li>
+<li><code>SUSTAINLEVEL=n</code> ... Sets the envelope sustain level (n=0 to 100)</li>
+<li><code>RELEASETIME=n</code> ... Sets the envelope release time in milliseconds (n=1 to 9999)</li>
+<li><code>LFO=?</code> ... Turns the pitch LFO effect on or off (?=ON or OFF) </li>
+<li><code>LFORANGE=n</code> ... Sets the LFO range to cents of a semitone (n=1 to 2400)</li>
+<li><code>LFOSPEED=n</code> ... Sets the LFO speed by cycles per second (n=0 to 100)</li>
+<li><code>LFOWAIT=n</code> ... Sets the time in milliseconds before the LFO effect starts (n=0 to 9999)</li>
+<li><code>ASTRO=n</code> ... Turns on the Astro effect and sets the number of wobbles per second (n=0 to 100, 0 for OFF)</li>
+<li><code>ASTRO=OFF</code> ... Turns off the Astro effect</li>
+<li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)</li>
+<li><code>DEFAULTTONE</code> ... Sets up a straight square wave tone</li>
+<li><code>WAVEFORM=n</code> ... Chooses the waveform that the channel uses (n=0 to 5)</li>
+<li><code>FALLSPEED=n</code> ... Speed of the Fall effect in 100ths of a semitone per second (n=0 to 9600)</li>
+<li><code>FALLWAIT=n</code> ... Wait time in milliseconds before the Fall effect starts (n=0 to 9999)</li>
+<li><code>RISESPEED=n</code> ... Speed of the Rise effect in 100ths of a semitone per second (n=0 to 9600)</li>
+<li><code>RISERANGE=n</code> ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)  </li>
+<li><code>Vn</code> ... Sets channel volume (n=0,1,2...10)</li>
+<li><code>Ln</code> ... Sets the current note length (n=1 to 64)</li>
+<li><code>C</code> ... Musical note</li>
+<li><code>D</code> ... Musical note</li>
+<li><code>E</code> ... Musical note</li>
+<li><code>F</code> ... Musical note</li>
+<li><code>G</code> ... Musical note</li>
+<li><code>A</code> ... Musical note</li>
+<li><code>B</code> ... Musical note</li>
+<li><code>#</code> ... Sharp</li>
+<li><code>b</code> ... Flat</li>
+<li><code>~</code> ... Elongates note by current note length</li>
+<li><code>:</code> ... Rest for the current note length</li>
+<li><code>[---]</code> ... Tuplet - groups notes --- in the space of current note length</li>
+<li><code>[n---]</code> ... Tuplet - groups notes --- in the space of note length specified by n</li>
+<li><code>{---}</code> ... Repeats the enclosed snippet ---</li>
+<li><code>{n---}</code> ... Repeats the enclosed snippet --- <code>n</code> times</li>
+<li><code>^</code> ... Increase channel volume by 10%</li>
+<li><code>_</code> ... Decrease channel volume by 10%</li>
+<li><code>,</code> ... Fall effect, works on the pitch commanded just before</li>
+<li><code>*</code> ... Rise effect, works on the pitch that comes right after</li>
+</ul>
+<div id="syntax_reference_drum_channel" />
+<h3>Drum Channel</h3>
+<ul>
+<li><code>Vn</code> ... Sets channel volume (n=0,1,2...10)</li>
+<li><code>Ln</code> ... Sets the current note length (n=1 to 64)</li>
+<li><code>K</code> ... Kick</li>
+<li><code>k</code> ... Kick, quieter</li>
+<li><code>S</code> ... Snare</li>
+<li><code>s</code> ... Snare, quieter</li>
+<li><code>H</code> ... Hi-hat</li>
+<li><code>h</code> ... Hi-hat, quieter</li>
+<li><code>~</code> ... Elongates note by current note length</li>
+<li><code>:</code> ... Rest for the current note length</li>
+<li><code>[---]</code> ... Tuplet - groups notes --- in the space of current note length</li>
+<li><code>[n---]</code> ... Tuplet - groups notes --- in the space of note length specified by n</li>
+<li><code>{---}</code> ... Repeats the enclosed snippet ---</li>
+<li><code>{n---}</code> ... Repeats the enclosed snippet --- <code>n</code> times</li>
+<li><code>^</code> ... Increase channel volume by 10%</li>
+<li><code>_</code> ... Decrease channel volume by 10%</li>
+</ul>
+<div id="uninstalling_beepcomp" />
+<h2>Uninstalling BeepComp</h2>
+<p>You can uninstall the application by using the &quot;Programs and Features&quot; under the Control Panel / Programs menu to uninstall BeepComp. Typing in &quot;appwiz.cpl&quot; in the command prompt or in the search box will direct you to this dialog, also.</p>
+<p>Please note that your &quot;userdata&quot; folder inside your &quot;Documents&quot; (or &quot;My Documents&quot; on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your &quot;userdata&quot; folder, please delete it along with its parent folder named BeepComp.</p>
+<div id="staying_updated" />
+<h2>Staying Updated</h2>
+<p>New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix and improve the bugs or issues found on the previous versions. I announce new versions through <a href="https://sourceforge.net/p/beepcomp/blog/">the SourceForge Blog page</a>. I also upload <a href="https://sourceforge.net/projects/beepcomp/files/patches/">patches</a> whenever there is a critical issue.</p>
+<p>Alternatively, you can scroll down the <a href="http://beepcomp.sourceforge.net">SourceForge project top page</a> and press the button that says &quot;Follow&quot; to receive automatic updates, but be alerted that you will receive third-party junk mail as well. I will find a better newsgroup format that's clean. If anyone knows of a good service, let me know! :)</p>
+<p>You can find out the version of BeepComp you're using by clicking the logo in the main editor screen.</p>
+<p>When you update to a new release, you will have to first <a href="#uninstalling_beepcomp">uninstall</a> your current version.</p>
+<div id="if_you_found_issues_bugs" />
+<h2>If you found issues/bugs...</h2>
+<p>BeepComp is still in its development stage... so I really appreciate you letting me know about any issues you experience. You're welcome to write in our <a href="http://beepcomp.freeforums.net/">forum page</a> or email me at beepcomp-at-hiromorozumi-dot-com. I really want to make a program that is reliable and enjoyable to anyone :)</p>
+<p>I am also documenting the issues as they get identified on the <a href="https://sourceforge.net/p/beepcomp/wiki/known_issues/">Known Issues page</a> on sourceForge. </p>
+<div id="beepcomp_on_the_web" />
+<h2>BeepComp on the Web</h2>
+<p>The home page for BeepComp is at:
+<a href="http://hiromorozumi.com/beepcomp">http://hiromorozumi.com/beepcomp</a>.</p>
+<p>Also, there is a <a href="http://beepcomp.freeforums.net/">forum page</a> where you can join our discussion. I have also set up a <a href="https://www.facebook.com/beepcomp">Facebook</a> page.</p>
+<p>The source code is publicly available at the <a href="http://sourceforge.net">SourceForge</a> repository. I will also welcome patches if you spot issues. The address of the repository is:
+<a href="https://sourceforge.net/p/beepcomp/code/ci/master/tree/">https://sourceforge.net/p/beepcomp/code/ci/master/tree/</a>.</p>
+<div id="contact_me" />
+<h2>Contact Me!</h2>
+<p>I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) You can contact me by emailing me at beepcomp-at-hiromorozumi-dot-com.</p>
+
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->

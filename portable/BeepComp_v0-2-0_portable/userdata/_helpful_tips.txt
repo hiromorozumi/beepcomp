@@ -1,0 +1,85 @@
+Here are a few helpful tips I want to share...
+
+*** If your audio device goes out ***
+-------------------------------------
+
+Sometimes when you launch another audio application while running BeepComp, that gives the device privilage to that application. If that happens... press Alt + I to re-initialize the audio device.
+
+*** Navigate to your userdata folder easily ***
+-----------------------------------------------
+
+When you're in a file dialog, click the pathname showing at the top of the screen - this tells the Windows Explorer to open the folder you're currently in.
+
+*** You can run two instances of BeepComp! ***
+----------------------------------------------
+
+I sometimes do this to boost my productivity. When you're working on a lengthy song, you can focus on one section of the song copied to a new BeepComp window, then go back and forth, for example. (On some systems you need to reset your device when you switch back - just press ALT + I)
+
+*** Perfect delay timing ***
+----------------------------
+
+If you were a guitar player in the 80-90's, you probably had to do this :) Calculating the millisecod value for delay timing can really add coherence to your track. The good magic formula to remember is 500 x 120 / tempo. I added a new tutorial file on this.
+
+*** Optimizing for audio applications ***
+-----------------------------------------
+
+Not just for BeepComp, there are a few things that help any audio applications to work in their best environment. It's always good to turn off anti-virus programs when you need serious audio performance. Also, if you use many audio programs, you should tell Windows to prioritize "Background Services". Google "Processor scheduling background Windows x" will return pages that walk you through this for your version of Windows.
+
+*** How do I know which version I have? ***
+-------------------------------------------
+
+Click on the logo. Don't do this when the music is playing :)
+
+*** Stay updated! ***
+---------------------
+
+I have been uploading the new releases quite often. You can always go to the "blog" section on the SourceForge project page:
+http://beepcomp.sourceforge.net
+Sometimes I get busy with things and have to sacrifice my development time.. but I try to improve the program and address bugs as often as I can!
+
+
+
+.... Wow, you really read all through this?
+
+
+
+
+// game over... lol :)
+
+@G
+
+LOOP=OFF
+MASTERVOLUME=70
+TEMPO=160
+V1=6 V2=6
+DELAYLEVEL=20
+DELAYTIME=200
+
+// channel 1 //////////////////////////////////
+
+@1
+
+ATTACKTIME=10
+PEAKTIME=20
+PEAKLEVEL=80
+DECAYTIME=250
+SUSTAINLEVEL=0
+RELEASETIME=0
+
+O4L8
+
+G>F:F[2FED]C<G:EC:::
+
+// channel 2 //////////////////////////////////
+
+@2
+
+ATTACKTIME=10
+PEAKTIME=20
+PEAKLEVEL=80
+DECAYTIME=250
+SUSTAINLEVEL=0
+RELEASETIME=0
+
+O3L8
+GG:G[2GAB]>C:<G:C:::

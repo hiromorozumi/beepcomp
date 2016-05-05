@@ -1,0 +1,61 @@
+////////////////////////////////////////////////
+//
+//  Try a pure PSG tone!
+//
+//  In your channel, declare PRESET=BEEP
+//  To get the authentic old PC beep tone :)
+//
+//                 Turning off your delay
+//                 gives you more retro feel
+//
+//  This example is the opening fanfare
+//  from a role-playing game title
+//                  Romancia (Falcom, 1986)
+//                  https://youtu.be/rRKN4kO2kuw
+//
+
+// global ///////////////////////////////////////
+
+@G
+
+MASTERVOLUME=70
+V1=5 V2=5 V3=4
+TEMPO=128
+DELAY=OFF
+LOOP=OFF
+
+// channel 1 ////////////////////////////////////
+
+@1
+
+PRESET=BEEP
+L16 O4
+
+C~~ :<[G:]>[C:] D~~ [G:][G:][G:]
+E~~ :[C:][E:] [F:][D:][F:] [G:][D:][G:]
+>E~~ :[C:][E:] [F:][D:][F:] [D:][D:][D:]
+E~~ ~~~ ~~~ ~~~ ~~~
+
+// channel 2 ////////////////////////////////////
+
+@2
+
+PRESET=BEEP
+L16 O4
+
+::: ::: ::: :::
+C~~: <[G:]>[C:] D~~ <[G:][G:][G:]>
+C~~: <[G:]>[C:] D~~ [G:][G:][G:]>
+C~~ <C~~ ~~~ ~~~ ~~~
+
+// channel 3 ////////////////////////////////////
+
+@3
+
+PRESET=BEEP
+L16 O4
+
+::: ::: ::: :::
+::: ::: ::: :::
+O5 G~~ :[E:][G:] >[C:]<[G:]>[C:] [D:]<[G:]>[D:]
+O7 E~~ ~~~ ~~~ ~~~ ~~~

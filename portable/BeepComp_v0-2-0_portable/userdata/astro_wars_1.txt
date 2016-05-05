@@ -1,0 +1,182 @@
+//
+//  Theme from 'Astro Wars I'
+//  (Super Cassette Vision, EPOCH 1984)    
+//
+//  ... I added a few twists :)
+//
+//                              watch this game:
+//                  https://youtu.be/8oZAz2fvWKI
+//
+
+// global ///////////////////////////////////////
+
+@G
+
+MASTERVOLUME=90
+V1=10 V2=4 V3=4 V4=4 V5=6 VD=9
+
+TEMPO=124
+DELAYTIME=322
+DELAYLEVEL=30
+
+// ch 1 melody //////////////////////////////////
+
+@1
+
+WAVEFORM=5     // <- 'hybrid' sine waveform with
+               // upper harmonics added
+ 
+ATTACKTIME=0
+PEAKLEVEL=100
+DECAYTIME=120
+SUSTAINLEVEL=35
+RELEASETIME=50
+ASTRO=12
+FALLSPEED=4800
+FALLWAIT=0
+
+L12 O4
+E~~~  CDFE  DDEC  D~GG   ~~~~ :EFG
+Ab~~~ FGAbG FAbFG Ab~>CC ~~~~ :::
+D~~ C~~ D~~ E~~ ~~~ ~~~ ~~~
+
+~,~~ ~~~
+
+O4
+AbGC GbF<B> AbG>C <B~~ ~~~ ~~~
+
+O3
+::: G~~>
+F~~ ~~C <G~~ G>CA  G~~   ~~~ ~~~ [4G::G]>
+C~~ <B~~ A~~ GAF   G~~   ~~~ ~~~ [4G::G]
+A~~ ~~~  F~~  FED [4D::C]G~~ ~~~ [4E::E]
+F~~ E~~  D~~  DEG  C~~   ~~~ ~~~ [4C::C]
+E~~ ~~~  C~~  CE>C<B~~   ~~~ ~~~ [4G#::A]<
+B~~ ~~~> G#~~ ABA> C~~   ~~~ ~~~ ~~~
+::: ::: ::: :::
+
+// ch2 melody double ////////////////////////////
+
+@2
+
+WAVEFORM=1
+ATTACKTIME=0
+PEAKLEVEL=100
+DECAYTIME=0
+SUSTAINLEVEL=45
+RELEASETIME=50
+ASTRO=12
+FALLSPEED=4800
+FALLWAIT=0
+
+L12 O5
+E~~~  CDFE  DDEC  D~GG   ~~~~ :EFG
+Ab~~~ FGAbG FAbFG Ab~>CC ~~~~ :::
+D~~ C~~ D~~ E~~ ~~~ ~~~ ~~~
+
+~,~~~~~
+
+O5
+AbGC GbF<B> AbG>C <B~~ ~~~ ~~~
+
+::: O4 G~~>
+F~~ ~~C <G~~ G>CA  G~~   ~~~ ~~~ [4G::G]>
+C~~ <B~~ A~~ GAF   G~~   ~~~ ~~~ [4G::G]
+A~~ ~~~  F~~  FED [4D::C]G~~ ~~~ [4E::E]
+F~~ E~~  D~~  DEG  C~~   ~~~ ~~~ O6[4C::C]
+E~~ ~~~  C~~  CE>C<B~~   ~~~ ~~~ [4G#::A]<
+B~~ ~~~> G#~~ ABA> C~~   ~~~ ~~~ ~~~
+::: ::: ::: :::
+
+// ch 3 harmony 1 ///////////////////////////////
+
+@3
+
+LFO=ON
+L12 O4
+
+:::: :::: :::: :::: :::: ::::
+:::: :::: :::: :::: :::: :::
+Ab~~ Ab~~ Ab~~ G~~ ~~~ ~~~ ~~~
+::::::
+FE<Ab> EbD<Ab >FEA Ab~~ ~~~ ~~~ 
+::::::
+
+O4
+C~~ ~~<A F~~ FA>F E~~ ~~~ ~~~ [4E::E]
+A~~ G~~ F~~  EFC  D~~ ~~~ ~~~ [4D::D]
+
+F~~ ~~~ C~~ CC<A [4A::G]> E~~ ~~~ >[4C::C]
+D~~ C~~ <A~~ A>CE <G~~ ~[6AGF] G~~ <[4G::G]>
+C~~ ~~~ G~~ G>CG G#~~ ~~~ ~~~ [4E::F]<
+G#~~ ~~~ >E~~ EG#E A~~ ~~~ ~~~ ~~~
+::: ::: ::: :::
+
+// ch 4 harmony 2 ///////////////////////////////
+
+@4
+
+LFO=ON
+L12 O4
+
+:::: :::: :::: :::: :::: ::::
+:::: :::: :::: :::: :::: :::
+F~~ D~~ F~~ E~~ ~~~ ~~~ ~~~
+::::::
+DC<F >C<BF DCD F~~ ~~~ ~~~
+::::::
+
+O3
+A~~ ~~<G C~~ CF>C C~>>[CD][E:][D:][C:]G~~<[4C::C]
+F~~ D~~ C~~ CC<A> C~~ ~~[DC] <B~~ [4B::B]>
+C~~ ~~~ <A~~ AGF [4F::E]> C~~ ~~~ [4G::G]
+A~~ G~~ F~~ FG>C< E~~ ~~~ ~~~ [4E::E]
+G~~ ~~~ E~~ EG>E E~~ ~~~ ~~~ <[4B::B]
+E~~ ~~~ B~~ B>E<B> E~~ ~~~ ~~~ ~~~
+::: ::: ::: :::
+
+// ch 4 bass ////////////////////////////////////
+
+@5
+
+ATTACKTIME=0
+PEAKLEVEL=95
+PEAKTIME=60
+DECAYTIME=100
+SUSTAINLEVEL=50
+RELEASETIME=50
+
+L12 O3
+
+:::: :::: :::: :::: :::: ::::
+:::: :::: :::: :::: :::: :::
+::: ::: ::: G~~ ~~~ ~~~ ~~~<
+::: :::
+F>C<F EbBEb DDD G~~ ~~~ ~~~ ::: 
+
+G~~> O2
+C:: :CC C:: ::C C:: :CC C:: ::C
+C:: :CC C:: ::C G:: :GG G:: ::G
+F:: :FF F:: ::F E:: :EE E:: ::E
+D:: :DD G:: ::G C:: :CC C:: C~~
+C:: :CC C:: :CD E:: :EE E:: ::E
+E:: :EE E:: :EG#A:: :AA A:: :AA
+::: ::: ::: :::
+
+@D
+
+L12
+:::: :::: :::: :::: :::: ::::
+:::: :::: :::: :::: ::::
+::: ::: ::: ::: ::: ::: ::: :::
+
+[KK]sS S:K
+ssk ssk KSK S:: ::: ::: ::[sss] S:K
+
+K:: ::k S:: ::h K:: :kk S:: ::k
+K:: ::k S:: :hh K:: :kk S:: ::k
+K:: ::k S:: ::h K:: :kk S:: ::k
+K:: ::k S:: :hh K:: :kk S:: [4sSKS]
+K:: ::k S:: ::h K:: :kk S:: ::k
+K:: ::k S:: :hh K:: :kk SkK SkK
+K:: ::: ::: :::

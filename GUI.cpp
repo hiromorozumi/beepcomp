@@ -16,6 +16,7 @@ const std::string GUI::STR_VERSION = "0.2.0";
 void GUI::initialize()
 {
 	config.setVersion(STR_VERSION);
+	currentDir = config.getCurrentDir();
 	
 	anotherThreadRunning = false;
 
@@ -31,18 +32,20 @@ void GUI::initialize()
 	mouse.bindWindow(&window);
 
 	// load icon
-	icon.loadFromFile("images/beepcomp_icon.png");
+	string iconFilePath = currentDir + "\\images\\beepcomp_icon.png";
+	icon.loadFromFile(iconFilePath);
 	window.setIcon(32, 32, icon.getPixelsPtr());
 
 	// load logo
-	if(!logoTexture.loadFromFile("images/beepcomp_logo.png"))
+	string logoFilePath = currentDir + "\\images\\beepcomp_logo.png";
+	if(!logoTexture.loadFromFile(logoFilePath))
 		cout << "Logo: load error!\n";
 	logo.setPosition(sf::Vector2f(675,12));
 	logo.setTexture(logoTexture);
 
 	// load font for knob and buttons
-	// if (!miniFont.loadFromFile("fonts/uni0563.ttf"))
-	if (!miniFont.loadFromFile("fonts/04B09.ttf"))
+	string miniFontFilePath = currentDir + "\\fonts\\04B09.ttf";
+	if (!miniFont.loadFromFile(miniFontFilePath))
 		{ cout << "Error reading font for the Knob object..\n"; }
 	
 	// create a knob - and initialize
@@ -75,18 +78,21 @@ void GUI::initialize()
 	
 	// call Config class's setup - if config file's not found in current directory (fresh after installation)
 	// it will copy the entire 'userdata' folder and its contents
+	
 	string configSetupResult = config.setup();  			// COMMENT OUT THIS LINE FOR *** PORTABLE ***
 	cout << "From GUI.cpp: " << configSetupResult << endl; 	// COMMENT OUT THIS LINE FOR *** PORTABLE ***
 	defaultPath = config.getUserdataPath(); 				// COMMENT OUT THIS LINE FOR *** PORTABLE ***
-	// defaultPath = "userdata/";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
+	
+	// defaultPath = currentDir + "\\userdata";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
+	
 	dialog.setDefaultDir(defaultPath); // don't forget to set default for Dialog!
 	
 	// set this to currently working path
 	currentPathAndFileName = defaultPath;
 
 	// load work area font
-	string fontfile = "fonts/UbuntuMono-R.ttf";
-	if (!font.loadFromFile(fontfile))
+	string mainFontFilePath = currentDir + "\\fonts\\UbuntuMono-R.ttf";
+	if (!font.loadFromFile(mainFontFilePath))
 		{ cout << "Loading main font - error!" << endl; }
 
 	charHeight = font.getLineSpacing(25) * 1.032f;
@@ -145,9 +151,17 @@ void GUI::initialize()
 	// load up default music to start...
 	mplayer.pause();
 	mplayer.resetForNewSong();
-	source = mml.loadFile("default.txt", &mplayer);
-	if(source=="Error")
+	string defaultSourceFile = currentDir + "\\default.txt";
+	source = mml.loadFile(defaultSourceFile, &mplayer);
+	if(source=="Error" || source.empty())
+	{
 		cout << "File load error..." << endl;
+		source  = "// *****  Welcome to BeepComp!  *****\n//\n";
+		source += "// Please press \n//\n//   ... [F10] to load a new song or\n//   ... [F9] to start composing new :)";
+		string strEOF = "\xFF";
+		source += strEOF;
+		mml.setSource(source);
+	}
 	mml.parse(&mplayer);
 	mplayer.goToBeginning();
 
@@ -260,6 +274,7 @@ void GUI::initialize()
 	help.deactivateVersionText();
 	
 	// this adds a little animation.. just some silly fun :)
+	omake.setCurrentDir(currentDir);
 	omake.initialize(&window);
 	
 	// clock to track meter update interval
@@ -956,24 +971,28 @@ void GUI::handleInputs()
 		cout << "After doubling backslashes and replacing with env variable:\n" << docPath << endl;
 		
 		// WAIT... try a relative path
-		docPath = "documentation\beepcomp_users_guide.html";
-		string docPath2 = "documentation\\beepcomp_users_guide.html";
+		docPath = "documentation\\beepcomp_users_guide.html";
+		string docPath2 = currentDir + "\\documentation\\beepcomp_users_guide.html";
 		
 		// now try to open the html file...
+		/*
 		int result = 0;
 		TCHAR app[MAX_PATH] = { 0 };
 		
-		result = (int)::FindExecutable(docPath.c_str(), NULL, app);
+		result = (int)::FindExecutable(docPath2.c_str(), NULL, app);
 		if (result > 32) 
 		{
 			::ShellExecute(0, NULL, app,
-				(docPath).c_str(), NULL, SW_SHOWNORMAL);
+				(docPath2).c_str(), NULL, SW_SHOWNORMAL);
 		}
+		*/
 		
-		ShellExecute( NULL, "open", docPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
-		ShellExecute( NULL, "open", docPath2.c_str(), NULL, NULL, SW_SHOWNORMAL );
-		ShellExecute( NULL, NULL, docPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
-		ShellExecute( NULL, "call", docPath.c_str(), NULL, NULL, SW_SHOWNORMAL );	
+		// ShellExecute( NULL, "open", docPath.c_str(), NULL, NULL, SW_SHOWNORMAL );
+		// ShellExecute( NULL, "open", docPath2.c_str(), NULL, NULL, SW_SHOWNORMAL );
+		
+		ShellExecute( NULL, NULL, docPath2.c_str(), NULL, NULL, SW_SHOWNORMAL );
+		
+		// ShellExecute( NULL, "call", docPath.c_str(), NULL, NULL, SW_SHOWNORMAL );	
 	}
 	else if(docButton.hovering(mouseX, mouseY))
 		docButton.highlight();

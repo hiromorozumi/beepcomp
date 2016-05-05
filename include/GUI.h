@@ -344,6 +344,7 @@ public:
 	static const int N_STARS = 50;
 	static const int WINDOW_WIDTH = 840;
 	static const int WINDOW_HEIGHT = 640;
+	std::string currentDir;
 	sf::RectangleShape stars[N_STARS];
 	sf::Sprite fighter[2];
 	sf::Texture fighterTexture[2];
@@ -391,10 +392,12 @@ public:
 		srand(time(NULL));
 		
 		// load fighter images
-		if(!fighterTexture[0].loadFromFile("images/fighter_1.png"))
+		string fighter1FilePath = currentDir + "\\images\\fighter_1.png";
+		if(!fighterTexture[0].loadFromFile(fighter1FilePath))
 			cout << "fighter_1.png: load error!\n";
-		if(!fighterTexture[1].loadFromFile("images/fighter_2.png"))
-			cout << "fighter_1.png: load error!\n";
+		string fighter2FilePath = currentDir + "\\images\\fighter_2.png";
+		if(!fighterTexture[1].loadFromFile(fighter2FilePath))
+			cout << "fighter_2.png: load error!\n";
 		fighter[0].setTexture(fighterTexture[0]);
 		fighter[1].setTexture(fighterTexture[1]);
 		
@@ -416,6 +419,11 @@ public:
 		}
 		resetStars();
 		resetFighter();
+	}
+	
+	void setCurrentDir(const std::string &cDir)
+	{
+		currentDir = cDir;
 	}
 	
 	void resetStars()
@@ -610,10 +618,11 @@ public:
 	bool rightKeyFiring;
 	int rightProcessedCount;
 
-	string defaultPath;
-	string currentPathAndFileName;
-	string currentFileName;
-	string lastSavedPathAndFileName;
+	std::string currentDir;
+	std::string defaultPath;
+	std::string currentPathAndFileName;
+	std::string currentFileName;
+	std::string lastSavedPathAndFileName;
 
 	bool anotherThreadRunning;
 

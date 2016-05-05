@@ -1,0 +1,278 @@
+/////////////////////////////////////////////////
+//                                             //
+//  YS II: Ancient YS Vanished (Falcom, 1988)  //
+//                                             //
+//  ~ Palace of Salmon ~                       //
+//                                             //
+//                      Composer: Yuzo Koshiro //
+//                                             //
+/////////////////////////////////////////////////
+
+////////////////////////////// global section ///
+
+@G
+
+MASTERVOLUME=80
+TEMPO=148
+DELAYTIME=405
+DELAYLEVEL=24
+DELAY=ON
+
+V1=7 V2=4 V3=4 V4=4 V5=7 VD=8
+
+/////////////////////////////// ch 1 - melody ///
+
+@1
+
+ PRESET=POPPYVIB // perfect "falcom" preset :)
+ LFORANGE=25
+
+// "POPPYVIB" preset comes with these settings
+
+   // ATTACKTIME=0
+   // PEAKTIME=50
+   // DECAYTIME=10
+   // RELEASETIME=50
+   // SUSTAINLEVEL=40
+   // PEAKLEVEL=90
+
+L16 O4
+
+E~~~~~AB>C~~D~~E~ D~~~~~CD<B~~~~~::>
+C~~~~~<BAE~~~~~:: >D~~~~~CDEDC<BAB>CD
+E~~~~~AB>C~~D~~E~ D~~~~~<B>CD~~~~~::
+C~~~~~<BAB~~A~~G~ A~~~ ~~~~ ~~~,~ ~~::<
+
+E~~~~~AB>C~~D~~E~ D~~~~~CD<B~~~~~::>
+C~~~~~<BAE~~~~~:: >D~~~~~CDEDC<BAB>CD
+E~~~~~AB>C~~D~~E~ D~~~~~<B>CD~~C~~<B~
+A~~~~~B>CD~~G~~B~ A~~~ ~~~~ ~~~,~ ~~::<<
+
+F~~~~~~~ :<A>CFAFCF G~~~~~~: D~~E~~*F~
+E~~~~~DEC~~~~~~,~
+
+ WAVEFORM=2     // change tone!
+ LFORANGE=90
+
+>A~~~~~AB>C~~~~~~,~<<
+
+ PRESET=POPPYVIB   // change back...
+ LFORANGE=25
+
+F~~~~~~~ :<A>CFAFCF G~~~~~~: B~~~>D~~~
+C~~<B~~A~~~~~~,~~~
+
+ WAVEFORM=2     // change tone!
+
+>>*A~:*G~:*E~:*D~:C~<A~<
+
+ PRESET=POPPYVIB   // change back...
+
+F~~~~~~~ :<A>CFAFCF G~~~~~~: D~~E~~*F~
+E~~~~~DEC~~~~~~,~
+
+ WAVEFORM=2     // change tone!
+ LFORANGE=90
+
+>A~~~~~AB>C~~~~~~,~<<
+
+ PRESET=POPPYVIB   // change back...
+ LFORANGE=25
+ RISERANGE=50
+
+F~~~~~~~ :<A>CFAFCF G~~~~~~: *B~~:>*D~~:
+E~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~,~~~
+
+//////////////////////////// ch 2 - chordal 1 ///
+
+@2
+
+ PRESET=POPPYVIB
+ LFORANGE=25
+
+L4
+:::: :::: :::: ::::
+:::: ::::
+L16
+A~~~~~GFG~~F~~D~ E~~~ ~~~~ ~~~,~ ~~::
+L4
+:::: :::: :::: ::::
+:::: ::::
+L16
+>F~~~~~GAG~~D~~G~ E~~~ ~~~~ ~~~,~ ~~::
+
+ WAVEFORM=2
+ LFORANGE=90
+
+L4
+:::: :::: ::::
+L16 O5
+E~~~~~EGA~~~~~~,~
+
+ WAVEFORM=2
+ LFORANGE=25
+
+L4
+:::: :::: ::::
+O6 L16
+*E~:*D~:*C~:<*B~:G~<E~<
+
+ WAVEFORM=2
+ LFORANGE=90
+
+L4 O5
+:::: :::: ::::
+L16
+E~~~~~EGA~~~~~~,~
+
+ PRESET=POPPYVIB
+ LFORANGE=25
+
+L4
+::::
+L16 O4
+ RISERANGE=50
+D~~~~~~~*G~~:*B~~:
+B~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~,~~~
+
+////////////////////////////// ch 3 chordal 2 ///
+
+@3
+
+ WAVEFORM=2
+
+L1
+:::: :::: :::: ::::
+:::: :::
+
+O6 L16
+*C~:<*B~:*A~:*G~:E~C~<
+
+ WAVEFORM=2
+ LFO=ON
+ LFORANGE=90
+
+L4 O6
+:::: :::: ::::
+L16
+C~~~~~CDE~~~~~~,~
+
+ PRESET=POPPYVIB
+ RISERANGE=50
+
+O5
+A~~~~~~~ >:C~~<B~A~ B~~~~~~: >*D~~:*G~~:
+>E~~~ ~~~~ ~~~~ ~~~~ ~~~~ ~~~~ ~~~~ ~,~~~
+
+////////////////////////// ch 4 - counterpart ///
+
+@4
+
+ PRESET=POPPYVIB
+
+L16 O4
+
+::::E~~~A~~B~~>C~ <B~~~G~~~D~~G~~B~
+A~~~~~~~C~~~~~FA G~~~~~~~G#~~~~~~~
+A~~~E~~~A~~B~~>C~ <B~~~~~GAB~~>C~~D~
+C~~~~~<BAB~~A~~B~ AEAB>C<B>CDEDEGAEC<A
+
+::::E~~~A~~B~~>C~ <B~~~G~~~D~~G~~B~
+A~~~~~~~C~~~~~FA G~~~~~~~G#~~~~~~~
+A~~~E~~~A~~B~~>C~ <B~~~~~GAB~~>C~~D~<
+A~~~~~B>CD~~<G~~B~ AEAB>C<B>CDEDEGAEC<A
+
+:::::::: :A~~G~F~G~~~~~~~ :<B>DGBAGB>
+C~~~ ~~~~ ~~,~~ ~~~~
+<<A>CEACEA>C<EA>CE<A>CEA<
+
+C~~~~~~~ :A~~G~F~D~~~~~~~ G~~~B~~~
+A~~G~~E~ ~~~~~,~~~
+<A>CEACEA>C<EA>CE<A>CEA<
+
+<A~~~~~~~ >:A~~G~F~D~~~~~~~ :<B>DGBAGB>
+C~~~ ~~~~ ~~,~~ ~~~~
+<A>CEACEA>C<EA>CE<A>CEA<
+
+<C~~~~~~~ :A~~G~F~D~~~~~~~ :<B>DGBAGB
+G#~~~~~~~~~~~~,~~~ <G#B>EG#<B>EG#BEG#B>E<G#B>EG#
+
+///////////////////////////////// ch 5 - bass ///
+
+@5
+
+ WAVEFORM=1
+ ATTACKTIME=0
+ PEAKTIME=55
+ PEAKLEVEL=90
+ DECAYTIME=45
+ SUSTAINLEVEL=0
+
+O2 L16
+
+{A:AA A:AA}  {G:GG G:GG}
+{F:FF F:FF}  {G:GG}{E:EE}
+{A:AA A:AA}  {G:GG G:GG}
+{F:FF}{G:GG} {A:AA A:AA}
+
+{A:AA A:AA}  {G:GG G:GG}
+{F:FF F:FF}  {G:GG}{E:EE}
+{A:AA A:AA}  {G:GG G:GG}
+{F:FF}{G:GG} {A:AA A:AA}
+
+FFFF>F<FF>F< :::: ::::
+GGGG>G<GG>G< :::: ::::
+CCCC>C<CC>C< :::: ::::
+AAAA>A<AA>A< GGGG>G<GG>G<
+
+FFFF>F<FF>F< :::: ::::
+GGGG>G<GG>G< :::: ::::
+AAAA>A<AA>A< :::: ::::
+AAAA>A<AA>A< GGGG>G<GG>G<
+
+FFFF>F<FF>F< :::: ::::
+GGGG>G<GG>G< :::: ::::
+CCCC>C<CC>C< :::: ::::
+AAAA>A<AA>A< GGGG>G<GG>G<
+
+FFFF>F<FF>F< :::: ::::
+GGGG>G<GG>G< :::: ::::
+{E:EE E:EE}  {E:EE E:EE}
+
+/////////////////////////////////////// drums ///
+
+@D
+
+L16
+
+Khhh Shhh Khhh Shhk Khhh Shhh Khhh Shhh
+Khhh Shhh Khhh Shhk Khhh Shhh Khhs SssS
+Khhh Shhh Khhh Shhk Khhh Shhh Khhh Shhh
+Khhh Shhh Khhh Shhk Khhh Shhk KsS~ [ss]SSS
+
+Khhh Shhh Khhh Shhk Khhh Shhh Khhh Shhh
+Khhh Shhh Khhh Shhk Khhh Shhh Khhs SssS
+Khhh Shhh Khhh Shhk Khhh Shhh Khhh Shhh
+Khhh Shhh Khhh Shhk KhhK SKKK [SS]SS[SS]SS[SS]S
+
+// Rock! LOL
+
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: [HH]HHH
+Khhh Shhk Khhh ShhS
+
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: [HH]HHH
+Khhh Shhk Khhh [SS]SSS
+
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: [HH]HHH
+Khhh Shhk Khhs SKhS
+
+[KK]kKK SKKS :::: ::HH
+[KK]kKK SKKS :::: [HH]HHH
+Khhh Shhk Khhh ShKK
+[ss]SS[ss]SS[ss]SS[ss]SSSSSS

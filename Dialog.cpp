@@ -20,7 +20,7 @@ Dialog::Dialog()
 
 	// load font
 	// string fontfile = "fonts/EnvyCodeR.ttf";
-	string fontfile = "fonts/UbuntuMono-R.ttf";
+	string fontfile = getCurrentDir() + "\\fonts\\UbuntuMono-R.ttf";
 	if (!font.loadFromFile(fontfile))
 		{ cout << "Loading font - error!" << endl; }
 	
