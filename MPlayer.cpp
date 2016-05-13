@@ -1037,10 +1037,18 @@ void MPlayer::processEvent(int channel, int eType, int eParam)
 	// type 70 - "BEEFUP="
 	else if(eType==70)
 	{
-		double valuef = static_cast<float>(eParam);
-		osc[channel].enableBeefUp();
-		osc[channel].setBeefUpFactor( (valuef*3.0f/100.0f) + 1.0f ); // set LFO speed to this value
 		cout << "BEEFUP=" << eParam << endl;
+		double valuef = static_cast<float>(eParam);
+		if(eParam<0.1f) // if zero, turn off beef-up
+		{
+			osc[channel].disableBeefUp();
+			cout << "BEEFUP disabled!\n";
+		}
+		else
+		{
+			osc[channel].enableBeefUp();
+			osc[channel].setBeefUpFactor( (valuef*3.0f/100.0f) + 1.0f ); // set BEEFUP to this value
+		}
 	}
 }
 

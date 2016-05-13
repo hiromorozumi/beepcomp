@@ -1,0 +1,55 @@
+///////////////////////////////////////////////
+//
+//  Try playing some drums...
+//
+//  Drum channel begins with '@D'
+//
+
+////////////////////////////////////// global //
+
+@G
+
+TEMPO=120
+VD=10 // Drum ch volume
+
+//////////////////////////////// Drum Channel //
+
+@D
+
+  // Kick is 'K'
+
+K::K::K: K::K::K:
+
+  // Lower case is 'quiet'
+
+K::k::kk K::k::kk
+
+  // Now add snare - 'S'
+  // again, lower case is 'quiet'
+
+K::k::S~ K::k::S~
+K::k:sS~ K::kssSS
+
+  // Hihat is 'H'
+
+HHHHHHHH HHHHHHHH
+
+  // Make it funky with dynamics
+
+HhhHhhHh HhhHhhHh
+
+  // Tuplets are great to use
+  //   just enclose your hits with [ ]
+  // [4SSS] means
+  //   three snare hits in space of quarter note
+
+K:::[4KKK] K::k[4SSS]
+K:::[4HHH] K::k[4ssS]
+
+  // you can go nuts with tuplets :)
+
+K::[KK] [4sssSSS]
+:::: K [16KKKK] [8ssssSSSS]
+
+  // make sure you calculate
+  // to make your timing correct :)

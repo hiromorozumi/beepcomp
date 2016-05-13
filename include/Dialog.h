@@ -295,6 +295,7 @@ public:
 	Button driveButton[32];
 	Button desktopButton;
 	Button documentsButton;
+	Button goToCancelButton;
 	
 	struct Slider
 	{
@@ -359,7 +360,7 @@ public:
 	float driveButtonTop;
 	sf::Text drivesGroupLabel;
 	sf::Text foldersGroupLabel;
-	
+
 	Dialog();
 	~Dialog();
 

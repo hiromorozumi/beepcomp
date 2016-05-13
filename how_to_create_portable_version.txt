@@ -1,0 +1,31 @@
+How to create a portable version of BeepComp
+============================================
+
+1. Copy the GUI.cpp and Dialog.cpp to files with following names (overwrite):
+
+   GUI_portable.cpp
+   Dialog_portable.cpp
+
+2. In GUI_portable.cpp:
+
+   Search with word "PORTABLE" - find spots to adjust..
+   Where it says "DECOMMENT", take out the double forward slashes "//"
+   Where it says "COMMENT OUT", add double forward slashes "//" at the start of each line
+   (Around lines 83-85, 87, 299?)
+
+3. In Dialog_portable.cpp:
+
+   Search with word "PORTABLE" - find spots to adjust..
+   Where it says "DECOMMENT", take out the double forward slashes "//"
+   Where it says "COMMENT OUT", add double forward slashes "//" at the start of each line
+   (Around line 134?)
+
+4. Compile with:
+
+   Make -j 2 portable2
+
+5. Copy the produced file beepcomp_portable.exe into /portable/beepcomp_vX-X-X_portable directory (overwrite)
+
+6. Copy README.txt and READ.md with the updated version number to that beepcomp_vX-X-X_portable folder
+
+7. Zip up that beepcomp_vX-X-X_portable folder!

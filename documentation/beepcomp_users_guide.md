@@ -30,6 +30,7 @@
 	* [Fall Effect](#fall_effect)
 	* [Rise Effect](#rise_effect)
 	* [Waveform Selection](#waveform_selection)
+	* ["Beef-Up" Effect](#beef_up_effect)
 	* [Preset Selection](#preset_selection)
 	* [Volume Envelope Commands](#volume_envelope_commands)
 	* [LFO Commands](#lfo_commands)
@@ -46,6 +47,7 @@
 * [LFO Effect](#lfo_effect)
 * [Astro Effect](#astro_effect)
 * [Waveforms](#waveforms)
+* [Beef Up!](#beef_up)
 * [Tone Presets](#tone_presets)
 * [Bookmarking Your Start Position](#bookmarking_your_start_position)
 * [Auto Saving](#auto_saving)
@@ -81,6 +83,8 @@ Launch the MSI installer file, **beepcomp_vx-x-x.msi**, (x-x-x fills the version
 
 After installation, BeepComp will be on the list of installed programs. On Windows XP & 7, go to Start->All Programs->BeepComp. You can also click the shortcut that has been created on your Desktop.
 
+(Note: If you downloaded the portable version, the installation steps below are not required. To launch, open the folder you extracted from the downloaded .zip file and double-click on **beepcomp_portable.exe**.)
+
 #### Mac / Linux ####
 
 I'll be working on these versions soon :)
@@ -96,6 +100,8 @@ These files are located in:
 
 - **C:\Documents and Settings\\{USERNAME}\My Documents\BeepComp\userdata** on XP
 - **C:\Users\\{USERNAME}\\Documents\BeepComp\userdata** on Vista and later
+
+(Note: for the portable version, find the **userdata** folder inside the application top folder)
 
 <div id="basics" />
 ## Basics ##
@@ -180,6 +186,8 @@ Now let's save your work. Click the SAVE button (or F11), type in **hellobeep.tx
 * **C:\Documents and Settings\\{USERNAME}\My Documents\BeepComp\userdata** on XP
 * **C:\Users\\{USERNAME}\\Documents\BeepComp\userdata** on Vista and later
 
+(Note: for the portable version, find the **userdata** folder inside the application top folder)
+
 See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.
 
 By the way, you can use the ALT + O shortcut from the main editor to open up your **userdata** folder anytime.
@@ -191,7 +199,7 @@ A nice thing about working with text is that you can easily copy and paste betwe
 
 Try this - Start a new file (NEW button or F9), Go to [this page](http://codrspace.com/hiromorozumi/beepcomp-source-ys-1-field-music/), copy all the code inside the grey box, and press CTRL + V in BeepComp, and play.
 
-I hope you see how easy it is to share work with each other on the web :)
+I hope you see how easy it can be to share your work with others on the web :)
 
 Of course, going the other way is easy, too. You can easily copy your work from BeepComp by pressing CTRL + A (select all) then CTRL + C (copy), and paste what you just copied into your external applications like your Outlook to email your music to a friend, for instance.
 
@@ -253,14 +261,18 @@ Here is a tip if you want the exported data to be looped (so you can fade out af
 * **ESCAPE** ... Exits dialog
 * **HOME** ... Go back to the default starting folder
 * **END** ... Go back to previous folder
+* **CTRL + Z** ... Go back to previous folder
 * **F1** ... Toggle file types to display
+* **F2** ... Display keyboard shortcuts
 * **F12** ... Load/Save/Export (as indicated)
 * **UP/DOWN** ... Navigate through the list of files in the current directory
 * **RIGHT** ... Selects a file name, Go to child folder (when over <<<)
 * **LEFT** ... Go to parent folder (when over <<<)
 * **BACKSPACE** ... Backspacing in the file name input
+* **CTRL + G** ... Go to a particular drive or special folders (Desktop and Documents)
 * **ALT + O** ... Open the currently selected directory in Explorer
 * **ALT + D** ... Go to the 'Desktop'
+* **CTRL + R** ... Refresh the currently viewing directory
 
 <div id="global_section_in_detail" />
 ## Global Section in Detail ##
@@ -287,6 +299,7 @@ Here is an example of using the global section to set up the volume, tempo and l
     MASTERVOLUME=50 // not too loud
     TEMPO=80 // kind of slow
     LOOP=OFF
+    DELAYTIME=750 // adjust delay timing
 
     @1
     GFEDC // this won't be looped
@@ -444,6 +457,12 @@ Placing an asterisk `*` is before a note causes that note to scoop up to its pit
 You can choose a waveform other than the default square wave for each channel by declaring `WAVEFORM=n`.
 See [Waveforms](#waveforms).
 
+<div id="beef_up_effect" />
+###"Beef-Up" Effect###
+
+Each channel comes with a mild overdrive effect you can use to give it a boost by declaring `BEEFUP=n`.
+See [Beef Up!](#beef_up)
+
 <div id="preset_selection" />
 ###Preset Selection###
 
@@ -542,7 +561,7 @@ You can set the delay parameters in your source. Your commands will go in the Gl
     @1
     CDEFG
 
-This gives you a pretty prominent delay effect with a short timing. Play around with `DELAYTIME=` (in milliseconds) and `DELAYLEVEL=` (scale of 100). You can turn off delay for the whole track by saying `DELAY=OFF`.
+This gives you a pretty prominent delay effect with a short timing. Play around with `DELAYTIME=` (in milliseconds) and `DELAYLEVEL=` (scale of 100). You can turn off delay for the whole track by saying `DELAY=OFF`. Please note that you cannot change the settings for the delay effect not separately on each channel.
 
 <div id="volume_envelope" />
 ## Volume Envelope ##
@@ -622,14 +641,40 @@ The number you specify after `ASTRO=` is the number of times that the wobble hap
 <div id="waveforms" />
 ## Waveforms ##
 
-Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring `WAVEFORM=` in each channel. The currently available waveforms and their assigned number are: sine(0), square(1, default), sawtooth(3), hybrid sine A(4), hybrid sine B(5). The hybrid sine waves combine a basic sign wave with a few added upper harmonics.
+Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring `WAVEFORM=n` in each channel. The currently available waveforms and their assigned numbers (n) are:
 
-Here is an example where a different waveform is selected:
+- sine (n=0)
+- square (n=1, default)
+- sawtooth (n=2)
+- triangle (n=3)
+- hybrid sine A(n=4)
+- hybrid sine B(n=5)
+- pulse with 12.5% cycle (n=6)
+- pulse with 25% cycle (n=7)
+- pulse with 33% cycle (n=8)
+
+The most frequent waveform used in old PCs and game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.
+
+Here is an example where a different waveform than the default form is selected:
 
     @1
-    DEFAULTTONE // resets the volume envelope settings to plain beep
+    DEFAULTTONE // resets the tone to plain beep with no envelope
     WAVEFORM=2  // sets up a saw tooth wave
 	F~:G~:Ab~:>C~:<Ab:G:F~:Eb~:F~~~~~::::
+
+<div id="beef_up" />
+## Beef Up! ##
+
+For each channel, you can use a mild overdrive effect if you want to boost up a soft waveform. The overdrive is turned off by default. To use it, simply declare `BEEFUP=n` where `n` is a number from 0 to 100 that specifies the strength. Setting to zero turns off the effect. Try the following example to see what `BEEFUP` does:
+
+    @1
+    PRESET=POPPY // attacky shape
+    WAVEFORM=3 // triangle wave (soft)
+    L8 
+    BEEFUP=0 CDEFG~ // BEEFUP is off
+    BEEFUP=10 CDEFG~
+    BEEFUP=50 CDEFG~
+    BEEFUP=100 CDEFG~
 
 <div id="tone_presets" />
 ## Tone Presets ##
@@ -702,13 +747,14 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 * `LFOWAIT=n` ... Sets the time in milliseconds before the LFO effect starts (n=0 to 9999)
 * `ASTRO=n` ... Turns on the Astro effect and sets the number of wobbles per second (n=0 to 100, 0 for OFF)
 * `ASTRO=OFF` ... Turns off the Astro effect
-* `PRESET=?` ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)
+* `PRESET=?` ... Sets up at once for a predetermined set of tone parameters
 * `DEFAULTTONE` ... Sets up a straight square wave tone
 * `WAVEFORM=n` ... Chooses the waveform that the channel uses (n=0 to 5)
 * `FALLSPEED=n` ... Speed of the Fall effect in 100ths of a semitone per second (n=0 to 9600)
 * `FALLWAIT=n` ... Wait time in milliseconds before the Fall effect starts (n=0 to 9999)
 * `RISESPEED=n` ... Speed of the Rise effect in 100ths of a semitone per second (n=0 to 9600)
-* `RISERANGE=n` ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)  
+* `RISERANGE=n` ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)
+* `BEEFUP=n` .... Add a mild overdrive effect to the channel (n=0 to 100, 0=off)
 * `Vn` ... Sets channel volume (n=0,1,2...10)
 * `Ln` ... Sets the current note length (n=1 to 64)
 * `C` ... Musical note
@@ -754,9 +800,9 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 <div id="uninstalling_beepcomp" />
 ## Uninstalling BeepComp ##
 
-You can uninstall the application by using the "Programs and Features" under the Control Panel / Programs menu to uninstall BeepComp. Typing in "appwiz.cpl" in the command prompt or in the search box will direct you to this dialog, also.
+You can uninstall the application by using the "Programs and Features" under the Control Panel / Programs menu to uninstall BeepComp. Typing in "appwiz.cpl" in the command prompt or in the search box will direct you to this dialog, also. You can also find a shortcut to uninstall in the Start menu.
 
-Please note that your "userdata" folder inside your "Documents" (or "My Documents" on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your "userdata" folder, please delete it along with its parent folder named BeepComp.
+Please note that your "userdata" folder inside your "Documents" (or "My Documents" on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your "userdata" folder, please manually delete it along with its parent folder named BeepComp.
 
 <div id="staying_updated" />
 ## Staying Updated ##

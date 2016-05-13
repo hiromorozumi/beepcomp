@@ -80,11 +80,11 @@ void GUI::initialize()
 	// call Config class's setup - if config file's not found in current directory (fresh after installation)
 	// it will copy the entire 'userdata' folder and its contents
 	
-	string configSetupResult = config.setup();  			// COMMENT OUT THIS LINE FOR *** PORTABLE ***
-	cout << "From GUI.cpp: " << configSetupResult << endl; 	// COMMENT OUT THIS LINE FOR *** PORTABLE ***
-	defaultPath = config.getUserdataPath(); 				// COMMENT OUT THIS LINE FOR *** PORTABLE ***
+	// string configSetupResult = config.setup();  			// COMMENT OUT THIS LINE FOR *** PORTABLE ***
+	// cout << "From GUI.cpp: " << configSetupResult << endl; 	// COMMENT OUT THIS LINE FOR *** PORTABLE ***
+	// defaultPath = config.getUserdataPath(); 				// COMMENT OUT THIS LINE FOR *** PORTABLE ***
 	
-	// defaultPath = installDir + "\\userdata";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
+	defaultPath = installDir + "\\userdata";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
 	
 	if(defaultPath.empty()||defaultPath=="#") // safeguarding...
 		defaultPath = installDir + "\\userdata";
@@ -296,7 +296,7 @@ void GUI::initialize()
 	// dialog - bind window in this class
 	dialog.bindWindow(&window);
 	string startFolder = defaultPath;
-	// startFolder = dialog.getCurrentDir() + "\\userdata"; // DECOMMENT THIS LINE FOR *** PORTABLE ***
+	startFolder = dialog.getCurrentDir() + "\\userdata"; // DECOMMENT THIS LINE FOR *** PORTABLE ***
 	dialog.setStartFolder(startFolder);	
 
 	// clock to track blinking

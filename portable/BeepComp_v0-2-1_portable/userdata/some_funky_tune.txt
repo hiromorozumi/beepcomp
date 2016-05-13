@@ -1,0 +1,119 @@
+//////////////////////////////////////////////
+// Some Funky Tune
+//////////////////////////////////////////////
+
+@G
+
+MASTERVOLUME=96
+TEMPO=118
+DELAYTIME=508
+DELAYLEVEL=20
+V1=9 V2=4 V3=4 V4=4 V5=4 VD=10
+
+// channel 1 - bass //////////////////////////
+
+@1
+
+ATTACKTIME=0
+PEAKLEVEL=95
+PEAKTIME=70
+DECAYTIME=40
+SUSTAINLEVEL=40
+RELEASETIME=80
+
+L16O2
+E~~E :::: :::: :EB>C# D::D ::C#C# :::: :C#<BG#  
+E~~E :::: :::: ::::   D::A ::C#C# :::: ::::
+E~~E :::: :::: :EB>C# D::D ::C#C# :::: :C#<BG#  
+E~~E :::: :::: ::::   :DDA ::C#C# :::: ::::
+
+E~~E :::: :::: :EB>C# D::D  ::C#C# :::: :C#<BG#  
+E~~E :::: :::: ::::   D::A  ::C#C# :::: ::::
+E~~E :::: :::: :EB>C# D::D  ::C#C# :::: :C#<BG#  
+E~~E :::: :::: ::::   DC#DA ::C#C# :::: ::::
+
+// channel 2 - chordal 1 //////////////////////
+
+@2
+
+LFO=ON
+LFORANGE=40
+LFOSPEED=6
+LFOWAIT=300
+
+L4 O4
+{{ :::: :::: }}
+
+L16
+{
+:::: :F#:G# ~~~~ ~~~~ A~~~  ~~~~       A~~~ ~~~~
+:::: :F#:G# ~~~~ ~~~~ F#~~~ ~~~[16GF#] E~~~ ~~~~
+}
+
+// channel 3 - chordal 2 //////////////////////
+
+@3
+
+LFO=ON
+LFORANGE=40
+LFOSPEED=6
+LFOWAIT=300
+
+L4 O4
+{{ :::: :::: }}
+
+L16
+{
+:::: :D:E ~~~~ ~~~~ E~~~ ~~~~      E~~~ ~~~~
+:::: :D:E ~~~~ ~~~~ D~~~ ~~~[16ED] C#~~~ ~~~~
+}
+
+// channel 4 - chordal 3 //////////////////////
+
+@4
+
+LFO=ON
+LFORANGE=40
+LFOSPEED=6
+LFOWAIT=300
+
+L4 O3
+{{ :::: :::: }}
+
+L16
+{
+:::: :A:B ~~~~ ~~~~ >D~~~ ~~~~  C#~~~ ~~~~<
+:::: :A:B ~~~~ ~~~~  A~~~ ~~~~  A ~~~ ~~~~
+}
+
+// channel 5 - sparkle ////////////////////////
+
+@5
+
+L4 O6
+
+:::: ::::
+
+{
+:::: :: L16 O6 V5 :BG#A_ F#G#EF#_
+DEC#D_ <B>C#<AB_ G#AF#G# EF#DE L4 ::::
+}
+
+:::: ::  L16 O6 V5 :BG#A_ F#G#EF#_
+DEC#D_ <B>C#<AB_ G#AF#G# EF#DE L4 ::::
+
+// drums //////////////////////////////////////
+
+@D
+
+L16
+
+K::k ::HH S~~~ hssh K::K ::KK S~~s hkKs
+K::k ::HH S~~~ [KK]SKS K::K ::KK sShh Skks
+K::k ::HH S~~~ hssh K::K ::KK S~~s hkKs
+K::k ::HH S~~~ hssh :skk sk~s ks~~ [4SSS]
+
+K::k ::HH S~~~ hssh K::K ::KK S~~s hkKs
+K::k ::HH S~~~ [KK]SKS K::K ::KK sShh Skk[ss]
+K::k ::HH S~~~ hssh K::K ::KK S~~s hkKs
+K::k ::HH S~~~ hssh :skk sk~s ks~[sss] [4SSS]

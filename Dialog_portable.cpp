@@ -131,7 +131,7 @@ Dialog::Dialog()
 	// set default current directory
 	installDir = getCurrentDir();
 	defaultDir = "C:\\";
-	// defaultDir = installDir + "\\userdata"; // DECOMMENT THIS LINE FOR *** PORTABLE ***
+	defaultDir = installDir + "\\userdata"; // DECOMMENT THIS LINE FOR *** PORTABLE ***
 	currentDir = defaultDir;
 	cwd.setString(trimLeft(currentDir, CWD_WIDTH));
 	pathNameRect = cwd.getGlobalBounds();

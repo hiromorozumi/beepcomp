@@ -16,7 +16,7 @@ release:
 	g++ -o beepcomp Config.cpp MData.cpp DData.cpp Astro.cpp LFO.cpp Fall.cpp OSC.cpp NOSC.cpp DelayLine.cpp MML.cpp MPlayer.cpp Dialog.cpp Button.cpp Knob.cpp GUI.cpp main.cpp beepcomp.res -I./include -L./lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -lmp3lame lib/libsndfile-1.lib lib/portaudio_x86.lib -mwindows
 
 portable2:
-	g++ -o beepcomp_portable Config.cpp MData.cpp DData.cpp Astro.cpp LFO.cpp Fall.cpp OSC.cpp NOSC.cpp DelayLine.cpp MML.cpp MPlayer.cpp Dialog.cpp Button.cpp Knob.cpp GUI.cpp main.cpp beepcomp.res -I./include -L./lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -lmp3lame lib/libsndfile-1.lib lib/portaudio_x86.lib -mwindows
+	g++ -o beepcomp_portable Config.cpp MData.cpp DData.cpp Astro.cpp LFO.cpp Fall.cpp OSC.cpp NOSC.cpp DelayLine.cpp MML.cpp MPlayer.cpp Dialog_portable.cpp Button.cpp Knob.cpp GUI_portable.cpp main.cpp beepcomp.res -I./include -L./lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -lmp3lame lib/libsndfile-1.lib lib/portaudio_x86.lib -mwindows
 	
 debug:
 	g++ -o beepcompd -g Config.cpp MData.cpp DData.cpp Astro.cpp LFO.cpp Fall.cpp OSC.cpp NOSC.cpp DelayLine.cpp MML.cpp MPlayer.cpp Dialog.cpp Button.cpp Knob.cpp GUI.cpp main.cpp beepcomp.res -I./include -L./lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -lmp3lame lib/libsndfile-1.lib lib/portaudio_x86.lib

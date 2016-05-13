@@ -328,7 +328,6 @@ img {
 <li><a href="#fall_effect">Fall Effect</a></li>
 <li><a href="#rise_effect">Rise Effect</a></li>
 <li><a href="#waveform_selection">Waveform Selection</a></li>
-<li><a href="#beef_up_effect">&quot;Beef-Up&quot; Effect</a></li>
 <li><a href="#preset_selection">Preset Selection</a></li>
 <li><a href="#volume_envelope_commands">Volume Envelope Commands</a></li>
 <li><a href="#lfo_commands">LFO Commands</a></li>
@@ -351,7 +350,6 @@ img {
 <li><a href="#lfo_effect">LFO Effect</a></li>
 <li><a href="#astro_effect">Astro Effect</a></li>
 <li><a href="#waveforms">Waveforms</a></li>
-<li><a href="#beef_up">Beef Up!</a></li>
 <li><a href="#tone_presets">Tone Presets</a></li>
 <li><a href="#bookmarking_your_start_position">Bookmarking Your Start Position</a></li>
 <li><a href="#auto_saving">Auto Saving</a></li>
@@ -384,7 +382,6 @@ img {
 <li><strong>C:\Program Files (x86)\BeepComp\</strong> on 64-bit Windows</li>
 </ul>
 <p>After installation, BeepComp will be on the list of installed programs. On Windows XP &amp; 7, go to Start-&gt;All Programs-&gt;BeepComp. You can also click the shortcut that has been created on your Desktop.</p>
-<p>(Note: If you downloaded the portable version, the installation steps below are not required. To launch, open the folder you extracted from the downloaded .zip file and double-click on <strong>beepcomp_portable.exe</strong>.)</p>
 <h4>Mac / Linux</h4>
 <p>I'll be working on these versions soon :)</p>
 <div id="tutorials" />
@@ -396,7 +393,6 @@ img {
 <li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
 <li><strong>C:\Users\{USERNAME}\Documents\BeepComp\userdata</strong> on Vista and later</li>
 </ul>
-<p>(Note: for the portable version, find the <strong>userdata</strong> folder inside the application top folder)</p>
 <div id="basics" />
 <h2>Basics</h2>
 <div id="basics_main_editor" />
@@ -462,14 +458,13 @@ L4 KKKSSS
 <li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
 <li><strong>C:\Users\{USERNAME}\Documents\BeepComp\userdata</strong> on Vista and later</li>
 </ul>
-<p>(Note: for the portable version, find the <strong>userdata</strong> folder inside the application top folder)</p>
 <p>See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.</p>
 <p>By the way, you can use the ALT + O shortcut from the main editor to open up your <strong>userdata</strong> folder anytime.</p>
 <div id="basics_copying_and_pasting_source" />
 <h3>Copying and Pasting Source</h3>
 <p>A nice thing about working with text is that you can easily copy and paste between BeepComp and other sources!</p>
 <p>Try this - Start a new file (NEW button or F9), Go to <a href="http://codrspace.com/hiromorozumi/beepcomp-source-ys-1-field-music/">this page</a>, copy all the code inside the grey box, and press CTRL + V in BeepComp, and play.</p>
-<p>I hope you see how easy it can be to share your work with others on the web :)</p>
+<p>I hope you see how easy it is to share work with each other on the web :)</p>
 <p>Of course, going the other way is easy, too. You can easily copy your work from BeepComp by pressing CTRL + A (select all) then CTRL + C (copy), and paste what you just copied into your external applications like your Outlook to email your music to a friend, for instance.</p>
 <div id="basics_exporting_your_work" />
 <h3>Exporting Your Work</h3>
@@ -524,18 +519,14 @@ L4 KKKSSS
 <li><strong>ESCAPE</strong> ... Exits dialog</li>
 <li><strong>HOME</strong> ... Go back to the default starting folder</li>
 <li><strong>END</strong> ... Go back to previous folder</li>
-<li><strong>CTRL + Z</strong> ... Go back to previous folder</li>
 <li><strong>F1</strong> ... Toggle file types to display</li>
-<li><strong>F2</strong> ... Display keyboard shortcuts</li>
 <li><strong>F12</strong> ... Load/Save/Export (as indicated)</li>
 <li><strong>UP/DOWN</strong> ... Navigate through the list of files in the current directory</li>
 <li><strong>RIGHT</strong> ... Selects a file name, Go to child folder (when over &lt;&lt;&lt;)</li>
 <li><strong>LEFT</strong> ... Go to parent folder (when over &lt;&lt;&lt;)</li>
 <li><strong>BACKSPACE</strong> ... Backspacing in the file name input</li>
-<li><strong>CTRL + G</strong> ... Go to a particular drive or special folders (Desktop and Documents)</li>
 <li><strong>ALT + O</strong> ... Open the currently selected directory in Explorer</li>
 <li><strong>ALT + D</strong> ... Go to the 'Desktop'</li>
-<li><strong>CTRL + R</strong> ... Refresh the currently viewing directory</li>
 </ul>
 <div id="global_section_in_detail" />
 <h2>Global Section in Detail</h2>
@@ -556,7 +547,6 @@ L4 KKKSSS
 MASTERVOLUME=50 // not too loud
 TEMPO=80 // kind of slow
 LOOP=OFF
-DELAYTIME=750 // adjust delay timing
 
 @1
 GFEDC // this won't be looped
@@ -694,10 +684,6 @@ L8 O4 *EGA&gt; *CCC *CCC *CC *C &lt;AGD#EC&lt;AG&gt;
 <h3>Waveform Selection</h3>
 <p>You can choose a waveform other than the default square wave for each channel by declaring <code>WAVEFORM=n</code>.
 See <a href="#waveforms">Waveforms</a>.</p>
-<div id="beef_up_effect" />
-<h3>&quot;Beef-Up&quot; Effect</h3>
-<p>Each channel comes with a mild overdrive effect you can use to give it a boost by declaring <code>BEEFUP=n</code>.
-See <a href="#beef_up">Beef Up!</a></p>
 <div id="preset_selection" />
 <h3>Preset Selection</h3>
 <p>You may choose a preset to for a quick tone shaping by declaring <code>PRESET=(presetname)</code>. See <a href="#tone_presets">Tone Presets</a>.</p>
@@ -775,7 +761,7 @@ DELAYLEVEL=50
 CDEFG
 </code></pre>
 
-<p>This gives you a pretty prominent delay effect with a short timing. Play around with <code>DELAYTIME=</code> (in milliseconds) and <code>DELAYLEVEL=</code> (scale of 100). You can turn off delay for the whole track by saying <code>DELAY=OFF</code>. Please note that you cannot change the settings for the delay effect not separately on each channel.</p>
+<p>This gives you a pretty prominent delay effect with a short timing. Play around with <code>DELAYTIME=</code> (in milliseconds) and <code>DELAYLEVEL=</code> (scale of 100). You can turn off delay for the whole track by saying <code>DELAY=OFF</code>.</p>
 <div id="volume_envelope" />
 <h2>Volume Envelope</h2>
 <p>For each channel, you can shape your sound using the volume envelope. The chart below shows the parameters you can set and how they will shape the volume changes in time.</p>
@@ -845,37 +831,12 @@ L4 CDEFG
 <p>The number you specify after <code>ASTRO=</code> is the number of times that the wobble happens. Between 10 and 20 is good to start with, but try different values to see which value works for you.</p>
 <div id="waveforms" />
 <h2>Waveforms</h2>
-<p>Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring <code>WAVEFORM=n</code> in each channel. The currently available waveforms and their assigned numbers (n) are:</p>
-<ul>
-<li>sine (n=0)</li>
-<li>square (n=1, default)</li>
-<li>sawtooth (n=2)</li>
-<li>triangle (n=3)</li>
-<li>hybrid sine A(n=4)</li>
-<li>hybrid sine B(n=5)</li>
-<li>pulse with 12.5% cycle (n=6)</li>
-<li>pulse with 25% cycle (n=7)</li>
-<li>pulse with 33% cycle (n=8)</li>
-</ul>
-<p>The most frequent waveform used in old PCs and game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.</p>
-<p>Here is an example where a different waveform than the default form is selected:</p>
+<p>Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring <code>WAVEFORM=</code> in each channel. The currently available waveforms and their assigned number are: sine(0), square(1, default), sawtooth(3), hybrid sine A(4), hybrid sine B(5). The hybrid sine waves combine a basic sign wave with a few added upper harmonics.</p>
+<p>Here is an example where a different waveform is selected:</p>
 <pre><code>@1
-DEFAULTTONE // resets the tone to plain beep with no envelope
+DEFAULTTONE // resets the volume envelope settings to plain beep
 WAVEFORM=2  // sets up a saw tooth wave
 F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
-</code></pre>
-
-<div id="beef_up" />
-<h2>Beef Up!</h2>
-<p>For each channel, you can use a mild overdrive effect if you want to boost up a soft waveform. The overdrive is turned off by default. To use it, simply declare <code>BEEFUP=n</code> where <code>n</code> is a number from 0 to 100 that specifies the strength. Setting to zero turns off the effect. Try the following example to see what <code>BEEFUP</code> does:</p>
-<pre><code>@1
-PRESET=POPPY // attacky shape
-WAVEFORM=3 // triangle wave (soft)
-L8 
-BEEFUP=0 CDEFG~ // BEEFUP is off
-BEEFUP=10 CDEFG~
-BEEFUP=50 CDEFG~
-BEEFUP=100 CDEFG~
 </code></pre>
 
 <div id="tone_presets" />
@@ -941,14 +902,13 @@ BEEFUP=100 CDEFG~
 <li><code>LFOWAIT=n</code> ... Sets the time in milliseconds before the LFO effect starts (n=0 to 9999)</li>
 <li><code>ASTRO=n</code> ... Turns on the Astro effect and sets the number of wobbles per second (n=0 to 100, 0 for OFF)</li>
 <li><code>ASTRO=OFF</code> ... Turns off the Astro effect</li>
-<li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters</li>
+<li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)</li>
 <li><code>DEFAULTTONE</code> ... Sets up a straight square wave tone</li>
 <li><code>WAVEFORM=n</code> ... Chooses the waveform that the channel uses (n=0 to 5)</li>
 <li><code>FALLSPEED=n</code> ... Speed of the Fall effect in 100ths of a semitone per second (n=0 to 9600)</li>
 <li><code>FALLWAIT=n</code> ... Wait time in milliseconds before the Fall effect starts (n=0 to 9999)</li>
 <li><code>RISESPEED=n</code> ... Speed of the Rise effect in 100ths of a semitone per second (n=0 to 9600)</li>
-<li><code>RISERANGE=n</code> ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)</li>
-<li><code>BEEFUP=n</code> .... Add a mild overdrive effect to the channel (n=0 to 100, 0=off)</li>
+<li><code>RISERANGE=n</code> ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)  </li>
 <li><code>Vn</code> ... Sets channel volume (n=0,1,2...10)</li>
 <li><code>Ln</code> ... Sets the current note length (n=1 to 64)</li>
 <li><code>C</code> ... Musical note</li>
@@ -993,8 +953,8 @@ BEEFUP=100 CDEFG~
 </ul>
 <div id="uninstalling_beepcomp" />
 <h2>Uninstalling BeepComp</h2>
-<p>You can uninstall the application by using the &quot;Programs and Features&quot; under the Control Panel / Programs menu to uninstall BeepComp. Typing in &quot;appwiz.cpl&quot; in the command prompt or in the search box will direct you to this dialog, also. You can also find a shortcut to uninstall in the Start menu.</p>
-<p>Please note that your &quot;userdata&quot; folder inside your &quot;Documents&quot; (or &quot;My Documents&quot; on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your &quot;userdata&quot; folder, please manually delete it along with its parent folder named BeepComp.</p>
+<p>You can uninstall the application by using the &quot;Programs and Features&quot; under the Control Panel / Programs menu to uninstall BeepComp. Typing in &quot;appwiz.cpl&quot; in the command prompt or in the search box will direct you to this dialog, also.</p>
+<p>Please note that your &quot;userdata&quot; folder inside your &quot;Documents&quot; (or &quot;My Documents&quot; on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your &quot;userdata&quot; folder, please delete it along with its parent folder named BeepComp.</p>
 <div id="staying_updated" />
 <h2>Staying Updated</h2>
 <p>New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix and improve the bugs or issues found on the previous versions. I announce new versions through <a href="https://sourceforge.net/p/beepcomp/blog/">the SourceForge Blog page</a>. I also upload <a href="https://sourceforge.net/projects/beepcomp/files/patches/">patches</a> whenever there is a critical issue.</p>

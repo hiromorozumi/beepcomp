@@ -1,0 +1,216 @@
+/////////////////////////////////////////////////
+//
+// demo song to test out different waveforms :)
+//
+//                   version 0.1.7 and later
+//                   is required for this song :)
+//
+/////////////////////////////////////////////////
+
+@G
+
+MASTERVOLUME=80
+DELAYTIME=428
+DELAYLEVEL=28
+TEMPO=140
+V1=5 V2=5 V3=5 V4=8 V5=8 V6=5
+V7=7 V8=7 V9=7 VD=10
+
+/////////////////////////////////////////////////
+
+@1
+
+WAVEFORM=2 // sawtooth wave...
+ATTACKTIME=5
+DECAYTIME=80
+SUSTAINLEVEL=50
+RELEASETIME=30
+
+LFO=ON
+LFOSPEED=6
+LFOWAIT=180
+LFORANGE=40
+
+L8
+
+{3
+ {4:[G:]Ab~[G:]Ab~[G:]Ab~[G:]Ab~~~:}
+}
+
+/////////////////////////////////////////////////
+
+@2
+
+WAVEFORM=2
+ATTACKTIME=5
+DECAYTIME=80
+SUSTAINLEVEL=50
+RELEASETIME=30
+
+LFO=ON
+LFOSPEED=6
+LFOWAIT=180
+LFORANGE=40
+
+L8
+
+{3
+ {4:[Eb:]F~[Eb:]F~[Eb:]F~[Eb:]F~~~:}
+}
+
+/////////////////////////////////////////////////
+
+@3
+
+WAVEFORM=2
+ATTACKTIME=5
+DECAYTIME=80
+SUSTAINLEVEL=50
+RELEASETIME=30
+
+LFO=ON
+LFOSPEED=6
+LFOWAIT=180
+LFORANGE=40
+
+L8 O3
+
+{3
+ {4:[Bb:]>C~<[Bb:]>C~<[Bb:]>C~<[Bb:]>C~~~:<}
+}
+
+/////////////////////////////////////////////////
+
+@4
+
+ATTACKTIME=0
+PEAKLEVEL=100
+PEAKTIME=50
+DECAYTIME=50
+SUSTAINLEVEL=40
+RELEASETIME=0
+
+L8 O2
+
+{3
+ {8F[F:]}
+ {8Db[Db:]}<
+ {8Bb[Bb:]}>
+ {8Eb[Eb:]}
+}
+
+/////////////////////////////////////////////////
+
+@5
+
+DEFAULTTONE // this clears the envelope settings
+WAVEFORM=3 // triangle wave...
+RELEASETIME=80
+LFO=ON
+
+O6
+L1 :: :: :: ::
+
+{
+L8:::::::[Ab:] L16G~~<Bb ~~Ab~
+~~>F~ ~~~~
+L8:::::::[F:] L16Eb~~<G ~~F~
+~~>Eb~ ~~~~
+L8:::::::[Eb:] L16Db~~<F ~~Eb~
+~~>C~ ~~~[DbC]<
+Bb~~~ ~~~~ ~~~~ ~~~~ 
+~~~[BbAb] GAbBb>C DbEbFG AbG AbBb
+}
+
+/////////////////////////////////////////////////
+
+@6
+
+DEFAULTTONE
+WAVEFORM=3
+RELEASETIME=80
+LFO=ON
+
+O6
+
+L1 {:: :: :: ::}
+
+L8:::::::>[C:] L16<Bb~~Db ~~C~
+~~Ab~ ~~~~
+L8:::::::[Ab:] L16G~~<Bb ~~Ab~
+~~>G~ ~~~~
+L8:::::::[G:] L16F~~<Ab ~~G~
+~~>Eb~ ~~~[FEb]
+Db~~~ ~~~~ ~~~~ ~~~~ 
+~~~[DbC] <Bb>CDbEb FGAbBb >C<Bb>CDb
+
+/////////////////////////////////////////////////
+
+@7
+
+DEFAULTTONE
+WAVEFORM=1 // square wave
+           // - you can do a lot with this 
+ATTACKTIME=0
+PEAKLEVEL=100 // attacky
+DECAYTIME=50 // decays very fast
+SUSTAINLEVEL=0 // because the sustain is off :)
+
+O4
+{2
+ { V10 L4 :::: :: L16F::_F::_F:
+   :_F:: _F::_F ::_F: :F::_ F::_F L4::: }
+}
+O5
+ { V10 L4 :::: :: L16F::_F::_F:
+   :_F:: _F::_F ::_F: :F::_ F::_F L4::: }
+
+/////////////////////////////////////////////////
+
+@8
+
+DEFAULTTONE
+WAVEFORM=1
+ATTACKTIME=0
+PEAKLEVEL=100
+DECAYTIME=50
+SUSTAINLEVEL=0
+
+O4
+{2
+ { V10 L4 :::: :: L16Ab::_Ab::_Ab:
+   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::_Ab L4::: }
+}
+O5
+ { V10 L4 :::: :: L16Ab::_Ab::_Ab:
+   :_Ab:: _Ab::_Ab ::_Ab: :Ab::_ Ab::_Ab L4::: }
+
+/////////////////////////////////////////////////
+
+@9
+
+DEFAULTTONE
+WAVEFORM=1
+ATTACKTIME=0
+PEAKLEVEL=100
+DECAYTIME=50
+SUSTAINLEVEL=0
+
+L1 {:: :: :: ::}
+
+O6
+{ V10 L4 :::: :: L16C::_C::_C:
+  :_C:: _C::_C ::_C: :C::_ C::_C L4::: }
+}
+
+/////////////////////////////////////////////////
+
+@D
+
+L16
+{2
+ {3 K:hhS~hh K:hhS~hk K:hhS~hh K:hhS~hh }
+    K:hhS~hh K:hhS~hk K:hhS~hh K:hs[sss]SSS
+}
+ {3 K:hhS~hh K:hhS~hk K:hhS~hh K:hhS~hh }
+    K:hhS~hh K:hhS~KK KsS~sSK[ss] [ss]SSS[ss]SSS

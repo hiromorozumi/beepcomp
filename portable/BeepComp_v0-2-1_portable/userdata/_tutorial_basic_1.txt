@@ -1,0 +1,80 @@
+/////////////////////////////////////////////////
+//
+//  tutorial ... getting started part 1
+//
+
+  // double slashes starts a comment line
+  // (comments will not be processed)
+
+  // @G starts the 'global' section
+  // here you can set tempo and master volume
+
+@G
+
+TEMPO=100         // takes range 40~300
+MASTERVOLUME=80   // scale to 100
+
+  // @1, @2, @3... starts each music channel
+
+@1
+
+  // now we're in music channel 1
+  // type notes to play in UPPERCASE
+
+CDEFG
+
+  // white space gets ignored
+  // so below line is the same as above
+
+ C D    E F        G  
+
+  // you can put a rest with ':'
+  // ':::::' -> rest for space of five notes
+
+:::::
+
+  // by default, each note length is a 16th
+  // but you can reset it with 'L'
+  // for example, L8 makes your notes 8th notes
+
+L8
+CDEFG
+
+  // this note length is good for rests, too
+
+:::::
+
+  // you can use sharp '#' and flat 'b'
+
+C:C#:D:Eb:E:F:Gb
+
+::::::
+
+  // use '~' for a tie
+  // this is useful to elongate a note
+
+A~~GF#~E~ D~E~F#~D~
+
+::::::
+
+  // 'O' sets up the octave
+  // default octave is O4 - where middle c is
+  // O6 is 2 octave above middle octave range
+
+O6
+DDDC# DDDC# D~~~
+
+::::::
+
+  // you can navigate to different octaves easily
+  //    ...  '<' - octave down
+  //    ...  '>' - octave up
+
+O6
+DDDC# < DDDC# < D~~~ < D~~A > D~~~
+
+::::::
+
+  // loop is set to on by default
+  // so from here
+  // player goes back to beginning :)
