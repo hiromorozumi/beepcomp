@@ -418,6 +418,7 @@ void MPlayer::resetForNewSong()
 	{
 		// back to default envelope setting
 		osc[i].setTable(1); // back to square wave
+		osc[i].refreshForSongBeginning();
 		osc[i].setEnvelope(22, 18, 250, 40, 0.9f, 0.5f);
 		enableChannel(i);
 		disableAstro(i);
@@ -426,6 +427,8 @@ void MPlayer::resetForNewSong()
 		osc[i].detune = 0;
 		osc[i].setRiseToDefault();
 		osc[i].setFallToDefault();
+		osc[i].disableBeefUp();
+		osc[i].setBeefUpFactor(1.0f);
 	}
 	enableDrumChannel();
 
@@ -501,7 +504,7 @@ void MPlayer::goToBeginning()
 	currentDrumNote = 0;
 	dNoteIndex = 0;
 	dEventIndex = 0;
-
+	
 	// set the starting note for each music channel (ch 1 to 9)
 	for(int i=0; i<9; i++)
 	{
@@ -1030,6 +1033,14 @@ void MPlayer::processEvent(int channel, int eType, int eParam)
 		double valued = static_cast<double>(eParam);
 		osc[channel].setRiseRange(valued); // set LFO speed to this value
 		// cout << "RISERANGE=" << eParam << endl;
+	}
+	// type 70 - "BEEFUP="
+	else if(eType==70)
+	{
+		double valuef = static_cast<float>(eParam);
+		osc[channel].enableBeefUp();
+		osc[channel].setBeefUpFactor( (valuef*3.0f/100.0f) + 1.0f ); // set LFO speed to this value
+		cout << "BEEFUP=" << eParam << endl;
 	}
 }
 

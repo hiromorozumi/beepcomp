@@ -21,7 +21,7 @@ const int FRAMES_PER_BUFFER = 256;
 int main()
 {
 	// initialize GUI
-	// the GUI class is the main controller of this append
+	// the GUI class is the main controller of this app
 	GUI gui;
 	gui.initialize();
 	gui.run();

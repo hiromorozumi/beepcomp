@@ -1,15 +1,19 @@
-/////////////////////////////////////////////
-//                                         //
-//   romancia - kingdom background music   //
-//                                         //
-/////////////////////////////////////////////
-
+/////////////////////////////////////////////////
+//                                             //
+//   "Song of Romancia" - from RPG "Romancia"  //
+//                                     (1986)  //
+//                                             //
+//                      Music by Takahito Abe  //
+//        From Album "Sound Fantasy Romancia"  //
+//               (c) Nihon Falcom Corporation  //
+//                                             //
+/////////////////////////////////////////////////
 
 // Global ///////////////////////////////////////
 
 @G
 
-MASTERVOLUME=80
+MASTERVOLUME=70
 TEMPO=104
 DELAYTIME=577
 V1=9 V2=9 V3=5 VD=0
@@ -87,13 +91,3 @@ AbEb<Ab>C~<Ab>CDEb~~~~BbGEb
 Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb
 
 Eb~~~~~~~::::
-
-
-// Channel 3 ////////////////////////////////////
-
-@3
-
-
-// Drum Channel  ////////////////////////////////
-
-@D

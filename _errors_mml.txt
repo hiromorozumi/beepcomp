@@ -1,4 +1,1 @@
-Error loading file: 
-Error loading file: 
-Error loading file: 
-Error loading file: 
+Error loading file: C:\Users\Hiro.Hiro-Laptop\Documents\Blog Posts\PortAudio Setup with MinGW\PortAudio??.txt (2016-5-8-20:21)

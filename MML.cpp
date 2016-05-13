@@ -1,9 +1,11 @@
 /// MML Class - Implementation ////////////////
 
 #include <cstdlib>
+#include <ctime>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <math.h>
 #include <vector>
 #include <string>
@@ -35,6 +37,7 @@ void MML::initialize(double sampleRate, double tempo)
 	eventTag[107]="ASTRO=OFF"; eventTag[108]="ASTRO=";
 	eventTag[109]="LFORANGE="; eventTag[110]="LFOSPEED="; eventTag[111]="LFOWAIT=";
 	eventTag[112]="FALLSPEED="; eventTag[113]="FALLWAIT="; eventTag[114]="RISESPEED="; eventTag[115]="RISERANGE=";
+	eventTag[116]="BEEFUP=";
 	
 	// NOTE: if you want to register a tag that contains another tag name, register the longer tag first!
 	// for example, PRESET=POPPYVIB must come earlier than PRESET=POPPY
@@ -1149,7 +1152,19 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 				output->eventFrame.push_back(framesWritten);
 				output->nEvents++;				
 			}
-			
+			else if(str.substr(i, 7) == "BEEFUP=") // in a value 0 to 100 - percentage value
+			{
+				string strValue = str.substr(i+7,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+				
+				output->eventType.push_back(70);
+				output->eventParam.push_back(value);
+				output->eventFrame.push_back(framesWritten);
+				output->nEvents++;				
+			}			
 			// cout << "event parsing done! " << str.substr(i,13) << "\n";
 			
 			// fast forward to where we find the next ')'
@@ -1830,7 +1845,10 @@ string MML::loadFile(string filename, MPlayer* player)
 	if(!inFile)
 	{
 		errLog("Error loading file: ", filename);
-		return "Error";
+		string strToReturn = "Load error...\xFF";
+		setSource(strToReturn);
+		inFile.close();
+		return strToReturn;
 	}
 
 	string fileContent = "";
@@ -1925,8 +1943,22 @@ int MML::countDigits(string snippet)
 // prints an error message to a log file
 void MML::errLog(std::string errText1, std::string errText2)
 {
+	// get the current time from TIMESTAMP
+	time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+	string strTime = "";
+	strTime += toString(now->tm_year + 1900) + "-" + toString(now->tm_mon + 1) + "-" + toString(now->tm_mday) + "-"; 
+	strTime += toString(now->tm_hour) + ":" + toString(now->tm_min); 
+		 
 	std::ofstream ofs;
 	ofs.open("_errors_mml.txt", std::ofstream::out | std::ofstream::app);
-	ofs << errText1 << errText2 << endl;
+	ofs << errText1 << errText2 << " (" << strTime << ")" << endl;
 	ofs.close();
+}
+
+std::string MML::toString(int n)
+{
+	stringstream ss;
+	ss << n;
+	return ss.str();
 }

@@ -3,6 +3,8 @@
 //    Ys I: Ancient Ys Vanished (Falcom, 1987) //
 //                   "First Step Towards Wars" //
 //                      Composer: Yuzo Koshiro //
+//                       Album "Music from Ys" //
+//                (c) Nihon Falcom Corporation //
 /////////////////////////////////////////////////
 
 @G

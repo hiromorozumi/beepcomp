@@ -242,10 +242,10 @@ public:
 	{
 		versionText.setString(strVersion);
 		sf::FloatRect fRect = versionText.getGlobalBounds();
-		versionText.setPosition(sf::Vector2f(827 - fRect.width, 80 - fRect.height));
+		versionText.setPosition(sf::Vector2f(830 - fRect.width, 80 - fRect.height));
 		authorText.setString(strAuthor);
 		fRect = authorText.getGlobalBounds();
-		authorText.setPosition(sf::Vector2f(827 - fRect.width, 96 - fRect.height));		
+		authorText.setPosition(sf::Vector2f(830 - fRect.width, 96 - fRect.height));		
 	}
 	void activateVersionText()
 		{ versionTextActive = true; }
@@ -271,8 +271,8 @@ class Progress
 
 public:
 
-	static const float BAR_X = 684.0;
-	static const float BAR_Y = 212.0;
+	static const float BAR_X = 686.0;
+	static const float BAR_Y = 214.0;
 	static const float BAR_W = 140.0;
 	static const float BAR_H = 4.0;
 	static const float MARKER_W = 12.0;
@@ -545,6 +545,8 @@ public:
 	static const int TEXT_HEIGHT = 24;
 	static const int TEXT_TOP_X = 10;
 	static const int TEXT_TOP_Y = 10;
+	static const int PANEL_TOP_X = 686;
+	static const int PANEL_TOP_Y;
 	static const std::string STR_VERSION;
 	
 	Config config;
@@ -618,9 +620,10 @@ public:
 	bool rightKeyFiring;
 	int rightProcessedCount;
 
-	std::string currentDir;
+	std::string installDir;
 	std::string defaultPath;
 	std::string currentPathAndFileName;
+	std::string currentPath;
 	std::string currentFileName;
 	std::string lastSavedPathAndFileName;
 

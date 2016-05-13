@@ -1,9 +1,13 @@
 #include <Windows.h>
+#include <shlobj.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <sstream>
 #include "Dialog.h"
+
+#pragma comment(lib, "shell32.lib")
 
 using namespace std;
 
@@ -12,18 +16,56 @@ Dialog::Dialog()
 
 	exitDialog = false;
 	exitBasicDialog = false;
+	exitGoToDialog = false;
 	windowClosed = false;
+	windowFocused = true;
 	cancelChosen = false;
 	
 	adjustedWindowWidth = WINDOW_WIDTH;
 	adjustedWindowHeight = WINDOW_HEIGHT;
 
-	// load font
+	// load main font
 	// string fontfile = "fonts/EnvyCodeR.ttf";
 	string fontfile = getCurrentDir() + "\\fonts\\UbuntuMono-R.ttf";
 	if (!font.loadFromFile(fontfile))
 		{ cout << "Loading font - error!" << endl; }
+
+	// load mini font
+	string miniFontFilePath = getCurrentDir() + "\\fonts\\04B09.ttf";
+	if (!miniFont.loadFromFile(miniFontFilePath))
+		{ cout << "Error reading font for the Knob object..\n"; }
 	
+	// set up help screen...
+	help.initialize(miniFont);
+	float helpYSpacing = 14.0;
+	float helpXTab = 134.0;
+	help.set(0 , "ESC",							6,				6 );
+	help.set(1 , "....  CANCEL",					6 + helpXTab,	6 );
+	help.set(2 , "F1", 		  					6           ,	6 + helpYSpacing*1);
+	help.set(3 , "....  TOGGLE FILE TYPE",		6 + helpXTab,	6 + helpYSpacing*1);
+	help.set(4 , "F2",   						6           ,	6 + helpYSpacing*2);
+	help.set(5 , "....  DISPLAY HELP",			6 + helpXTab,	6 + helpYSpacing*2);
+	help.set(6 , "F12",   						6           ,	6 + helpYSpacing*3);
+	help.set(7 , "....  LOAD / SAVE / EXPORT",	6 + helpXTab,	6 + helpYSpacing*3);
+	help.set(8 , "RETURN",   					6           ,	6 + helpYSpacing*4);
+	help.set(9 , "....  SELECT FILE",			6 + helpXTab,	6 + helpYSpacing*4);
+	help.set(10, "HOME",						6           ,	6 + helpYSpacing*5);
+	help.set(11, "....  TO DEFAULT DIR",			6 + helpXTab,	6 + helpYSpacing*5);
+	help.set(12, "ALT + O",						6           ,	6 + helpYSpacing*6);
+	help.set(13, "....  OPEN CURRENT DIR",		6 + helpXTab,	6 + helpYSpacing*6);
+	help.set(14, "ALT + D",						6           ,	6 + helpYSpacing*7);
+	help.set(15, "....  TO DESKTOP",				6 + helpXTab,	6 + helpYSpacing*7);
+	help.set(16, "CTRL + Z",					6           ,	6 + helpYSpacing*8);
+	help.set(17, "....  BACK TO PREVIOUS DIR",	6 + helpXTab,	6 + helpYSpacing*8);
+	help.set(18, "CTRL + G",					6           ,	6 + helpYSpacing*9);
+	help.set(19, "....  GO TO DRIVE / FOLDER",	6 + helpXTab,	6 + helpYSpacing*9);
+	help.set(20, "CTRL + R",					6           ,	6 + helpYSpacing*10);
+	help.set(21, "....  REFRESH",				6 + helpXTab,	6 + helpYSpacing*10);
+	
+	help.setBlackOut(3, 3, 432, helpYSpacing*11+10);	
+	help.deactivate(); // start inactive...
+
+	// main char size
 	charHeight = font.getLineSpacing(25);
 	charWidth = 13;
 
@@ -32,6 +74,7 @@ Dialog::Dialog()
 	dialogGreenLight = sf::Color(255,255,200,255);
 	dialogRed = sf::Color(255,170,150,255);
 	dialogRedLight = sf::Color(255,200,180,255);
+	dialogRedDark = sf::Color(170,90,70,255);
 	dialogBlue = sf::Color(180,180,255,255);
 	
 	// for broswer area
@@ -76,6 +119,14 @@ Dialog::Dialog()
 	cwd.setCharacterSize(22);
 	cwd.setColor(dialogGreen);
 	cwd.setPosition(sf::Vector2f(92, 38));
+	
+	// for goToDialog - set drive group and folders group label text
+	drivesGroupLabel.setFont(font);
+	drivesGroupLabel.setCharacterSize(25);
+	drivesGroupLabel.setColor(dialogGreen);
+	foldersGroupLabel.setFont(font);
+	foldersGroupLabel.setCharacterSize(25);
+	foldersGroupLabel.setColor(dialogGreen);
 	
 	// set default current directory
 	installDir = getCurrentDir();
@@ -164,6 +215,7 @@ vector<string> Dialog::getDirNamesInDir(string folder)
 void Dialog::bindWindow(sf::RenderWindow* windowObj)
 {
 	w = windowObj;
+	help.bindWindow(w);
 }
 
 std::string Dialog::getLoadFileName()
@@ -172,16 +224,22 @@ std::string Dialog::getLoadFileName()
 	w->setTitle("Load from a file");
 	
 	// make buttons to be used
-	makeButton(&loadButton, "Load", 0);
-	makeButton(&cancelButton, "Cancel", 0);
+	makeButton(&loadButton, " Load ", 0);
+	makeButton(&cancelButton, " Cancel ", 0);
+	makeButton(&helpButton, " Help ", 2);
+	makeButton(&goButton, "<", 3);
 	positionButton(&loadButton, 544, 560);
 	positionButton(&cancelButton, 650, 560);
+	positionButton(&helpButton, 435, 560);
+	positionButton(&goButton, 734, 42);
 	addHelp(&loadButton, "F12", 1);
 	addHelp(&cancelButton, "ESC", 1);
+	addHelp(&helpButton, "F2", 1);
+	// addHelp(&goButton, "F3", 1);
 	
 	// file filter button
 	fileFilter = ".txt";
-	makeButton(&filterButton, "  File Type: Text File  ", 1);
+	makeButton(&filterButton, "  File Type: Text  ", 1);
 	positionButton(&filterButton, 92, 560);
 	addHelp(&filterButton, "F1", 0);
 
@@ -197,16 +255,21 @@ std::string Dialog::getSaveFileName()
 	w->setTitle("Save to a file");	
 	
 	// make buttons to be used
-	makeButton(&saveButton, "Save", 0);
-	makeButton(&cancelButton, "Cancel", 0);
+	makeButton(&saveButton, " Save ", 0); // "Save"
+	makeButton(&cancelButton, " Cancel ", 0);
+	makeButton(&helpButton, " Help ", 2);
+	makeButton(&goButton, "<", 3);
 	positionButton(&saveButton, 544, 560);
 	positionButton(&cancelButton, 650, 560);
+	positionButton(&helpButton, 435, 560);
+	positionButton(&goButton, 734, 42);
 	addHelp(&saveButton, "F12", 1);
 	addHelp(&cancelButton, "ESC", 1);
+	addHelp(&helpButton, "F2", 1);
 	
 	// file filter button
 	fileFilter = ".txt";
-	makeButton(&filterButton, "  File Type: Text File  ", 1);
+	makeButton(&filterButton, "  File Type: Text  ", 1);
 	positionButton(&filterButton, 92, 560);
 	addHelp(&filterButton, "F1", 0);
 
@@ -222,12 +285,17 @@ std::string Dialog::getExportFileName()
 	w->setTitle("Export to a file");		
 	
 	// make buttons to be used
-	makeButton(&exportButton, "Export", 0);
-	makeButton(&cancelButton, "Cancel", 0);
+	makeButton(&exportButton, " Export ", 0);
+	makeButton(&cancelButton, " Cancel ", 0);
+	makeButton(&helpButton, " Help ", 2);
+	makeButton(&goButton, "<", 3);
 	positionButton(&exportButton, 528, 560);
 	positionButton(&cancelButton, 650, 560);
+	positionButton(&helpButton, 419, 560);
+	positionButton(&goButton, 734, 42);
 	addHelp(&exportButton, "F12", 1);
 	addHelp(&cancelButton, "ESC", 1);
+	addHelp(&helpButton, "F2", 1);
 	
 	// file filter button
 	fileFilter = ".*";
@@ -273,14 +341,19 @@ void Dialog::runFileDialog()
 	pageClickCount = 0;
 	historyLevel = 0;
 	undoing = false;
+	refreshing = false;
 	calledExplorerAlready = false;
 	
+	startingOut = true; // this is the only time this flag is used!
+	
 	// if start folder has been specified, start there (currentDir gets updated)
-	if(!requestedStartFolder.empty())
+	if(!requestedStartFolder.empty() && dirExists(requestedStartFolder))
 		readDir(requestedStartFolder, fileFilter);
 	else
-		readDir(currentDir, fileFilter); // otherwise, use currentDir (install folder or last-used folder)
-
+		readDir(defaultDir, fileFilter); // otherwise, use defaultDir (install folder or last-used folder)
+	
+	startingOut = false; // turn off this flag - no other place will use this flag!
+		
 	// patch... for save / export dialogs, force starting on the save placeholder line (2nd line)
 	if(dialogMode==1 || dialogMode==2)
 		selectedIndex = 1;
@@ -307,6 +380,7 @@ void Dialog::pollEvents()
 			{
 				exitDialog = true;
 				exitBasicDialog = true;
+				exitGoToDialog = true;
 				windowClosed = true;
 				
 				cancelChosen = true;
@@ -342,6 +416,11 @@ void Dialog::pollEvents()
 				else
 					typedChar = 0;
 			}
+			if (event.type == sf::Event::LostFocus)
+				windowFocused = false;
+
+			if (event.type == sf::Event::GainedFocus)
+				windowFocused = true;
 			
 			// handle resize event
 			if(event.type == sf::Event::Resized)
@@ -357,6 +436,10 @@ void Dialog::pollEvents()
 			}
 		}
 		
+		// mouse! this might just be a better way to get coordinates
+		mouseX = static_cast<double>(sf::Mouse::getPosition().x - w->getPosition().x -4)  * WINDOW_WIDTH / adjustedWindowWidth;
+		mouseY = static_cast<double>(sf::Mouse::getPosition().y - w->getPosition().y - 23)  * WINDOW_HEIGHT / adjustedWindowHeight;
+		
 		// determine mouse delta amount
 		mouseXdelta = mouseX - mouseXprev;
 		mouseYdelta = mouseY - mouseYprev;
@@ -365,7 +448,11 @@ void Dialog::pollEvents()
 }
 
 void Dialog::handleInputFileDialog()
-{	
+{
+	// if window has lost focus, skip input-handling altogether
+	if(!windowFocused)
+		return;
+	
 	// browser box range..
 	//   x:  TEXT_TOP_X  ... TEXT_TOP_X + charWidth*TEXT_WIDTH
 	//   y:  TEXT_TOP_Y  ... TEXT_TOP_Y + charHeight*TEXT_HEIGHT
@@ -404,7 +491,7 @@ void Dialog::handleInputFileDialog()
 			// now.. go ahead and change current directory
 			if(itemTypes[selectedIndex]==0) // parent folder chosen
 			{
-				if(currentDir != "C:\\")
+				if(currentDir != "C:\\" && currentDir.length() > 3)
 				{
 					// get the parent dir name
 					string newDir = currentDir;
@@ -473,9 +560,9 @@ void Dialog::handleInputFileDialog()
 	}
 	
 	// handle right mouse click - reverts to previous path
-	if(mouse.right() || kbd.end())
+	if( mouse.right() || kbd.end() || kbd.ctrlZ() )
 	{
-		while(mouse.right() || kbd.end()){}
+		while(mouse.right() || kbd.end() || kbd.ctrlZ() ){}
 		string previousDir = popHistory();
 		if(!previousDir.empty()) // if there's no record to pop, you get empty string
 								// make sure there is record to retrieve
@@ -583,7 +670,7 @@ void Dialog::handleInputFileDialog()
 		// if 'folder' is currently chosen, go ahead and change current directory
 		if(itemTypes[selectedIndex]==0) // parent folder chosen
 		{
-			if(currentDir != "C:")
+			if( currentDir != "C:" || currentDir.length()>2 )
 			{
 				// get the parent dir name
 				string newDir = currentDir;
@@ -851,7 +938,7 @@ void Dialog::handleInputFileDialog()
 	if(dialogMode == 1) // save dialog
 	{
 		if( (hovering(&saveButton) && !dragging) || kbd.f12() ) 
-			// handle 'load' button
+			// handle 'save' button
 		{
 			if(mouse.left() || kbd.f12())
 			{
@@ -861,7 +948,7 @@ void Dialog::handleInputFileDialog()
 				if(!strInput.empty())
 				{
 					// if the requested filename already exists, check!
-					bool sameNameExists = overwriting(strInput);
+					bool sameNameExists = overwriting(strInput) || overwriting(strInput+".txt");
 					bool overwriteOkay = false;
 					if(sameNameExists)
 					{
@@ -908,7 +995,7 @@ void Dialog::handleInputFileDialog()
 				if(!strInput.empty())
 				{
 					// if the requested filename already exists, check!
-					bool sameNameExists = overwriting(strInput);
+					bool sameNameExists = overwriting(strInput) || overwriting(strInput+".wav");
 					bool overwriteOkay = false;
 					if(sameNameExists)
 					{
@@ -942,6 +1029,91 @@ void Dialog::handleInputFileDialog()
 		
 	}
 	
+	// handle 'help' button - all file dialogs
+	if( ( hovering(&helpButton) && !dragging ) || kbd.f2())
+	{
+		if(mouse.left() || kbd.f2())
+		{
+			activateButton(&helpButton);
+			drawFileDialog(); // update screen once
+			while(mouse.left() || kbd.f2())
+			{
+				//
+				//	perform - display help!
+				//
+				
+				help.activate();
+				drawFileDialog(); // keep updating screen!
+			}
+			
+			help.deactivate();
+		}
+		else
+			highlightButton(&helpButton);	
+	}
+	else
+		dehighlightButton(&helpButton);
+	
+	// handle "refresh" - when ctrl + R are pressed
+	if( kbd.ctrlR() )
+	{
+		while( kbd.ctrlR() ){}
+		
+		// refresh!
+		cout << "refresh at current dir...\n";
+		selectedIndex = 0;
+		topRenderLine = 0;
+		refreshing = true; // the only time this flag turns on!
+		readDir(currentDir, fileFilter);
+		refreshing = false; // this must remain false in all other cases
+	}
+
+	// handle 'go' button - all file dialogs
+	if( ( hovering(&goButton) && !dragging ) || kbd.ctrlG() )
+	{
+		if( mouse.left() || kbd.ctrlG() )
+		{
+			activateButton(&goButton);
+			drawFileDialog(); // update screen once
+			while( mouse.left() || kbd.ctrlG() ){}
+			
+			//
+			// perform - "go-to" dialog!
+			//
+			string goToDestination = goToDialog();
+			cout << "goToDestination = " << goToDestination << endl;
+			
+			// if desktop was selected...
+			if(goToDestination=="DESKTOP")
+			{
+				string desktopPath = string(getenv("USERPROFILE"));
+				desktopPath += "\\Desktop";
+		
+				cout << "To Desktop: " << desktopPath << endl;
+				readDir(desktopPath, fileFilter);
+				
+			}
+			// if documents folder was selected...
+			else if(goToDestination=="DOCUMENTS")
+			{
+				string documentsFolderPath = getUserDocPathFromSystem();
+				cout << "To Documents folder: " << documentsFolderPath << endl;
+				readDir(documentsFolderPath, fileFilter);				
+			}
+			// if drive letter was selected...
+			else if(goToDestination.length()==2 && goToDestination.at(1)==':')
+			{
+				string goToDir = goToDestination;
+				cout << "Go to drive - " << goToDir << endl;
+				readDir(goToDir, fileFilter);
+			}
+		}
+		else
+			highlightButton(&goButton);	
+	}
+	else
+		dehighlightButton(&goButton);
+	
 	// handle 'cancel' button - all file dialogs
 	if( ( hovering(&cancelButton) && !dragging ) || kbd.escape())
 	{
@@ -972,13 +1144,13 @@ void Dialog::handleInputFileDialog()
 				if(fileFilter==".txt")
 				{
 					fileFilter = ".*";
-					changeButtonText(&filterButton, "  File Type: Any        ");
+					changeButtonText(&filterButton, " File Type: Any  ");
 					readDir(currentDir, fileFilter);
 				}
 				else
 				{
 					fileFilter = ".txt";
-					changeButtonText(&filterButton, "  File Type: Text File  ");
+					changeButtonText(&filterButton, " File Type: Text ");
 					readDir(currentDir, fileFilter);
 				}
 			}
@@ -1105,47 +1277,102 @@ void Dialog::drawFileDialog()
 	{
 		w->draw(filterButton.rect);
 		w->draw(filterButton.label);
-		w->draw(filterButton.help);		
+		w->draw(filterButton.help);	
 	}
 	
+	// draw help button - all dialogs
+	w->draw(helpButton.rect);
+	w->draw(helpButton.label);
+	w->draw(helpButton.help);
+
+	// draw Go "<" button - all dialogs
+	w->draw(goButton.rect);
+	w->draw(goButton.label);
+	w->draw(goButton.help);
+
+	// draw cancel button - all dialogs
 	w->draw(cancelButton.rect);
 	w->draw(cancelButton.label);
 	w->draw(cancelButton.help);
+	
+	// if active, draw help screen...
+	if(help.isActive())
+		help.draw();	
 	
 	w->display();
 }
 
 void Dialog::makeButton(Button* b, const std::string& lbl, int type)
 {
+	b->label.setFont(font);
+	b->label.setCharacterSize(22);
+	b->label.setString(lbl);
+	sf::FloatRect fRect = b->label.getGlobalBounds();
+	
 	b->type = type;
 	b->strLabel = lbl;
-	b->w = (lbl.length() + 2) * charWidth;
-	b->h = charHeight * 1.38;
+	
+	b->w = (fRect.width) + static_cast<float>(charWidth) * 0.9;
+	b->h =  static_cast<float>(charHeight) * 1.40;
+	b->sizeWOffset = 0;
+	b->sizeHOffset = 0;
+	
 	b->x = 0;
 	b->y = 0;
+	b->labelYOffset = 0;
+	b->labelXOffset = 0;
 
 	b->rect.setPosition(sf::Vector2f(0,0));
 	b->rect.setSize(sf::Vector2f(b->w, b->h));
-	b->label.setString(lbl);
-	b->label.setFont(font);
-	b->label.setCharacterSize(22);
-	b->label.setPosition(sf::Vector2f(charWidth, static_cast<float>(charHeight * 0.30)));
+	// b->label.setString(lbl);
+	b->label.setPosition(sf::Vector2f(static_cast<float>(charWidth * 0.24), static_cast<float>(charHeight * 0.36)));
 
 	b->hasHelpText = false;
 	
-	if(b->type == 0)
+	if(b->type == 0) // regular red button
 	{
 		b->rect.setFillColor(sf::Color::Black);
 		b->rect.setOutlineColor(dialogRedLight);
 		b->rect.setOutlineThickness(-3.0f);
 		b->label.setColor(dialogRedLight);
 	}
-	else
+	else if(b->type == 1) // file type filter button
 	{
 		b->rect.setFillColor(sf::Color::Black);
 		b->rect.setOutlineColor(dialogGreen);
 		b->rect.setOutlineThickness(-3.0f);
 		b->label.setColor(dialogGreen);		
+	}
+	else if(b->type == 2) // "?" help button
+	{
+		b->rect.setFillColor(sf::Color::Black);
+		b->rect.setOutlineColor(dialogRedDark);
+		b->rect.setOutlineThickness(-3.0f);
+		b->label.setColor(dialogRedDark);
+
+		/*
+		// force a special size for this one...
+		// b->sizeWOffset = 80;
+		b->w = 28;
+		b->rect.setSize(sf::Vector2f(b->w, b->h)); // resize!
+		b->labelXOffset = 4;
+		b->labelYOffset = 0;
+		*/
+	}
+	else if(b->type == 3) // "<" go to folder button
+	{
+		b->rect.setFillColor(sf::Color::Black);
+		b->rect.setOutlineColor(dialogRedDark);
+		b->rect.setOutlineThickness(-3.0f);
+		b->label.setColor(dialogRedDark);		
+
+		// force a special size for this one...
+		// b->sizeWOffset = 80;
+		b->w = 25;
+		b->h = 24;
+		b->rect.setSize(sf::Vector2f(b->w, b->h)); // resize!
+		b->labelXOffset = 2;
+		b->labelYOffset = -7;		
 	}
 }
 
@@ -1161,6 +1388,10 @@ void Dialog::addHelp(Button* b, string helpStr, int position)
 		b->help.setPosition(b->x, b->y - 22);
 	else
 		b->help.setPosition(b->x + b->w - helpStr.length()*7.5, b->y - 22);
+	
+	// special case: "<" button
+	if(b->type==3)
+		b->help.setPosition(b->x + 9, b->y - 19);
 }
 
 void Dialog::positionButton(Button* b, int xx, int yy)
@@ -1168,36 +1399,48 @@ void Dialog::positionButton(Button* b, int xx, int yy)
 	b->x = xx;
 	b->y = yy;
 	b->rect.setPosition(sf::Vector2f(xx, yy));
-	b->label.setPosition(sf::Vector2f(xx + (charWidth*1.30), yy + charHeight * 0.10 ));	
+	b->label.setPosition(sf::Vector2f(xx + (static_cast<float>(charWidth)*0.4f) + b->labelXOffset, yy + (static_cast<float>(charHeight) * 0.10f) + b->labelYOffset ));
 }
 
 void Dialog::highlightButton(Button* b)
 {
-	if(b->type == 0)
+	if(b->type == 0) // regular red button
 	{
 		b->rect.setOutlineColor(dialogRed);
 		b->rect.setFillColor(sf::Color(255,180,180,255));
 		b->label.setColor(sf::Color(100,0,0,255));
 	}
-	else
+	else if(b->type == 1) // file filter button
 	{
 		b->rect.setFillColor(dialogGreen);
+		b->label.setColor(sf::Color::Black);		
+	}
+	else if(b->type == 2 || b->type == 3) // help or go button
+	{
+		b->rect.setOutlineColor(dialogRedDark);
+		b->rect.setFillColor(dialogRedDark);
 		b->label.setColor(sf::Color::Black);		
 	}
 }
 
 void Dialog::dehighlightButton(Button* b)
 {
-	if(b->type == 0)
+	if(b->type == 0) // regular red button
 	{
 		b->rect.setOutlineColor(dialogRed);
 		b->rect.setFillColor(sf::Color::Black);
 		b->label.setColor(dialogRed);
 	}
-	else
+	else if(b->type == 1) // file filter button
 	{
 		b->rect.setFillColor(sf::Color::Black);
 		b->label.setColor(dialogGreen);			
+	}
+	else if(b->type == 2 || b->type == 3) // help or go button
+	{
+		b->rect.setOutlineColor(dialogRedDark);
+		b->rect.setFillColor(sf::Color::Black);
+		b->label.setColor(dialogRedDark);		
 	}
 }
 
@@ -1285,7 +1528,7 @@ void Dialog::readDir(string path, string strFilter)
 	
 	// if you're requesting to go to new dir... push history
 	// exclude the case you're just un-doing!
-	if(path != currentDir && !undoing)
+	if(path != currentDir && !undoing && !refreshing && !startingOut)
 	{
 		// before setting up new dir... lets store current path in record
 		pushHistory(currentDir);
@@ -1295,6 +1538,9 @@ void Dialog::readDir(string path, string strFilter)
 	// bow go ahead and set new path as our current directory
 	currentDir = path;
 	cwd.setString(trimLeft(currentDir, CWD_WIDTH));
+	// only if cwd ended up with two chars - drive letter and ':' - adjust by adding '\' (just for display)
+	if(currentDir.length()<=2 && currentDir.at(1)==':')
+		cwd.setString(string(currentDir+"\\"));
 	pathNameRect = cwd.getGlobalBounds();
 	
 	// clear the input for load dialog only
@@ -1612,8 +1858,8 @@ bool Dialog::yesNoDialog(std::string question)
 	parseBasicDialog(question);
 	
 	// make buttons to be used
-	makeButton(&yesButton, "Yes", 0);
-	makeButton(&noButton, "No", 0);
+	makeButton(&yesButton, " Yes ", 0);
+	makeButton(&noButton, " No ", 0);
 	positionButton(&yesButton, WINDOW_WIDTH/2 - 100, messageBottomY+80);
 	positionButton(&noButton, WINDOW_WIDTH/2 + 34, messageBottomY+80);
 	addHelp(&yesButton, "Y", 1);
@@ -1825,4 +2071,347 @@ bool Dialog::hoveringOnPathName()
 {
 	return ( pathNameRect.left < mouseX && mouseX < pathNameRect.left + pathNameRect.width
 	   && pathNameRect.top < mouseY && mouseY < pathNameRect.top + pathNameRect.height );
+}
+
+vector<std::string> Dialog::getDriveLetters()
+{
+	DWORD mydrives = 100;// buffer length
+	char lpBuffer[100];// buffer for drive string storage	
+	DWORD result = GetLogicalDriveStrings( mydrives, lpBuffer);	
+	
+	string str = "";
+	for(int i=0; i<100; i++)
+	{
+		str += lpBuffer[i];
+	}
+	
+	size_t found;
+	string target = ":\\";
+	bool done = false;
+	
+	vector<std::string> driveLetter;
+	
+	while(!done)
+	{
+		found = str.find(target);
+		if(found != string::npos && found != 0) // found!
+		{
+			string letterStr = str.substr(found-1, 3);
+			driveLetter.push_back(letterStr);
+			str.erase(found-1, 3);
+		}
+		else
+			done = true;
+	}
+	
+	return driveLetter;
+}
+
+vector<int> Dialog::getDriveTypes(vector<std::string> drives)
+{
+	vector<int> types;
+	for(int i=0; i<drives.size(); i++)
+	{
+		int result = GetDriveType(drives[i].c_str());		
+		types.push_back(result);
+	}
+	return types;
+}
+
+// show a dialog to let user select drive or special folders to go to
+std::string Dialog::goToDialog()
+{
+	// in case starting with a different-sized window...
+	sf::Vector2u size = w->getSize();
+	adjustedWindowWidth = static_cast<double>(size.x);
+	adjustedWindowHeight = static_cast<double>(size.y);
+	windowClosed = false;
+	exitDialog = false;
+	exitGoToDialog = false;
+	
+	goToDialogResult = "";
+
+	// make buttons to be used
+	
+	// string text above the drive letter buttons
+	drivesGroupLabel.setString("Drives:");
+	sf::FloatRect fRect = drivesGroupLabel.getGlobalBounds();
+	drivesGroupLabel.setPosition(WINDOW_WIDTH/2 - (fRect.width/2), 90);
+	
+	// create drive letter buttons
+	drives = getDriveLetters();
+	
+	// DEBUG
+	/*
+	drives.push_back("A:");drives.push_back("B:");drives.push_back("D:");drives.push_back("E:");
+	drives.push_back("F:");drives.push_back("H:");drives.push_back("I:");drives.push_back("J:");	
+	drives.push_back("K:");drives.push_back("L:");drives.push_back("M:");drives.push_back("N:");	
+	drives.push_back("O:");drives.push_back("P:");drives.push_back("Q:");drives.push_back("R:");
+	drives.push_back("S:");drives.push_back("T:");drives.push_back("U:");drives.push_back("V:");
+	drives.push_back("X:");drives.push_back("Y:");drives.push_back("Z:");
+	*/
+	
+	nDrives = drives.size();
+	if(nDrives>21) nDrives = 21;
+	nLinesDrive = nDrives / 7 + 1;
+	int nButtons[3];
+	float firstButtonX[3] = {0};
+	float gap[3] = {0};
+	driveButtonTop = 150;
+	driveButtonW = 50;
+	driveButtonH = 35;
+	driveButtonYStep = 66;
+	float lineW[3] = {0};
+	
+	if(nLinesDrive > 3) nLinesDrive = 3; // safeguarding
+	
+	// now create each drive button to begin...
+	for(int j=0; j<nLinesDrive; j++)
+	{
+		for(int i=0; i<7; i++)
+		{
+			int index = j*7+i;
+			if(index < nDrives) // make sure we haven't gone over the vector size
+			{
+				if(drives[index].length()>2) drives[index] = drives[index].substr(0,2);
+				string driveName = " " + drives[index] + " ";
+				makeButton(&(driveButton[index]), driveName, 0);
+				
+				if(driveButton[index].w > driveButtonW) // readjust drive button width
+					driveButtonW = driveButton[index].w;
+			}
+		}
+	}
+	
+	// get the sizing elements based on how many drive buttons for each line
+	for(int i=0; i<nLinesDrive; i++)
+	{
+		nButtons[i] = nDrives - i*7;
+		if(nButtons[i]>7) nButtons[i] = 7;
+		if(nButtons[i]<0) nButtons[i] = 0;
+		
+		if(nButtons[i] <= 1) // if only one item for this line
+		{
+			gap[i] = 0;
+			lineW[i] = driveButtonW;
+			firstButtonX[i] = WINDOW_WIDTH/2 - driveButtonW / 2; // place it in dead center
+		}
+		else // if we have more than one item for this line
+		{
+			gap[i] = 80 - (nButtons[i]-2) * 10;
+			lineW[i] = nButtons[i]*driveButtonW + (nButtons[i]-1)*gap[i]; // total length of this line
+			firstButtonX[i] = WINDOW_WIDTH/2 - lineW[i] / 2;
+		}
+	}
+	
+	// finally, position all the buttons
+	for(int j=0; j<nLinesDrive; j++)
+	{
+		int currentX = firstButtonX[j];
+		int currentY = driveButtonTop + driveButtonYStep * j;
+		for(int i=0; i<7; i++)
+		{
+			int index = j*7+i;
+			if(index < nDrives) // make sure we haven't gone over the vector size
+			{
+				positionButton(&driveButton[index], currentX, currentY);
+				string letterName = "";
+				if(!drives[index].empty())
+					letterName = drives[index].substr(0,1);
+				addHelp(&(driveButton[index]), letterName, 1);
+				
+				currentX += driveButtonW + gap[j];
+			}
+		}
+	}
+	
+	// string text above the 'desktop' and 'documents' buttons
+	foldersGroupLabel.setString("Special Folders:");
+	fRect = foldersGroupLabel.getGlobalBounds();
+	foldersGroupLabel.setPosition(WINDOW_WIDTH/2 - (fRect.width/2), 
+			driveButtonTop + 90 + (nLinesDrive * driveButtonYStep));
+	
+	// 'desktop' and 'documents' buttons
+	float folderButtonY = driveButtonTop + 150 + (nLinesDrive * driveButtonYStep);
+	makeButton(&desktopButton, " Desktop ", 0);
+	makeButton(&documentsButton, " Documents ", 0);
+	float folderButtonGap = 60;
+	float folderButtonsW = desktopButton.w + documentsButton.w + folderButtonGap;
+	positionButton(&desktopButton, WINDOW_WIDTH/2 - (folderButtonsW/2), folderButtonY);
+	positionButton(&documentsButton, WINDOW_WIDTH/2 + (folderButtonsW/2) - documentsButton.w, folderButtonY);
+	addHelp(&desktopButton, "F1", 1);
+	addHelp(&documentsButton, "F2", 1);
+	
+	cout << "just before run\n";
+	
+	runGoToDialog();
+	cout << "'goto' dialog finished, result = " << yesNoDialogResult << endl;
+	return goToDialogResult;
+}
+
+// run a 'goto' dialog
+void Dialog::runGoToDialog()
+{
+	exitGoToDialog = false;
+	
+	while(!exitGoToDialog)
+	{
+		pollEvents();
+		if(!windowClosed) // in case screen x-ed out
+		{
+			handleInputGoToDialog();
+			drawGoToDialog();
+		}
+	}
+}
+
+// handle input for 'goto' dialog
+void Dialog::handleInputGoToDialog()
+{
+	
+	// check for ESC key
+	if(kbd.escape())
+	{
+		while(kbd.escape()){}
+		exitGoToDialog = true;
+		cout << "cancelled by user...\n";
+	}
+	
+	// check for mouse hover - all drive buttons
+	for(int i=0; i<nDrives; i++)
+	{
+		if(hovering(&driveButton[i]))
+		{
+			highlightButton(&driveButton[i]);
+			if(mouse.left())
+			{
+				activateButton(&driveButton[i]);
+				while(mouse.left())
+				{
+					drawGoToDialog(); // draw to update...
+				}
+				// now, perform!
+				exitGoToDialog = true;
+				goToDialogResult = drives[i];
+			}
+		}
+		else // not hovering on this button - deactivate
+			dehighlightButton(&driveButton[i]);
+	}
+	// check for keyboard input - for all drive button
+	for(int i=0; i<nDrives; i++)
+	{
+		string targetLetter = "";
+		if(drives[i].length()>0) targetLetter = drives[i].substr(0,1);
+		if(kbd.letterKey(targetLetter))
+		{
+			activateButton(&driveButton[i]);
+			while(kbd.letterKey(targetLetter))
+			{
+				drawGoToDialog(); // draw to update...
+			}
+			// now, perform!
+			exitGoToDialog = true;
+			goToDialogResult = drives[i];
+			
+		}
+	}
+	
+	// check for 'desktop' button
+	if(hovering(&desktopButton))
+		highlightButton(&desktopButton);
+	else
+		dehighlightButton(&desktopButton);
+
+	if((hovering(&desktopButton) && mouse.left()) || kbd.f1()) // f1 button pressed
+	{
+		activateButton(&desktopButton);
+		drawGoToDialog(); // draw once to update
+		while(mouse.left() || kbd.f1()){}
+		{
+			exitGoToDialog = true;
+			goToDialogResult = "DESKTOP";
+		}
+	}
+	
+	// check for 'documents' button
+	if(hovering(&documentsButton))
+		highlightButton(&documentsButton);
+	else
+		dehighlightButton(&documentsButton);
+	
+	if((hovering(&documentsButton) && mouse.left()) || kbd.f2()) // f2 button pressed
+	{
+		activateButton(&documentsButton);
+		drawGoToDialog(); // draw once to update
+		while(mouse.left() || kbd.f2()){}
+		{
+			exitGoToDialog = true;
+			goToDialogResult = "DOCUMENTS";
+		}
+	}
+	
+	// clear keyboard buffer variables (not used here)
+	typedChar = 0;
+	strTypedChar = "";
+}
+
+
+void Dialog::drawGoToDialog()
+{
+	w->clear();
+	
+	// draw the labels for each button group
+	w->draw(drivesGroupLabel);
+	w->draw(foldersGroupLabel);
+	
+	// draw drive buttons
+	for(int i=0;i<nDrives;i++)
+	{
+		w->draw(driveButton[i].rect);
+		w->draw(driveButton[i].label);
+		w->draw(driveButton[i].help);
+	}
+	
+	// draw folders buttons
+	w->draw(desktopButton.rect);
+	w->draw(desktopButton.label);
+	w->draw(desktopButton.help);
+	w->draw(documentsButton.rect);
+	w->draw(documentsButton.label);
+	w->draw(documentsButton.help);			
+	
+	w->display();
+}
+
+// get current user's documents path from system...
+std::string Dialog::getUserDocPathFromSystem()
+{
+    CHAR my_documents[MAX_PATH];
+    HRESULT result = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, my_documents);
+
+	string strResult = "";
+	
+	if (result != S_OK)
+	{
+		cout << "Error getting the User Documents path...\n";
+		return strResult;
+	}
+	stringstream ss;
+	ss << my_documents;
+	strResult = ss.str();
+	return strResult;
+}
+
+// check if a directory of the passed name exists
+bool Dialog::dirExists(const std::string& dirName_in)
+{
+	DWORD ftyp = GetFileAttributesA(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		return false;  //something is wrong with your path!
+
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;   // this is a directory!
+
+	return false;    // this is not a directory!
 }

@@ -1,6 +1,10 @@
 /////////////////////////////////////////////////
 //  Ancient Ys Vanished Omen 1 (Falcom, 1987)  //
-//  Opening town music                         //
+//  Music from the opening town scene          //
+//                         "Fountain of Love"  //
+//                   Composer: Mieko Ishikawa  //
+//                      Album "Music from Ys"  //
+//                (c) Nihon Falcom Corporation //
 /////////////////////////////////////////////////
 
 @G

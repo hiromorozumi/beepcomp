@@ -1,6 +1,12 @@
-///////////////////////////////////////////////
-//   xanadu background music (Falcom 1985)   //
-///////////////////////////////////////////////
+/////////////////////////////////////////////////
+//                                             //
+//  Xanadu background music (Falcom 1985)      //
+//                                             //
+//                Composer: Toshiya Takahashi  //
+//                    Album "All Over Xanadu"  //
+//               (c) Nihon Falcom Corporation  //
+//                                             //
+/////////////////////////////////////////////////
 
 //////////////////// global channel
 
@@ -9,7 +15,7 @@
 MASTERVOLUME=80
 TEMPO=132
 DELAYTIME=454
-V1=9 V2=9 V3=5 VD=0
+V1=8 V2=8 V3=5 VD=0
 
 //////////////////// channel 1 - melody
 	
@@ -45,7 +51,3 @@ O4L8
 L8EbG>EbD~<B>D~C<B~>[8C<BAb]B~~B~~:BAbF>C<B
 ::::::::::::::::::::::::
 L16>C~~<B>C~C~~<B>C~C~~<B>C~C~Eb~D~C~~<B>C~C~~<B>C~C~~<B>C~<B~~B~~B~~B~~
-
-//////////////////// drum channel - is not used
-
-@d

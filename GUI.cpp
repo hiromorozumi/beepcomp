@@ -11,17 +11,18 @@
 
 using namespace std;
 
-const std::string GUI::STR_VERSION = "0.2.0";
+const std::string GUI::STR_VERSION = "0.2.1";
 
 void GUI::initialize()
 {
 	config.setVersion(STR_VERSION);
-	currentDir = config.getCurrentDir();
+	installDir = config.getCurrentDir();
+	currentPath = installDir;
 	
 	anotherThreadRunning = false;
 
 	// create window
-	windowTitle = "*** BeepComp ***";
+	windowTitle = "BeepComp";
 	window.create(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), windowTitle);
 	adjustedWindowWidth = static_cast<double>(WINDOW_WIDTH);
 	adjustedWindowHeight = static_cast<double>(WINDOW_HEIGHT);
@@ -32,46 +33,46 @@ void GUI::initialize()
 	mouse.bindWindow(&window);
 
 	// load icon
-	string iconFilePath = currentDir + "\\images\\beepcomp_icon.png";
+	string iconFilePath = installDir + "\\images\\beepcomp_icon.png";
 	icon.loadFromFile(iconFilePath);
 	window.setIcon(32, 32, icon.getPixelsPtr());
 
 	// load logo
-	string logoFilePath = currentDir + "\\images\\beepcomp_logo.png";
+	string logoFilePath = installDir + "\\images\\beepcomp_logo.png";
 	if(!logoTexture.loadFromFile(logoFilePath))
 		cout << "Logo: load error!\n";
-	logo.setPosition(sf::Vector2f(675,12));
+	logo.setPosition(sf::Vector2f(PANEL_TOP_X-9,12)); // 675
 	logo.setTexture(logoTexture);
 
 	// load font for knob and buttons
-	string miniFontFilePath = currentDir + "\\fonts\\04B09.ttf";
+	string miniFontFilePath = installDir + "\\fonts\\04B09.ttf";
 	if (!miniFont.loadFromFile(miniFontFilePath))
 		{ cout << "Error reading font for the Knob object..\n"; }
 	
 	// create a knob - and initialize
 	knob.initialize(std::string("MASTER"), 60.0f, wPtr, miniFont);
-	knob.setPosition(687.0f, 356.0f);
+	knob.setPosition(PANEL_TOP_X+3.0f, 358.0f);
 	
 	// create buttons with shapes...
 	const float XSPACING = 78;
 	const float YSPACING = 70;
-	playButton.initialize   (0, "PLAY",    684+XSPACING*0, 234+YSPACING*0, 60, 52, wPtr, miniFont);
-	pauseButton.initialize  (0, "PAUSE",   684+XSPACING*1, 234+YSPACING*0, 60, 52, wPtr, miniFont);
-	rewindButton.initialize (0, "REWIND",  684+XSPACING*0, 234+YSPACING*1, 60, 20, wPtr, miniFont);	
-	forwardButton.initialize(0, "FORWARD", 684+XSPACING*1, 234+YSPACING*1, 60, 20, wPtr, miniFont);
+	playButton.initialize   (0, "PLAY",    PANEL_TOP_X+XSPACING*0, 236+YSPACING*0, 60, 52, wPtr, miniFont);
+	pauseButton.initialize  (0, "PAUSE",   PANEL_TOP_X+XSPACING*1, 236+YSPACING*0, 60, 52, wPtr, miniFont);
+	rewindButton.initialize (0, "REWIND",  PANEL_TOP_X+XSPACING*0, 236+YSPACING*1, 60, 20, wPtr, miniFont);	
+	forwardButton.initialize(0, "FORWARD", PANEL_TOP_X+XSPACING*1, 236+YSPACING*1, 60, 20, wPtr, miniFont);
 
 	// create smaller text buttons...
 	const float MINITBSPACING = 42;
-	keyButton.initialize(1, "KEY", 772, 342 + MINITBSPACING * 0, 48, 26, wPtr, miniFont);
-	docButton.initialize(1, "DOC", 772, 342 + MINITBSPACING * 1, 48, 26, wPtr, miniFont);
-	dlyButton.initialize(1, "DLY", 772, 342 + MINITBSPACING * 2, 48, 26, wPtr, miniFont);
+	keyButton.initialize(1, "KEY", PANEL_TOP_X+88, 344 + MINITBSPACING * 0, 48, 26, wPtr, miniFont);
+	docButton.initialize(1, "DOC", PANEL_TOP_X+88, 344 + MINITBSPACING * 1, 48, 26, wPtr, miniFont);
+	dlyButton.initialize(1, "DLY", PANEL_TOP_X+88, 344 + MINITBSPACING * 2, 48, 26, wPtr, miniFont);
 	
 	// create bigger text buttons...
 	const float TXBSPACING = 42;
-	newButton.initialize   (1, "NEW",    684, 470 + TXBSPACING * 0, 136, 26, wPtr, miniFont);
-	loadButton.initialize  (1, "LOAD",   684, 470 + TXBSPACING * 1, 136, 26, wPtr, miniFont);
-	saveButton.initialize  (1, "SAVE",   684, 470 + TXBSPACING * 2, 136, 26, wPtr, miniFont);
-	exportButton.initialize(1, "EXPORT", 684, 470 + TXBSPACING * 3, 136, 26, wPtr, miniFont);
+	newButton.initialize   (1, "NEW",    PANEL_TOP_X, 472 + TXBSPACING * 0, 136, 26, wPtr, miniFont);
+	loadButton.initialize  (1, "LOAD",   PANEL_TOP_X, 472 + TXBSPACING * 1, 136, 26, wPtr, miniFont);
+	saveButton.initialize  (1, "SAVE",   PANEL_TOP_X, 472 + TXBSPACING * 2, 136, 26, wPtr, miniFont);
+	exportButton.initialize(1, "EXPORT", PANEL_TOP_X, 472 + TXBSPACING * 3, 136, 26, wPtr, miniFont);
 	
 	// set default userdata path
 	// defaultPath = "userdata/"; // DEPRECIATED
@@ -83,15 +84,19 @@ void GUI::initialize()
 	cout << "From GUI.cpp: " << configSetupResult << endl; 	// COMMENT OUT THIS LINE FOR *** PORTABLE ***
 	defaultPath = config.getUserdataPath(); 				// COMMENT OUT THIS LINE FOR *** PORTABLE ***
 	
-	// defaultPath = currentDir + "\\userdata";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
+	// defaultPath = installDir + "\\userdata";	// DECOMMNENT THIS LINE FOR *** PORTABLE ***
+	
+	if(defaultPath.empty()||defaultPath=="#") // safeguarding...
+		defaultPath = installDir + "\\userdata";
 	
 	dialog.setDefaultDir(defaultPath); // don't forget to set default for Dialog!
 	
 	// set this to currently working path
 	currentPathAndFileName = defaultPath;
+	currentPath = defaultPath;
 
 	// load work area font
-	string mainFontFilePath = currentDir + "\\fonts\\UbuntuMono-R.ttf";
+	string mainFontFilePath = installDir + "\\fonts\\UbuntuMono-R.ttf";
 	if (!font.loadFromFile(mainFontFilePath))
 		{ cout << "Loading main font - error!" << endl; }
 
@@ -151,9 +156,9 @@ void GUI::initialize()
 	// load up default music to start...
 	mplayer.pause();
 	mplayer.resetForNewSong();
-	string defaultSourceFile = currentDir + "\\default.txt";
+	string defaultSourceFile = installDir + "\\default.txt";
 	source = mml.loadFile(defaultSourceFile, &mplayer);
-	if(source=="Error" || source.empty())
+	if(source.empty() || (source.length()>=5 && source.find("Load error")!=string::npos))
 	{
 		cout << "File load error..." << endl;
 		source  = "// *****  Welcome to BeepComp!  *****\n//\n";
@@ -162,6 +167,7 @@ void GUI::initialize()
 		source += strEOF;
 		mml.setSource(source);
 	}
+	mml.setSource(source);
 	mml.parse(&mplayer);
 	mplayer.goToBeginning();
 
@@ -199,14 +205,14 @@ void GUI::initialize()
 	mouseWheelMoved = 0;
 
 	// meter related
-	meter.initialize(689, 90, 138, 96, 0.5f); // set size and position
+	meter.initialize(PANEL_TOP_X+5, 90, 138, 98, 0.5f); // set size and position
 
 	for(int i=0; i<10; i++)
 		meter.set(i, 0.0f);
 	
 	// meter back panel
-	backPanel.setSize(sf::Vector2f(138, 96));
-	backPanel.setPosition(sf::Vector2f(684, 90));
+	backPanel.setSize(sf::Vector2f(138, 98));
+	backPanel.setPosition(sf::Vector2f(PANEL_TOP_X, 90));
 	backPanel.setFillColor(sf::Color(40,40,40));
 	backPanel.setOutlineThickness(2.0f);
 	backPanel.setOutlineColor(sf::Color(80,80,80));
@@ -231,41 +237,45 @@ void GUI::initialize()
 	help.set(10, "F10", loadButton.x, loadButton.y - yup);
 	help.set(11, "F11", saveButton.x, saveButton.y - yup);
 	help.set(12, "F12", exportButton.x, exportButton.y - yup);
-	help.set(13, "CTRL-UP   ", 640, 346);
-	help.set(14, "CTRL-DOWN", 640, 360);
+	help.set(13, "CTRL+UP   ", PANEL_TOP_X-44, 346);
+	help.set(14, "CTRL+DOWN", PANEL_TOP_X-44, 360);
 	float helpXTab = 150.0;
 	help.set(15, "ESC",        6           ,  6 );
-	help.set(16, ".... QUIT",  6 + helpXTab,  6 );
+	help.set(16, "....  QUIT",  6 + helpXTab,  6 );
 	help.set(17, "CTRL + Z",   6           ,  6 + helpYSpacing*1);
-	help.set(18, ".... UNDO",  6 + helpXTab,  6 + helpYSpacing*1);
+	help.set(18, "....  UNDO",  6 + helpXTab,  6 + helpYSpacing*1);
 	help.set(19, "CTRL + C",   6           ,  6 + helpYSpacing*2);
-	help.set(20, ".... COPY",  6 + helpXTab,  6 + helpYSpacing*2);
+	help.set(20, "....  COPY",  6 + helpXTab,  6 + helpYSpacing*2);
 	help.set(21, "CTRL + V",   6           ,  6 + helpYSpacing*3);
-	help.set(22, ".... PASTE", 6 + helpXTab,  6 + helpYSpacing*3);
+	help.set(22, "....  PASTE", 6 + helpXTab,  6 + helpYSpacing*3);
 	help.set(23, "CTRL + S",   6           ,  6 + helpYSpacing*4);
-	help.set(24, ".... SAVE",  6 + helpXTab,  6 + helpYSpacing*4);
+	help.set(24, "....  SAVE",  6 + helpXTab,  6 + helpYSpacing*4);
 	help.set(25, "ALT + S",    6           ,  6 + helpYSpacing*5);
-	help.set(26, ".... QUICK-SAVE" ,  6 + helpXTab,  6 + helpYSpacing*5);
+	help.set(26, "....  QUICK-SAVE" ,  6 + helpXTab,  6 + helpYSpacing*5);
 	help.set(27, "CTRL + A",   6           ,  6 + helpYSpacing*6);
-	help.set(28, ".... SELECT ALL" ,  6 + helpXTab,  6 + helpYSpacing*6);	
+	help.set(28, "....  SELECT ALL" ,  6 + helpXTab,  6 + helpYSpacing*6);	
 	help.set(29, "SHIFT + ARROW"   ,  6           ,  6 + helpYSpacing*7);
-	help.set(30, ".... SELECT TEXT",  6 + helpXTab,  6 + helpYSpacing*7);
+	help.set(30, "....  SELECT TEXT",  6 + helpXTab,  6 + helpYSpacing*7);
 	help.set(31, "ALT"   ,     6           ,  6 + helpYSpacing*8);
-	help.set(32, ".... CLEAR SELECTION",  6 + helpXTab,  6 + helpYSpacing*8);
+	help.set(32, "....  CLEAR SELECTION",  6 + helpXTab,  6 + helpYSpacing*8);
 	help.set(33, "ALT + V",    6           ,  6 + helpYSpacing*9);
-	help.set(34, ".... SYSTEM VOLUME" ,  6 + helpXTab,  6 + helpYSpacing*9);
+	help.set(34, "....  SYSTEM VOLUME" ,  6 + helpXTab,  6 + helpYSpacing*9);
 	help.set(35, "ALT + D",    6           ,  6 + helpYSpacing*10);
-	help.set(36, ".... AUDIO DEVICE" ,  6 + helpXTab,  6 + helpYSpacing*10);
+	help.set(36, "....  AUDIO DEVICE" ,  6 + helpXTab,  6 + helpYSpacing*10);
 	help.set(37, "ALT + I",    6           ,  6 + helpYSpacing*11);
-	help.set(38, ".... INITIALIZE AUDIO" ,  6 + helpXTab,  6 + helpYSpacing*11);
+	help.set(38, "....  INITIALIZE AUDIO" ,  6 + helpXTab,  6 + helpYSpacing*11);
 	help.set(39, "ALT + O",    6           ,  6 + helpYSpacing*12);
-	help.set(40, ".... OPEN USERDIR" ,  6 + helpXTab,  6 + helpYSpacing*12);
+	help.set(40, "....  OPEN USERDIR" ,  6 + helpXTab,  6 + helpYSpacing*12);
 	help.set(41, "HOME"            ,  6,             6 + helpYSpacing*13);
-	help.set(42, ".... TO TOP"     ,  6 + helpXTab,  6 + helpYSpacing*13);
+	help.set(42, "....  TO TOP"     ,  6 + helpXTab,  6 + helpYSpacing*13);
 	help.set(43, "END"             ,  6,             6 + helpYSpacing*14);
-	help.set(44, ".... TO END"     ,  6 + helpXTab,  6 + helpYSpacing*14);
+	help.set(44, "....  TO END"     ,  6 + helpXTab,  6 + helpYSpacing*14);
+	help.set(45, "PGUP"             ,  6,             6 + helpYSpacing*15);
+	help.set(46, "....  UP ONE SCREEN"     ,  6 + helpXTab,  6 + helpYSpacing*15);
+	help.set(47, "PGDOWN"             ,  6,             6 + helpYSpacing*16);
+	help.set(48, "....  DOWN ONE SCREEN"     ,  6 + helpXTab,  6 + helpYSpacing*16);
 	
-	help.setBlackOut(3, 3, 360, helpYSpacing*15+10);	
+	help.setBlackOut(3, 3, 380, helpYSpacing*17+10);	
 	help.deactivate(); // start inactive...
 	
 	string vText = "VERSION " + STR_VERSION;
@@ -274,7 +284,7 @@ void GUI::initialize()
 	help.deactivateVersionText();
 	
 	// this adds a little animation.. just some silly fun :)
-	omake.setCurrentDir(currentDir);
+	omake.setCurrentDir(installDir);
 	omake.initialize(&window);
 	
 	// clock to track meter update interval
@@ -300,9 +310,6 @@ void GUI::initialize()
 
 	window.requestFocus();
 	
-	// DEBUG
-	cout << "At start - progressRatio() = " << mplayer.getProgressRatio() << endl;
-
 	// start running GUI
 	// run();
 }
@@ -972,7 +979,7 @@ void GUI::handleInputs()
 		
 		// WAIT... try a relative path
 		docPath = "documentation\\beepcomp_users_guide.html";
-		string docPath2 = currentDir + "\\documentation\\beepcomp_users_guide.html";
+		string docPath2 = installDir + "\\documentation\\beepcomp_users_guide.html";
 		
 		// now try to open the html file...
 		/*
@@ -2003,11 +2010,12 @@ void GUI::startNewDialog()
 	if(currentFileName.empty())
 		window.setTitle(windowTitle);
 	else
-		window.setTitle(windowTitle + " ... " + currentFileName);
+		window.setTitle(currentFileName + " ... " + windowTitle);
 }
 
 void GUI::saveDialog()
 {
+	dialog.setStartFolder(currentPath);
 	string saveFileName = dialog.getSaveFileName();
 	cout << "Save dialog completed!" << endl;
 	bool shouldCancel = dialog.cancelChosen;
@@ -2017,6 +2025,8 @@ void GUI::saveDialog()
 	{
 		currentPathAndFileName = saveFileName;
 		size_t fpos = currentPathAndFileName.find_last_of("\\");
+		currentPath = currentPathAndFileName.substr(0,fpos);
+		cout << "Current Path reset to: " << currentPath;
 		currentFileName = currentPathAndFileName.substr(fpos+1);
 
 		// if the file name has no extension, add '.txt'
@@ -2046,11 +2056,12 @@ void GUI::saveDialog()
 	if(currentFileName.empty())
 		window.setTitle(windowTitle);
 	else
-		window.setTitle(windowTitle + " ... " + currentFileName);
+		window.setTitle(currentFileName + " ... " + windowTitle);
 }
 
 void GUI::loadDialog()
 {	
+	dialog.setStartFolder(currentPath);
 	string loadFileName = dialog.getLoadFileName();
 	cout << "Load dialog completed!" << endl;
 	bool shouldCancel = dialog.cancelChosen;
@@ -2060,6 +2071,8 @@ void GUI::loadDialog()
 	{
 		currentPathAndFileName = loadFileName;
 		size_t fpos = currentPathAndFileName.find_last_of("\\");
+		currentPath = currentPathAndFileName.substr(0,fpos);
+		cout << "Current Path reset to: " << currentPath << endl;
 		currentFileName = currentPathAndFileName.substr(fpos+1);
 
 		cout << "Open: " << currentPathAndFileName << endl;
@@ -2082,7 +2095,7 @@ void GUI::loadDialog()
 	if(currentFileName.empty())
 		window.setTitle(windowTitle);
 	else
-		window.setTitle(windowTitle + " ... " + currentFileName);
+		window.setTitle(currentFileName + " ... " + windowTitle);
 }
 
 void GUI::exportDialog()
@@ -2128,7 +2141,7 @@ void GUI::exportDialog()
 	if(currentFileName.empty())
 		window.setTitle(windowTitle);
 	else
-		window.setTitle(windowTitle + " ... " + currentFileName);
+		window.setTitle(currentFileName + " ... " + windowTitle);
 }
 
 // this function creates a dialog box for starting new file - start new if yes

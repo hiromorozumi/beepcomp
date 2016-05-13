@@ -69,6 +69,14 @@ public:
 	Rise rise;
 	bool riseActive;
 	
+	bool beefUp;
+	float beefUpFactor;
+	float compRatio;
+	float compThreshold;
+	
+	int popGuardCount;
+	float lastAmp;
+	
 	float history[OSC_HISTORY_SIZE];
 	int historyWriteWait;
 	int historyWriteIndex;
@@ -84,7 +92,13 @@ public:
 	void setFrequency(double noteFreq);
 	void setIncrement(double noteFreq);
 	void initializePhase();
+	void refreshForSongBeginning();
 	float getOutput();
+	float compress(float in);
+	float popGuard(float in);
+	void enableBeefUp();
+	void disableBeefUp();
+	void setBeefUpFactor(float factor);
 	void advanceEnvelope();
 	void refreshEnvelope();
 	float getEnvelopeOutput();

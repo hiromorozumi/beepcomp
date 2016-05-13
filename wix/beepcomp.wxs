@@ -6,7 +6,7 @@
 		UpgradeCode='8F81687A-D9C1-4711-AF2A-347CA54ADDD8'
 		Language='1033'
 		Codepage='1252'
-		Version='0.2.0'
+		Version='0.2.1'
 		Manufacturer='Gingerroot Soft'>
 	
 	<Package Id='*' Keywords='Installer' 

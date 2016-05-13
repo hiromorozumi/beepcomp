@@ -50,6 +50,14 @@ OSC::OSC()
 	fallActive = false;
 	riseActive = false;
 	
+	beefUp = false;
+	beefUpFactor = 1.0f;
+	compRatio = 4.0f;
+	compThreshold = 0.90f;
+	
+	popGuardCount = 0;
+	lastAmp = 0.0f;
+	
 	// initialize history table
 	clearHistory();
 }
@@ -89,11 +97,11 @@ void OSC::setTable(int type)
 		
 			for(int i=0; i<OSC_TABLE_SIZE/2; i++)
 			{
-				table[i] = 0.85f;
+				table[i] = 0.80f;
 			}
 			for(int i=OSC_TABLE_SIZE/2; i<OSC_TABLE_SIZE; i++)
 			{
-				table[i] = -0.85f;
+				table[i] = -0.80f;
 			}
 			break;
 		
@@ -106,9 +114,16 @@ void OSC::setTable(int type)
 		// triangle wave
 		case 3:
 			for(int i=0; i<OSC_TABLE_SIZE/2; i++)
-				table[i] = -0.99f  + (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE/2)) * 1.98f;	
+			{
+				int index = OSC_TABLE_SIZE/4 + i;
+				table[index] = -0.99f  + (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE/2)) * 1.98f;
+			}				
 			for(int i=OSC_TABLE_SIZE/2; i<OSC_TABLE_SIZE; i++)
-				table[i] = 0.99f  - (static_cast<float>(i-OSC_TABLE_SIZE/2) / static_cast<float>(OSC_TABLE_SIZE/2)) * 1.98f;
+			{
+				int index = OSC_TABLE_SIZE/4 + i;
+				if(index>=OSC_TABLE_SIZE) index -= OSC_TABLE_SIZE;
+				table[index] = 0.99f  - (static_cast<float>(i-OSC_TABLE_SIZE/2) / static_cast<float>(OSC_TABLE_SIZE/2)) * 1.98f;
+			}
 			break;
 		
 		// sine wave with 3rd, 6th, 9th, 12th harmonics
@@ -181,12 +196,53 @@ void OSC::setTable(int type)
 			
 			break;
 
-		// default is sine wave...
-		default:
-			maxAmp = 0.99f;
-			for(int i=0; i<OSC_TABLE_SIZE; i++)
-				table[i] = sin( TWO_PI * (static_cast<float>(i) / static_cast<float>(OSC_TABLE_SIZE) ) ) * maxAmp;
+		// pulse wave 12.5%-87.5% ratio
+		case 6:
+			for(int i=0; i<OSC_TABLE_SIZE/8; i++)
+			{
+				table[i] = -0.80f;
+			}
+			for(int i=OSC_TABLE_SIZE/8; i<OSC_TABLE_SIZE; i++)
+			{
+				table[i] = 0.80f;
+			}			
+			break;			
 			
+		// pulse wave 25%-75% ratio
+		case 7:
+		
+			for(int i=0; i<OSC_TABLE_SIZE/4; i++)
+			{
+				table[i] = -0.80f;
+			}
+			for(int i=OSC_TABLE_SIZE/4; i<OSC_TABLE_SIZE; i++)
+			{
+				table[i] = 0.80f;
+			}		
+			break;
+			
+		// pulse wave 33.3% ratio
+		case 8:
+			for(int i=0; i<OSC_TABLE_SIZE/3; i++)
+			{
+				table[i] = -0.80f;
+			}
+			for(int i=OSC_TABLE_SIZE/3; i<OSC_TABLE_SIZE; i++)
+			{
+				table[i] = 0.80f;
+			}				
+			break;
+
+		// default is SQUARE wave...
+		default:
+			for(int i=0; i<OSC_TABLE_SIZE/2; i++)
+			{
+				table[i] = -0.80f;
+			}
+			for(int i=OSC_TABLE_SIZE/2; i<OSC_TABLE_SIZE; i++)
+			{
+				table[i] = 0.80f;
+			}
 			break;
 			
 	}
@@ -270,7 +326,10 @@ float OSC::getEnvelopeOutput()
 		if(!envRfinished && !forceSilenceAtBeginning)
 			output = sustainLevel * ( static_cast<float>(nReleaseFrames - releasePos) / static_cast<float>(nReleaseFrames) );
 		else
+		{
 			output = 0.0f;
+			phase = 0; // reset phase for next note!
+		}
 	}
 	
 	return output;
@@ -351,13 +410,16 @@ void OSC::setNewNote(double newFreq)
 {
 	forceSilenceAtBeginning = false;
 	setFrequency(newFreq);
-	initializePhase();
+	// initializePhase();
 	refreshEnvelope();
 	resting = false;
 	if(fallActive && fall.octTraveled > 0.0)
 		stopFall();
 	if(riseActive && rise.pos > 30)
 		stopRise();
+	
+	// enable pop-guarding...
+	popGuardCount = 60;
 }
 
 // set the frequency and phase increment at once
@@ -532,6 +594,13 @@ void OSC::initializePhase()
 	phase = 0;
 }
 
+void OSC::refreshForSongBeginning()
+{
+	initializePhase();
+	lastAmp = 0.0f;
+	refreshEnvelope();
+}
+
 float OSC::getOutput()
 {
 	/*
@@ -549,7 +618,19 @@ float OSC::getOutput()
 	int ph = static_cast<int> (phase);
 	// cout << "phase=" << phase << "..";
 	
-	float out = table[ph] * getEnvelopeOutput() * gain;
+	float out = table[ph] * getEnvelopeOutput();
+	
+	// if BeefUp is enabled... beef up and compress!
+	if(beefUp)
+		out = compress(out * beefUpFactor);
+	
+	out *= gain;
+	
+	// popguard - just for the first 2 frames...
+	if(popGuardCount>0)
+		out = popGuard(out);
+	else
+		lastAmp = out;
 	
 	historyWriteWait++;
 	if(historyWriteWait >= 8)
@@ -560,6 +641,46 @@ float OSC::getOutput()
 	
 	return out;
 }
+
+float OSC::compress(float in)
+{
+	float out = in;
+	if(in >= 0.0f && in > compThreshold) // positive value
+	{
+		float delta = in - compThreshold;
+		delta = delta / compRatio;
+		out = compThreshold + delta;
+		if(out>=0.99f) out = 0.99f;
+	}
+	else if(in <= 0.0f && in < -compThreshold) // negative value
+	{
+		float delta = in + compThreshold;
+		delta = delta / compRatio;
+		out = -compThreshold + delta;
+		if(out<=-0.99f) out = -0.99f;
+	}
+	return out;
+}
+
+float OSC::popGuard(float in)
+{
+	float inPositive = max(0.0f, (in + 1.0f));
+	float lastAmpPositive = max(0.0f, (lastAmp + 1.0f));
+	float travelAmount = lastAmpPositive - inPositive;
+	inPositive = inPositive + travelAmount * (static_cast<float>(popGuardCount) / 60.0f);
+	popGuardCount--;
+	
+	return (inPositive-1.0f);
+}
+
+void OSC::enableBeefUp()
+{ beefUp = true; }
+
+void OSC::disableBeefUp()
+{ beefUp = false; }
+
+void OSC::setBeefUpFactor(float factor)
+{ beefUpFactor = factor; }
 
 // push current data to table that keeps an array of historical data
 // (used for meter visualization)

@@ -44,6 +44,7 @@ public:
 	int countDigits(std::string snippet);
 	
 	void errLog(std::string errText1, std::string errText2="");
+	std::string toString(int n);
 	
 	// destructor
 	~MML();
