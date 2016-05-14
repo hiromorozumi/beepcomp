@@ -238,6 +238,7 @@ public:
 	int itemTypesView[TEXT_HEIGHT];
 	int topRenderLine;
 	int selectedIndex;
+	int selectedIndexPrevious;
 	
 	bool upFiring;
 	int upProcessedCount;
@@ -252,6 +253,7 @@ public:
 	std::string fileNameToReturn;
 	int dialogMode;
 	bool cancelChosen;
+	bool atBaseDialogLevel;
 	std::string fileFilter;
 
 	sf::RectangleShape inputLine;

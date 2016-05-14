@@ -20,6 +20,7 @@ Dialog::Dialog()
 	windowClosed = false;
 	windowFocused = true;
 	cancelChosen = false;
+	atBaseDialogLevel = true;
 	
 	adjustedWindowWidth = WINDOW_WIDTH;
 	adjustedWindowHeight = WINDOW_HEIGHT;
@@ -333,8 +334,10 @@ void Dialog::runFileDialog()
 	exitDialog = false;
 	exitBasicDialog = false;
 	cancelChosen = false;
+	atBaseDialogLevel = true;
 	topRenderLine = 0;
 	selectedIndex = 0;
+	selectedIndexPrevious = 0;
 	strInput = "";
 	cursorPos = 0;
 	fireClock.restart();
@@ -376,15 +379,34 @@ void Dialog::pollEvents()
 {
 		while (w->pollEvent(event))
 		{
-			if (!exitDialog && !exitBasicDialog && (event.type == sf::Event::Closed) )
+			// handle x-ing out the window
+			if (event.type == sf::Event::Closed)
 			{
-				exitDialog = true;
-				exitBasicDialog = true;
-				exitGoToDialog = true;
-				windowClosed = true;
+				// if you're coming from yes/no dialog or drive 'go-to' dialog, simply return to base file dialog
+				if(!exitBasicDialog || !exitGoToDialog)
+				{
+					exitBasicDialog = true;
+					exitGoToDialog = true;
+					windowClosed = true;
+				}
+				// otherwise you're exiting from base dialog - return to GUI, pass cancelChosen = true
+				else
+				{
+					exitDialog = true;
+					exitBasicDialog = true;
+					exitGoToDialog = true;
+					windowClosed = true;
 				
-				cancelChosen = true;
+					cancelChosen = true;
+				}
 			}
+			/*
+			if(event.type == sf::Event::Closed && atBaseDialogLevel)
+			{
+				cancelChosen = true;
+				exitDialog = true;
+			}
+			*/
 			// check for mouse events now
 			if (event.type == sf::Event::MouseButtonPressed)
 			{
@@ -460,13 +482,15 @@ void Dialog::handleInputFileDialog()
 	// if clicked on a filename line, select that itemText
 	if(mouse.left()
 		&& mouseX >= TEXT_TOP_X && mouseX <= TEXT_TOP_X + charWidth * TEXT_WIDTH
-		&& mouseY >= TEXT_TOP_Y && mouseY <= TEXT_TOP_Y + charHeight * TEXT_HEIGHT)
+		&& mouseY >= TEXT_TOP_Y && mouseY <= TEXT_TOP_Y + charHeight * TEXT_HEIGHT + 5)
 	{
 		pageClickCount++;
 		while(mouse.left()){}
 		
+		selectedIndexPrevious = selectedIndex; // for checking for double-clicking the same item...
+		
 		// line number that's selected on browser display
-		int selectedLineDisplay = (mouseY-TEXT_TOP_Y)/charHeight;
+		int selectedLineDisplay = (mouseY-TEXT_TOP_Y-8)/charHeight;
 		
 		// translate that with topRenderLine, and also check you're not out of bound
 		int possiblySelectedIndex = selectedLineDisplay + topRenderLine;
@@ -482,9 +506,14 @@ void Dialog::handleInputFileDialog()
 		}
 		
 		//  check for double-clicking now...
+		bool doubleClickedSameItem = (selectedIndexPrevious==selectedIndex);
+		
+		// DEBUG
+		if(clickTimer.getElapsedTime().asSeconds()<0.5f && pageClickCount>=2 && !doubleClickedSameItem)
+			cout << "double-clicked, but different item!\n";
 
 		// check if this item has been DOUBLE-CLICKED
-		if(clickTimer.getElapsedTime().asSeconds()<0.5f && pageClickCount>=2)
+		if(clickTimer.getElapsedTime().asSeconds()<0.5f && pageClickCount>=2 && doubleClickedSameItem)
 		{
 			cout << "double clicked!\n";
 			
@@ -527,6 +556,11 @@ void Dialog::handleInputFileDialog()
 			{
 				// if the requested filename already exists, check!
 				bool sameNameExists = overwriting(strInput);
+				string strExtension = "";
+				if(dialogMode==1 && strInput.find(".")==string::npos && overwriting(strInput+".txt"))
+					{ sameNameExists = true; strExtension = ".txt"; }
+				if(dialogMode==2 && strInput.find(".")==string::npos && overwriting(strInput+".wav"))
+					{ sameNameExists = true; strExtension = ".wav"; }
 				bool overwriteOkay = false;
 				if(sameNameExists)
 				{
@@ -534,7 +568,7 @@ void Dialog::handleInputFileDialog()
 					cout << "File by this name already exists..." << endl;
 					cout << "Will confirm with yes-no dialog! \n";
 					
-					string fname = trimRight(strInput, 26);
+					string fname = trimRight(strInput, 26) + strExtension;
 					string strQuestion = "File named {" + fname + "} already exists.|Are you sure you want to {overwrite}?";
 					overwriteOkay = yesNoDialog(strQuestion);
 					cout << "dialog result = " << overwriteOkay << endl;
@@ -841,6 +875,11 @@ void Dialog::handleInputFileDialog()
 				
 				// if the requested filename already exists, check!
 				bool sameNameExists = overwriting(strInput);
+				string strExtension = "";
+				if(dialogMode==1 && strInput.find(".")==string::npos && overwriting(strInput+".txt"))
+					{ sameNameExists = true; strExtension = ".txt"; }
+				if(dialogMode==2 && strInput.find(".")==string::npos && overwriting(strInput+".wav"))
+					{ sameNameExists = true; strExtension = ".wav"; }
 				bool overwriteOkay = false;
 				if(sameNameExists)
 				{
@@ -848,7 +887,7 @@ void Dialog::handleInputFileDialog()
 					cout << "File by this name already exists..." << endl;
 					cout << "Will confirm with yes-no dialog! \n";
 					
-					string fname = trimRight(strInput, 26);
+					string fname = trimRight(strInput, 26) + strExtension;
 					string strQuestion = "File named {" + fname + "} already exists.|Are you sure you want to {overwrite}?";
 					overwriteOkay = yesNoDialog(strQuestion);
 					cout << "dialog result = " << overwriteOkay << endl;
@@ -948,7 +987,10 @@ void Dialog::handleInputFileDialog()
 				if(!strInput.empty())
 				{
 					// if the requested filename already exists, check!
-					bool sameNameExists = overwriting(strInput) || overwriting(strInput+".txt");
+					bool sameNameExists = overwriting(strInput);
+				string strExtension = "";
+				if(strInput.find(".")==string::npos && overwriting(strInput+".txt"))
+					{ sameNameExists = true; strExtension = ".txt"; }
 					bool overwriteOkay = false;
 					if(sameNameExists)
 					{
@@ -956,7 +998,7 @@ void Dialog::handleInputFileDialog()
 						cout << "File by this name already exists..." << endl;
 						cout << "Will confirm with yes-no dialog! \n";
 						
-						string fname = trimRight(strInput, 26);
+						string fname = trimRight(strInput, 26) + strExtension;
 						string strQuestion = "File named {" + fname + "} already exists.|Are you sure you want to {overwrite}?";
 						overwriteOkay = yesNoDialog(strQuestion);
 						cout << "dialog result = " << overwriteOkay << endl;
@@ -995,7 +1037,10 @@ void Dialog::handleInputFileDialog()
 				if(!strInput.empty())
 				{
 					// if the requested filename already exists, check!
-					bool sameNameExists = overwriting(strInput) || overwriting(strInput+".wav");
+					bool sameNameExists = overwriting(strInput);
+					string strExtension = "";
+					if(strInput.find(".")==string::npos && overwriting(strInput+".wav"))
+						{ sameNameExists = true; strExtension = ".wav"; }
 					bool overwriteOkay = false;
 					if(sameNameExists)
 					{
@@ -1003,7 +1048,7 @@ void Dialog::handleInputFileDialog()
 						cout << "File by this name already exists..." << endl;
 						cout << "Will confirm with yes-no dialog! \n";
 						
-						string fname = trimRight(strInput, 26);
+						string fname = trimRight(strInput, 26) + strExtension;
 						string strQuestion = "File named {" + fname + "} already exists.|Are you sure you want to {overwrite}?";
 						overwriteOkay = yesNoDialog(strQuestion);
 						cout << "dialog result = " << overwriteOkay << endl;

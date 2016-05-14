@@ -4,10 +4,10 @@ Release Notes v0.2.1
 
 Dear users,
 
-The funky and nasal sounds of a pulse waveforms were used everywhere in many console games so this had to be included in BeepComp's sound arsenal! I also added a simple overdrive effect you can use to "beef up" soft waveforms like sine and triangle waves. I think you will have fun with these new tools!
-I will post a tutorials with which you can explore these new features.
-I hope you enjoy the evolved version of BeepComp.
-Please always feel free to give me feedback, bug reports and share songs you make!
+The funky, nasally sounds of a pulse waveforms were used everywhere in many old console games so these had to be included in BeepComp's sound arsenal! I also added a simple overdrive effect you can use to "beef up" soft waveforms like sine and triangle waves. You will have fun with these new tools!
+I am creating a few forum posts that walk through these new features...
+I hope you enjoy this evolved version of BeepComp.
+Please always feel free to give me feedback, let me know of any bugs, and share songs you make!
 
 Kind regards,
 Hiro
@@ -15,7 +15,7 @@ Hiro
 What's new in BeepComp version 0.2.1:
 
 - Introduces pulse waveforms - pulse wave patterns emulate some of the classic sounds of Nintendo's NES
-- New "Beef-Up" effect - mild overdrive effect to fatten up your channel
+- New "Beef-Up" effect - mild overdrive effect to fatten up your audio signal
 - Added a button in the file dialog to go to a particular drive, the 'Desktop' folder or the 'Documents' folder
 - Added a help screen in the file dialog to look up key short-cuts
 - CTRL + Z in the file dialog: go back to the previous directory you were in

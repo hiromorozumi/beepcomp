@@ -1,3 +1,4 @@
+============================================
 How to create a portable version of BeepComp
 ============================================
 
@@ -29,3 +30,33 @@ How to create a portable version of BeepComp
 6. Copy README.txt and READ.md with the updated version number to that beepcomp_vX-X-X_portable folder
 
 7. Zip up that beepcomp_vX-X-X_portable folder!
+
+
+What to pack in the portable package
+------------------------------------
+
+Folders to copy from 'beepcomp' base folder
+
+- 'documentation' folder (entirely)
+- 'fonts' folder (entirely)
+- 'userdata' folder (entirely)
+- 'images' folder (entirely)
+
+Files to copy from 'beepcomp' base folder top level
+
+- portaudio_portable.exe
+- default.txt
+
+- sfml-graphics-2.dll
+- sfml-window-2.dll
+- sfml-system-2.dll
+- libgcc_s_dw2-1.dll
+- libstdc++6.dll
+- libwinpthread-1.dll
+- portaudio_x86.dll
+- libsndfile-1.dll
+- libmp3lame-0.dll
+
+- README.txt
+- README.md
+- LICENSE.txt

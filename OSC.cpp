@@ -664,10 +664,12 @@ float OSC::compress(float in)
 
 float OSC::popGuard(float in)
 {
-	float inPositive = max(0.0f, (in + 1.0f));
-	float lastAmpPositive = max(0.0f, (lastAmp + 1.0f));
-	float travelAmount = lastAmpPositive - inPositive;
-	inPositive = inPositive + travelAmount * (static_cast<float>(popGuardCount) / 60.0f);
+	float inPositive = in + 1.0f;
+	if(inPositive<0.0f) inPositive = 0.0f;
+	float lastAmpPositive = lastAmp + 1.0f;
+	if(lastAmpPositive<0.0f) lastAmpPositive = 0.0f;
+	// float travelAmount = lastAmpPositive - inPositive;
+	inPositive += (lastAmpPositive - inPositive) * (static_cast<float>(popGuardCount) / 60.0f);
 	popGuardCount--;
 	
 	return (inPositive-1.0f);

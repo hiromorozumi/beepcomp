@@ -1,0 +1,15 @@
+@G
+
+TEMPO=128
+DELAYTIME=468
+
+@1
+
+PRESET=POPPY
+WAVEFORM=3
+
+O5
+C~~<BBb~G~F~G~A~F~G~GABb~G~>EEbDDbC~<C~>
+C~~<BBb~G~F~G~A~F~>D~DEF~~DC~<B~>C~~~
+D~DEF~~D<B~B>CDC<B~Bb~Bb>CD~~<BAG#ABb>CC#DE
+F~~ED~Db~C~<B~Bb~G~F~FGA~~F>C<BBbGF~>F~

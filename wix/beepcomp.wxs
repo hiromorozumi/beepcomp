@@ -470,6 +470,7 @@
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 	
 	<Icon Id="beepcomp_24.ico" SourceFile="beepcomp_24.ico" />
+	<Icon Id="beepcomp_48.ico" SourceFile="beepcomp_48.ico" />
 	<Icon Id="documentation_24.ico" SourceFile="documentation_24.ico" />
 	<Property Id="ARPPRODUCTICON" Value="beepcomp_48.ico" />
 	
