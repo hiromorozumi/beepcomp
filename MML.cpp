@@ -330,6 +330,7 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 					
 					str.insert(searchPos + targetLen + digits, ")");
 					str.insert(searchPos,"(");
+					strLen += 2; // we just increased the string's length by w chars...
 					searchPos += targetLen; // advance.. we should skip the newly inserted '('
 					i = N_EVENT_TAGS; // force this loop to end
 				}
