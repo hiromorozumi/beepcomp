@@ -11,7 +11,7 @@
 
 using namespace std;
 
-const std::string GUI::STR_VERSION = "0.2.1";
+const std::string GUI::STR_VERSION = "0.2.2";
 
 void GUI::initialize()
 {

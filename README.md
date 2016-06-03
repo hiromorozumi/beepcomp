@@ -1,7 +1,7 @@
 BeepComp - Chiptune Creator
 ===========================
 
-This version is: v0.2.1
+This version is: v0.2.2
 
 This software assists you in making music that sounds like 8-bit game consoles or old PCs.
 The latest release is always available at the SourceForge project top page:

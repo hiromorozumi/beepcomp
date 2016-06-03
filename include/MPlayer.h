@@ -55,7 +55,11 @@ public:
 	float compThreshold;
 	float compRatio;
 	bool delayEnabled;
+	bool ringModEnabled[9];
+	int ringModFeed[9];
+	bool ringModMute[9];
 	bool loopEnabled;
+	int repeatsRemaining;
 	bool songFinished;
 
 	bool channelDone[9];
@@ -99,6 +103,7 @@ public:
 	void activateDrumChannel();
 	void enableLooping();
 	void disableLooping();
+	void setRepeatsRemaining(int value);
 	void advance();
 	float getMix(int channel);
 	float compress(float input);
@@ -154,6 +159,8 @@ public:
 	void disableDelay();
 	void setAstro(int channel, int nCyclesPerSecond);
 	void disableAstro(int channel);
+	void enableRingMod(int channel, int modulatorChannel);
+	void disableRingMod(int channel);
 	void processEvent(int channel, int eType, int eParam);
 	void processDrumEvent(int eType, int eParam);
 	std::string exportToFile(string filename);

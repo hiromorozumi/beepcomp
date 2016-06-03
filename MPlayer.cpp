@@ -165,9 +165,43 @@ int MPlayer::playerCallback (
 			if(	channelDone[0] && channelDone[1] && channelDone[2] &&
 				channelDone[3] && channelDone[4] && channelDone[5] &&
 				channelDone[6] && channelDone[7] && channelDone[8] && dChannelDone)
-			{
+			{	
+				// final point check!
+				// ... if there are events to process at this final moment... process them here
+				
+				for(int i=0;i<9;i++)
+				{	
+					bool eventsDone = false;
+					while(!eventsDone)
+					{
+						// if next event in vector is set to happen at this frame pos, process
+						if( (eventIndex[i] < data[i].nEvents) )
+						{
+							processEvent(i, data[i].eventType[eventIndex[i]], data[i].eventParam[eventIndex[i]]);
+							eventIndex[i]++;
+						}
+						else
+							eventsDone = true;
+					}
+				}
+				
+				// process drum events pending at the final point before loop
+				bool eventsDone = false;
+				while(!eventsDone)
+				{
+					// if next event in vector is set to happen at this frame pos, process
+					if( (dEventIndex < ddata.nEvents) )
+					{
+						processDrumEvent(ddata.eventType[dEventIndex], ddata.eventParam[dEventIndex]);
+						dEventIndex++;
+					}
+					else
+						eventsDone = true;
+				}
+				
 				if(loopEnabled)
 				{
+					cout << "Looping back to beginning...\n";
 					// enable channels again
 					enableChannels(true, true, true, true, true, true, true, true, true, true);
 
@@ -176,6 +210,21 @@ int MPlayer::playerCallback (
 
 					// go back to the beginning
 					goToBeginning();
+				}
+				else if(!loopEnabled && repeatsRemaining > 1) // if repeat times is left.. process
+																// when set to 1, it's last time
+				{
+					repeatsRemaining--;
+					cout << "Back to beginning... repeats remaining = " << repeatsRemaining << endl;
+					
+					// enable channels again
+					enableChannels(true, true, true, true, true, true, true, true, true, true);
+
+					// enable drum channel
+					enableDrumChannel();
+
+					// go back to the beginning
+					goToBeginning();					
 				}
 			}
 
@@ -394,6 +443,9 @@ void MPlayer::resetForNewSong()
 	// loop is enabled by default
 	loopEnabled = true;
 	
+	// repeat counts - Note: repeating is OFF if loop is enabled
+	repeatsRemaining = 1;
+	
 	// reset frame info for now (in case you're starting a new empty file)
 	songLastFrame = 0;
 	songLastFramePure = 0;
@@ -429,8 +481,16 @@ void MPlayer::resetForNewSong()
 		osc[i].setFallToDefault();
 		osc[i].disableBeefUp();
 		osc[i].setBeefUpFactor(1.0f);
+		ringModEnabled[i] = false; // start with ring modulation cleared
+		ringModFeed[i] = -1; // -1 means no feeder channel
+		ringModMute[i] = false;
+		osc[i].resetYFlip();
 	}
 	enableDrumChannel();
+	nosc.resetDrumTones();
+	nosc.disableBeefUp();
+	nosc.setBeefUpFactor(1.0f);
+	nosc.useWhiteNoise();
 
 	// clear all osc history data used for meter visualization
 	for(int i=0; i<9; i++)
@@ -638,6 +698,30 @@ void MPlayer::setAstro(int channel, int nCyclesPerSecond)
 
 void MPlayer::disableAstro(int channel)
 	{ osc[channel].disableAstro(); }
+	
+void MPlayer::enableRingMod(int channel, int modulatorChannel)
+{
+	ringModEnabled[channel] = true; // turn on ring modulation for this channel
+	ringModFeed[channel] = modulatorChannel; // assign the modulator/feeder channel
+	ringModMute[modulatorChannel] = true; // feeder channel should be muted in main mix
+}
+
+void MPlayer::disableRingMod(int channel)
+{
+	bool found = false;
+	int searchChannel = ringModFeed[channel]; // do search for - currently assigned modulator for this channel
+	ringModFeed[channel] = -1; // -1 to clear target for this channel to begin...
+	int channelToCheck = ringModFeed[channel]; // check for the assigned modulator channel
+												// if it's not by any other channel, then we can REVIVE the modulator
+	for(int i=0; i<9; i++)
+	{
+		if( ringModFeed[i] == searchChannel )
+			found = true;
+	}
+	if(!found) // if no other channel has to keep using this modulator that has been used by this channel
+		ringModMute[searchChannel] = false; // revive this feeder channel - comes alive in mix again!
+	ringModEnabled[channel] = false; // then disable ring modulation for this channel
+}
 
 void MPlayer::setNewNote(int channel, double freq)
 {
@@ -719,6 +803,9 @@ void MPlayer::enableLooping()
 void MPlayer::disableLooping()
 	{ loopEnabled = false; }
 	
+void MPlayer::setRepeatsRemaining(int value)
+	{ repeatsRemaining = value; }
+	
 void MPlayer::advance()
 {
 	// advance each music oscillator
@@ -740,8 +827,10 @@ float MPlayer::getMix(int channel)
 	// mix all 9 channels
 	for(int i=0; i<9; i++)
 	{
-		if(enabled[i] && silenced[i] == false)
+		if(enabled[i] && silenced[i] == false && !ringModEnabled[i] && !ringModMute[i])
 			mix += compress(osc[i].getOutput());
+		else if(ringModEnabled[i] && enabled[i] && silenced[i] == false && ringModFeed[i]!=-1)
+			mix += compress(osc[i].getOutput() * osc[ringModFeed[i]].getOutput());
 	}
 
 	// mix drum channel, too
@@ -852,20 +941,26 @@ void MPlayer::processEvent(int channel, int eType, int eParam)
 	{
 		float gainToSet = min(0.5f, getChannelGain(channel)+0.05f);
 		setChannelGain(channel, gainToSet);		
-		// cout << "VOLUME++\n";
+		cout << "channel " << channel << " VOLUME++ new gain=" << gainToSet << "\n";
 	}
 	// type 2 - decrement volume
 	else if(eType==2)
 	{
 		float gainToSet = max(0.001f, getChannelGain(channel)-0.05f);
 		setChannelGain(channel, gainToSet);
-		// cout << "VOLUME--\n";
+		cout << "channel " << channel << " VOLUME-- new gain=" << gainToSet << "\n";
 	}
 	// type 10 - set waveform 
 	else if(eType==10)
 	{
 		osc[channel].setTable(eParam); // set wavetable for this value
 		// cout << "WAVEFORM=" << eParam << endl;
+	}
+	// type 11 - flip waveform vertically (helpful for pulse waves etc.)
+	else if(eType==11)
+	{
+		osc[channel].flipYAxis(); // set flipping status to INVERTED
+		cout << "channel " << channel << " - WAVEFLIP" << endl;
 	}
 	// type 1000 - "DEFAULTTONE"
 	else if(eType==1000)
@@ -1050,6 +1145,26 @@ void MPlayer::processEvent(int channel, int eType, int eParam)
 			osc[channel].setBeefUpFactor( (valuef*3.0f/100.0f) + 1.0f ); // set BEEFUP to this value
 		}
 	}
+	// type 80 - "RINGMOD="
+	else if(eType==80)
+	{
+		cout << "channel " << channel << " - RINGMOD = " << eParam << endl;
+		if(eParam==0) // if 0 is passed, turn OFF
+		{
+			cout << "RINGMOD=OFF, channel = " << channel << endl;
+			disableRingMod(channel); // stop ring modulation for this channel now
+		}
+		else if(eParam >= 1) // if 1 or bigger is passed, assign ring modulator channel
+			enableRingMod(channel, eParam-1); // start ring modulation for this channel now
+											// the passed parameter is the modulator/feeder channel number
+		
+	}
+	// type 81 - "RINGMOD=OFF"
+	else if(eType==81)
+	{
+		cout << "RINGMOD=OFF, channel = " << channel << endl;
+		disableRingMod(channel); // stop ring modulation for this channel now
+	}
 }
 
 
@@ -1086,6 +1201,101 @@ void MPlayer::processDrumEvent(int eType, int eParam)
 		float gainToSet = max(0.001f, getDChannelGain()-0.05f);
 		setDChannelGain(gainToSet);
 		// cout << "VOLUME--\n";
+	}
+	// type 500 - reset all drum settings
+	else if(eType==500)
+	{
+		nosc.resetDrumTones();
+		cout << "RESETDRUMS\n";
+	}
+	// type 510 - tune kick
+	// passed value = 0 to 100 (scale), set to freq ranging between 50 and 350hz
+	else if(eType==510)
+	{
+		double tuneFreq = (static_cast<double>(eParam) / 100.0) * 300.0 + 50.0;
+		nosc.tuneKick(tuneFreq);
+		cout << "KICKPITCH - " << eParam << "%, " << tuneFreq << "hz\n";
+	}
+	// type 511 - tune snare
+	// passed value = 0 to 100 (scale), set to freq ranging between 200 and 1240hz
+	else if(eType==511)
+	{
+		double tuneFreq = (static_cast<double>(eParam) / 100.0) * 1040.0 + 200.0;
+		nosc.tuneSnare(tuneFreq);
+		cout << "SNAREPITCH - " << eParam << "%, " << tuneFreq << "hz\n";
+	}
+	// type 512 - tune HiHat
+	// passed value = 0 to 100 (scale), set to freq ranging between 1200 and 3600hz
+	else if(eType==512)
+	{
+		double tuneFreq = (static_cast<double>(eParam) / 100.0) * 2400.0 + 1200.0;
+		nosc.tuneHiHat(tuneFreq);
+		cout << "HIHATPITCH - " << eParam << "%, " << tuneFreq << "hz\n";
+	}
+	// type 520 - "BEEFUP="
+	else if(eType==520)
+	{
+		cout << "Drum BEEFUP=" << eParam << endl;
+		double valuef = static_cast<float>(eParam);
+		if(eParam<0.1f) // if zero, turn off beef-up
+		{
+			nosc.disableBeefUp();
+			cout << "Drum - BEEFUP disabled!\n";
+		}
+		else
+		{
+			nosc.enableBeefUp();
+			nosc.setBeefUpFactor( (valuef*1.6f/100.0f) + 1.0f ); // set BEEFUP to this value
+		}
+	}
+	// type 530 - use white noise
+	else if(eType==530)
+	{
+		nosc.useWhiteNoise();
+		cout << "WHITENOISE\n";
+	}
+	// type 531 - use pink noise
+	else if(eType==531)
+	{
+		nosc.usePinkNoise();
+		cout << "PINKNOISE\n";
+	}
+	// type 540 - set kick length
+	// passed value = 0 to 400 (milliseconds), set to int value ranging between 0 and 400 msec
+	else if(eType==540)
+	{
+		nosc.setKickLength(eParam);
+		cout << "KICKLENGTH - " << eParam << "msec\n";
+	}
+	// type 541 - set snare length
+	// passed value = 0 to 1000 (milliseconds), set to int value ranging between 0 and 1000 msec
+	else if(eType==541)
+	{
+		nosc.setSnareLength(eParam);
+		cout << "SNARELENGTH - " << eParam << "msec\n";
+	}
+	// type 542 - set hihat length
+	// passed value = 0 to 1000 (milliseconds), set to int value ranging between 0 and 1000 msec
+	else if(eType==542)
+	{
+		nosc.setHiHatLength(eParam);
+		cout << "HIHATLENGTH - " << eParam << "msec\n";
+	}
+	// type 550 - set square wave element mix level (default is 100 = 1.0f)
+	// passed value = 0 to 100 (percent), set to float value ranging between 0 and 1.0f
+	else if(eType==550)
+	{
+		float valuef = static_cast<float>(eParam) / 100.0f;
+		nosc.setSquareLevel(valuef);
+		cout << "SQUARELEVEL - " << eParam << "%, passing value = " << valuef << "\n";
+	}
+	// type 551 - set noise element mix level (default is 100 = 1.0f)
+	// passed value = 0 to 100 (percent), set to float value ranging between 0 and 1.0f
+	else if(eType==551)
+	{
+		float valuef = static_cast<float>(eParam) / 100.0f;
+		nosc.setNoiseLevel(valuef);
+		cout << "NOISELEVEL - " << eParam << "%, passing value = " << valuef << "\n";
 	}
 }
 
@@ -1145,7 +1355,7 @@ std::string MPlayer::exportToFile(string filename)
 			currentSongFrame += read;
 
 			// if reached end of song, will get out of loop and finish
-			if(currentSongFrame >= songFrameLen)
+			if(framePos >= songFrameLen)
 				done = true;
 
 			write = lame_encode_buffer_interleaved_ieee_float
@@ -1193,8 +1403,8 @@ std::string MPlayer::exportToFile(string filename)
 			// write to file just this much
 			int framesWrittenFile = sf_writef_float(sndFile, sndBuffer, writeChunkSize);
 
-			currentFrame += nFramesWritten; // update current position
-			if(currentFrame >= songFrameLen) // reached end...
+			// currentFrame += nFramesWritten; // update current position
+			if(framePos >= songFrameLen) // reached end...
 				done = true;
 		}
 
@@ -1336,6 +1546,65 @@ int MPlayer::fillExportBuffer(float* buffer, int framesToWrite, long startFrame,
 				}
 			}
 		}
+
+		
+		// if all channels have reached end... and loop is enabled, go back to beginning
+		if(	channelDone[0] && channelDone[1] && channelDone[2] &&
+			channelDone[3] && channelDone[4] && channelDone[5] &&
+			channelDone[6] && channelDone[7] && channelDone[8] && dChannelDone)
+		{
+			
+			// final point check!
+			// ... if there are events to process at this final moment... process them here
+			
+			for(int i=0;i<9;i++)
+			{
+				bool eventsDone = false;
+				while(!eventsDone)
+				{
+					// if next event in vector is set to happen at this frame pos, process
+					if( (eventIndex[i] < data[i].nEvents) )
+					{
+						processEvent(i, data[i].eventType[eventIndex[i]], data[i].eventParam[eventIndex[i]]);
+						eventIndex[i]++;
+					}
+					else
+						eventsDone = true;
+				}
+			}
+			
+			// process drum events pending at the final point before loop
+			bool eventsDone = false;
+			while(!eventsDone)
+			{
+				// if next event in vector is set to happen at this frame pos, process
+				if( (dEventIndex < ddata.nEvents) )
+				{
+					processDrumEvent(ddata.eventType[dEventIndex], ddata.eventParam[dEventIndex]);
+					dEventIndex++;
+				}
+				else
+					eventsDone = true;
+			}			
+			
+			
+			if(repeatsRemaining > 1) // if repeat times is left.. process
+															// when set to 1, it's last time
+			{
+				repeatsRemaining--;
+				cout << "Back to beginning... repeats remaining = " << repeatsRemaining << endl;
+				
+				// enable channels again
+				enableChannels(true, true, true, true, true, true, true, true, true, true);
+
+				// enable drum channel
+				enableDrumChannel();
+
+				// go back to the beginning
+				goToBeginning();					
+			}
+		}		
+		
 
 		// if song is not finished, update frame position - advance player
 		if(!writeFinished)

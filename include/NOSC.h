@@ -17,7 +17,12 @@ static const int NOSC_HISTORY_SIZE = 64;
 public:
 
 	std::vector<float> nTable;
+	std::vector<float> nPinkTable;
 	std::vector<float> pTable;
+	
+	bool usePink;
+	float noiseLevel; // user can change noise element mix level ... default = 1.0f;
+	float squareLevel; // user can change picthed element mix level ... default = 1.0f
 	
 	double phase;
 	double increment;
@@ -45,6 +50,22 @@ public:
 	float levelFallDelta[6];
 	int envPos;
 	bool envFinished;
+	
+	bool beefUp;
+	float beefUpFactor;
+	float beefUpFactorNoise;
+	float compRatio;
+	float compThreshold;
+
+	double kickFreq;
+	double snareFreq;
+	double hihatFreq;
+	int kickPeakTime;
+	int kickDecayTime;
+	int snarePeakTime;
+	int snareDecayTime;
+	int hihatPeakTime;
+	int hihatDecayTime;
 
 	float history[NOSC_HISTORY_SIZE];
 	int historyWriteWait;
@@ -56,8 +77,24 @@ public:
 	void setIncrement(int dType);
 	void initializePhase();
 	float getOutput();
+	float compress(float in);
+	float limit(float in);
+	void enableBeefUp();
+	void disableBeefUp();
+	void setBeefUpFactor(float factor);
+	void useWhiteNoise();
+	void usePinkNoise();
+	void setNoiseLevel(float nLevel);
+	void setSquareLevel(float sqLevel);
 	void setDrumTone(int dType, double nMilSecAttack, double nMilSecPeak, double nMilSecDecay, float peakVol,
 		double freq, double nMilSecPTime, float pBeginningLevel, double pFallRatio);
+	void resetDrumTones();
+	void setKickLength(int lenMilSec);
+	void setSnareLength(int lenMilSec);
+	void setHiHatLength(int lenMilSec);
+	void tuneKick(double freq);
+	void tuneSnare(double freq);
+	void tuneHiHat(double freq);
 	void refreshEnvelope();
 	float getEnvelopeOutput();
 	void setGain(float g);

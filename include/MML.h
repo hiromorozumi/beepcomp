@@ -51,6 +51,8 @@ public:
 	
 	std::string eventTag[N_EVENT_TAGS];
 	int eventTagLen[N_EVENT_TAGS];
+	std::string eventTagDrum[N_EVENT_TAGS];
+	int eventTagLenDrum[N_EVENT_TAGS];
 	
 	// MData data[4];
 	std::string originalSource;

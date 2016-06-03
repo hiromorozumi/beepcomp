@@ -10,7 +10,7 @@
 
 using namespace std;
 
-const int NOSC::NOSC_NTABLE_SIZE = 4096;
+const int NOSC::NOSC_NTABLE_SIZE = 9999;
 const int NOSC::NOSC_PTABLE_SIZE = 4096;
 const double NOSC::NOSC_SAMPLE_RATE = 44100.0;
 
@@ -18,8 +18,14 @@ NOSC::NOSC()
 {	
 	// set up a noise wave nTable
 	nTable.resize(NOSC_NTABLE_SIZE);
+	nPinkTable.resize(NOSC_NTABLE_SIZE);
 	pTable.resize(NOSC_PTABLE_SIZE);
 	setTable();
+	
+	usePink = false;
+	
+	squareLevel = 1.0f;
+	noiseLevel = 1.0f;
 	
 	// initialize NOSC variables
 	phase = 0.0;
@@ -32,17 +38,31 @@ NOSC::NOSC()
 	pPitchFall = 0;
 	
 	// set default envelope for each drum
-	setDrumTone(0, 3, 30,  20,  0.8, 200.0,  50  , 0.9, 2.0); // kick
-	setDrumTone(1, 3, 20, 120, 0.95, 720.0,  100 , 0.85, 1.2); // snare
-	setDrumTone(2, 3, 17,  3,  0.5, 2400.0, 1   , 0.2, 2.0); // hat
+	setDrumTone(0, 1, 25,  15,  0.8, 200.0,  50  , 0.9, 2.0); // kick
+	setDrumTone(1, 1, 20, 120, 0.95, 720.0,  100 , 0.85, 1.2); // snare
+	setDrumTone(2, 1, 17,  3,  0.5, 2400.0, 1   , 0.2, 2.0); // hat
 	
-	setDrumTone(3, 3, 30,  20,  0.4, 200.0,  50  , 0.5, 2.0); // kick - quiet
-	setDrumTone(4, 3, 20, 120, 0.5, 720.0,  100 , 0.45, 1.2); // snare - quiet
-	setDrumTone(5, 3, 17,  3,  0.2, 2400.0, 1   , 0.1, 2.0); // hat - quiet
+	setDrumTone(3, 1, 25,  15,  0.4, 200.0,  50  , 0.5, 2.0); // kick - quiet
+	setDrumTone(4, 1, 20, 120, 0.5, 720.0,  100 , 0.45, 1.2); // snare - quiet
+	setDrumTone(5, 1, 17,  3,  0.2, 2400.0, 1   , 0.1, 2.0); // hat - quiet
+	
+	kickFreq = 200.0;
+	snareFreq = 720.0;
+	hihatFreq = 2400.0;
+	
+	kickPeakTime = 25; kickDecayTime = 15;
+	snarePeakTime = 20; snareDecayTime = 120;
+	hihatPeakTime = 17; hihatDecayTime = 3;
 
 	envPos = 0;	
 	
 	envFinished = false;
+
+	beefUp = false;
+	beefUpFactor = 1.0f;
+	beefUpFactorNoise = 1.0f;
+	compRatio = 4.0f;
+	compThreshold = 0.90f;
 	
 	// initialize history table
 	clearHistory();
@@ -59,10 +79,23 @@ void NOSC::setTable()
 	
 	int midTablePoint = NOSC_PTABLE_SIZE / 2;
 	
+	// create pTable (pitched element)
 	for(int i=0; i<midTablePoint; i++)
 		pTable[i] = 0.95f;
 	for(int i=midTablePoint; i<NOSC_PTABLE_SIZE; i++)
 		pTable[i] = -0.95f;
+	
+	float b0, b1, b2;
+	
+	// create pink noise table from white noise
+	// using paul Kellet's economy method (http://www.firstpr.com.au/dsp/pink-noise/#uses)
+	for(int i=0; i<NOSC_NTABLE_SIZE; i++)
+	{
+		b0 = 0.99765f * b0 + nTable[i] * 0.0990460f; 
+		b1 = 0.96300f * b1 + nTable[i] * 0.2965164f; 
+		b2 = 0.57000f * b2 + nTable[i] * 1.0526913f; 
+		nPinkTable[i] = (b0 + b1 + b2 + nTable[i] * 0.1848f) * 0.36f;	
+	}
 }
 
 void NOSC::setGain(float g)
@@ -97,7 +130,134 @@ void NOSC::setDrumTone(int dType, double nMilSecAttack, double nMilSecPeak, doub
 	pStartLevel[dType] = pBeginningLevel;
 	levelFallDelta[dType] = peakLevel[dType] / static_cast<float>(NOSC_SAMPLE_RATE * nMilSecPTime/1000.0);
 	
-	cout << "attack=" << nAttackFrames[dType] << " peakTime=" << nPeakFrames[dType] << " decayTime" << nDecayFrames[dType] << " envFrames=" << nEnvFrames[dType] << endl;
+	// DEBUG
+	// cout << "attack=" << nAttackFrames[dType] << " peakTime=" << nPeakFrames[dType] << " decayTime" << nDecayFrames[dType] << " envFrames=" << nEnvFrames[dType] << endl;
+}
+
+// reset all drum settings to default
+void NOSC::resetDrumTones()
+{
+	squareLevel = 1.0f;
+	noiseLevel = 1.0f;
+	
+	// set default envelope for each drum
+	setDrumTone(0, 1, 25,  15,  0.8, 200.0,  50  , 0.9, 2.0); // kick
+	setDrumTone(1, 1, 20, 120, 0.95, 720.0,  100 , 0.85, 1.2); // snare
+	setDrumTone(2, 1, 17,  3,  0.5, 2400.0, 1   , 0.2, 2.0); // hat
+	
+	setDrumTone(3, 1, 25,  15,  0.4, 200.0,  50  , 0.5, 2.0); // kick - quiet
+	setDrumTone(4, 1, 20, 120, 0.5, 720.0,  100 , 0.45, 1.2); // snare - quiet
+	setDrumTone(5, 1, 17,  3,  0.2, 2400.0, 1   , 0.1, 2.0); // hat - quiet
+	
+	kickFreq = 200.0;
+	snareFreq = 720.0;
+	hihatFreq = 2400.0;
+	
+	kickPeakTime = 25; kickDecayTime = 15;
+	snarePeakTime = 20; snareDecayTime = 120;
+	hihatPeakTime = 17; hihatDecayTime = 3;
+}
+
+// sets kick's length - takes a millisecond value
+void NOSC::setKickLength(int lenMilSec)
+{
+	int peakTime, decayTime;
+	if(lenMilSec < 0) lenMilSec = 0;
+	else if(lenMilSec > 400) lenMilSec = 400;
+	
+	if(lenMilSec >= 25)
+	{
+		peakTime = 25;
+		decayTime = lenMilSec - peakTime;
+	}
+	else // if smaller than 30 milsec, you just get peak stage w/ no decay
+	{
+		peakTime = lenMilSec;
+		decayTime = 0;
+	}
+
+	setDrumTone(0, 1, peakTime,  decayTime,  0.8, kickFreq,  50  , 0.9, 2.0); // kick	
+	setDrumTone(3, 1, peakTime,  decayTime,  0.4, kickFreq,  50  , 0.5, 2.0); // kick - quiet
+	kickPeakTime = peakTime; kickDecayTime = decayTime;
+}
+
+// sets snare's length - takes a millisecond value
+void NOSC::setSnareLength(int lenMilSec)
+{
+	int peakTime, decayTime;
+	if(lenMilSec < 0) lenMilSec = 0;
+	else if(lenMilSec > 1000) lenMilSec = 1000;
+	
+	if(lenMilSec >= 20)
+	{
+		peakTime = 20;
+		decayTime = lenMilSec - peakTime;
+	}
+	else // if smaller than 20 milsec, you just get peak stage w/ no decay
+	{
+		peakTime = lenMilSec;
+		decayTime = 0;
+	}
+	
+	setDrumTone(1, 1, peakTime,  decayTime, 0.95, snareFreq,  100 , 0.85, 1.2); // snare
+	setDrumTone(4, 1, peakTime,  decayTime, 0.5 , snareFreq,  100 , 0.45, 1.2); // snare - quiet
+	snarePeakTime = peakTime; snareDecayTime = decayTime;
+}
+
+// sets hihat's length - takes a millisecond value
+void NOSC::setHiHatLength(int lenMilSec)
+{
+	int peakTime, decayTime;
+	if(lenMilSec < 0) lenMilSec = 0;
+	else if(lenMilSec > 1000) lenMilSec = 1000;
+
+	if(lenMilSec >= 17)
+	{
+		peakTime = 17;
+		decayTime = lenMilSec - peakTime;
+	}
+	else // if smaller than 17 milsec, you just get peak stage w/ no decay
+	{
+		peakTime = lenMilSec;
+		decayTime = 0;
+	}
+
+	setDrumTone(2, 1, peakTime, decayTime,  0.5, hihatFreq, 1   , 0.2, 2.0); // hat
+	setDrumTone(5, 1, peakTime, decayTime,  0.2, hihatFreq, 1   , 0.1, 2.0); // hat - quiet
+	hihatPeakTime = peakTime; hihatDecayTime = decayTime;
+}
+
+// change kick's tuning frequency
+// takes a double variable from 50 to 350 (default=200.0, at 50%)
+void NOSC::tuneKick(double freq)
+{
+	if(freq < 50.0) freq = 50.0;
+	else if(freq > 350.0) freq = 350.0;
+	setDrumTone(0, 1, kickPeakTime, kickDecayTime,  0.8, freq,  50  , 0.9, 2.0); // kick
+	setDrumTone(3, 1, kickPeakTime, kickDecayTime,  0.4, freq,  50  , 0.5, 2.0); // kick - quiet
+	kickFreq = freq;
+}
+
+// change snare's tuning frequency
+// takes a double variable from 200 to 1240 (default=720.0 at 50%)
+void NOSC::tuneSnare(double freq)
+{
+	if(freq < 200.0) freq = 200.0;
+	else if(freq > 1240.0) freq = 1240.0;
+	setDrumTone(1, 1, snarePeakTime, snareDecayTime, 0.95, freq,  100 , 0.85, 1.2); // snare
+	setDrumTone(4, 1, snarePeakTime, snareDecayTime, 0.5,  freq,  100 , 0.45, 1.2); // snare - quiet
+	snareFreq = freq;	
+}
+
+// change snare's tuning frequency
+// takes a double variable from 1200 to 3600 (default=2400.0 at 50%)
+void NOSC::tuneHiHat(double freq)
+{
+	if(freq < 1200.0) freq = 1200.0;
+	else if(freq > 3600.0) freq = 3600.0;
+	setDrumTone(2, 1, hihatPeakTime, hihatDecayTime,  0.5, freq, 1   , 0.2, 2.0); // hat
+	setDrumTone(5, 1, hihatPeakTime, hihatDecayTime,  0.2, freq, 1   , 0.1, 2.0); // hat - quiet
+	hihatFreq = freq;	
 }
 
 void NOSC::setNewDrum(int dType)
@@ -212,9 +372,25 @@ float NOSC::getPitchOutput()
 float NOSC::getOutput()
 {
 	int ph = (int) phase;
-	float noiseOut = nTable[ph];
-	float pitchOut = getPitchOutput();
-	float out = ( noiseOut * gain + pitchOut * gain) * getEnvelopeOutput();
+
+	float noiseOut;
+	if(usePink) // if flag's set, use pink noise
+		noiseOut = nPinkTable[ph] * noiseLevel;
+	else // use regular white noise
+		noiseOut = nTable[ph] * noiseLevel;
+
+	float pitchOut = getPitchOutput() * squareLevel;
+
+	float out;
+	
+	// output the regular way
+	if(!beefUp)
+		out = ( noiseOut * gain + pitchOut * gain) * getEnvelopeOutput();
+	
+	// if beefUp is enabled
+	else
+		out = limit( 	pitchOut * gain * getEnvelopeOutput() * beefUpFactor +
+						noiseOut * gain * getEnvelopeOutput() * beefUpFactorNoise );
 	
 	historyWriteWait++;
 	if(historyWriteWait >= 8)
@@ -227,6 +403,60 @@ float NOSC::getOutput()
 	// return ( noiseOut * gain + pitchOut * gain) * getEnvelopeOutput();
 }
 
+// same compressor used for regular OSC channel ... might be kind of soft for drums though
+float NOSC::compress(float in)
+{
+	float out = in;
+	if(in >= 0.0f && in > compThreshold) // positive value
+	{
+		float delta = in - compThreshold;
+		delta = delta / compRatio;
+		out = compThreshold + delta;
+		if(out>=0.99f) out = 0.99f;
+	}
+	else if(in <= 0.0f && in < -compThreshold) // negative value
+	{
+		float delta = in + compThreshold;
+		delta = delta / compRatio;
+		out = -compThreshold + delta;
+		if(out<=-0.99f) out = -0.99f;
+	}
+	return out;
+}
+
+// alternate BEEFUP processing... brickwall limiter
+float NOSC::limit(float in)
+{
+	float out = in;
+	if(out>=0.99f) out = 0.99f;
+	else if(out<=-0.99f) out = -0.99f;
+	return out;
+}
+
+void NOSC::enableBeefUp()
+{ beefUp = true; }
+
+void NOSC::disableBeefUp()
+{ beefUp = false; }
+
+void NOSC::setBeefUpFactor(float factor)
+{
+	beefUpFactor = factor; // this works on the pitched element
+	beefUpFactorNoise = ((factor - 1.0f) * 0.80f) + 1.0f; // works on the noise element
+}
+
+void NOSC::useWhiteNoise()
+	{ usePink = false; }
+
+void NOSC::usePinkNoise()
+	{ usePink = true; }
+
+void NOSC::setNoiseLevel(float nLevel)
+	{ noiseLevel = nLevel; }
+
+void NOSC::setSquareLevel(float sqLevel)
+	{ squareLevel = sqLevel; }
+	
 // push current data to table that keeps an array of historical data
 // (used for meter visualization)
 void NOSC::pushHistory(float g)

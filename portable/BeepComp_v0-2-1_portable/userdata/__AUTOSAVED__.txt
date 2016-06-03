@@ -6,9 +6,9 @@
 //
 //                         Composer: Yuzo Koshiro
 //                         Album: Music From YsII
-//                 (c) Nihon Falcom Coorpoaration
+//                  (c) Nihon Falcom Corpoaration
 //
-//                (small twists added by Hiro :))
+//                  (w/ Sandwich man's twists :))
 
 ////////////////////////////////// global section
 
@@ -18,9 +18,9 @@ LOOP=OFF
 TEMPO=120
 MASTERVOLUME=70
 DELAYTIME=500
-DELAYLEVEL=28
+DELAYLEVEL=25
 
-V1=9 V2=6 V3=6 V4=7 V5=9 V6=5 V7=5 VD=10
+V1=9 V2=6 V3=6 V4=7 V5=9 V6=6 V7=6 VD=10
 
 /////////////////////////////////// ch 1 - melody
 

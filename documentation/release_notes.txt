@@ -1,4 +1,22 @@
 ====================
+Release Notes v0.2.2
+====================
+
+New in BeepComp version 0.2.2:
+
+- New ring modulation feature - create wacky sci-fi sound effects and unique percussion sounds
+- REPEAT= in the global section sets the repeat count for playing/exporting
+- WAVEFLIP sets the channel waveform vertically inverted (for balancing when adding multiple pulse waves in the mix)
+- Tune each drum to your liking with KICKPITCH=n and SNAREPITCH=n commands
+- Set the length of each drum with KICKLENGTH=n, SNARELENGTH=n, and HIHATLENGTH=n
+- Now two noise types are avaliable for drums - switch with commands WHITENOISE and PINKNOISE
+- Balance the mix of the pitched element and noise element: SQUARELEVEL=n, NOISELEVEL=n
+- Overdrive effect BEEFUP=n is now available for the drum channel for an extra boost
+- Automatically set the optimum delay time according to the tempo by DELAYTIME=AUTO
+- Minor bug-fix: channels with a large number of control event commands were ignoring the last few of those commands
+- Minor bug-fix: if a looped channel ended with control event commands those commands were getting skipped
+
+====================
 Release Notes v0.2.1
 ====================
 

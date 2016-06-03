@@ -32,12 +32,13 @@ void MML::initialize(double sampleRate, double tempo)
 		eventTag[i] = "";
 	eventTag[0]="DEFAULTTONE"; eventTag[1]="LFO=ON"; eventTag[2]="LFO=OFF"; eventTag[3]="PRESET=BEEP";
 	eventTag[4]="PRESET=POPPYVIB"; eventTag[5]="PRESET=POPPY"; eventTag[6]="PRESET=BELL";
+	eventTag[20]="WAVEFLIP";
 	eventTag[100]="WAVEFORM="; eventTag[101]="ATTACKTIME="; eventTag[102]="PEAKTIME="; eventTag[103]="DECAYTIME=";
 	eventTag[104]="RELEASETIME="; eventTag[105]="PEAKLEVEL="; eventTag[106]="SUSTAINLEVEL=";
 	eventTag[107]="ASTRO=OFF"; eventTag[108]="ASTRO=";
 	eventTag[109]="LFORANGE="; eventTag[110]="LFOSPEED="; eventTag[111]="LFOWAIT=";
 	eventTag[112]="FALLSPEED="; eventTag[113]="FALLWAIT="; eventTag[114]="RISESPEED="; eventTag[115]="RISERANGE=";
-	eventTag[116]="BEEFUP=";
+	eventTag[116]="BEEFUP="; eventTag[117]="RINGMOD=OFF"; eventTag[118]="RINGMOD=";
 	
 	// NOTE: if you want to register a tag that contains another tag name, register the longer tag first!
 	// for example, PRESET=POPPYVIB must come earlier than PRESET=POPPY
@@ -48,6 +49,22 @@ void MML::initialize(double sampleRate, double tempo)
 			eventTagLen[i] = 0;
 		else
 			eventTagLen[i] = eventTag[i].length();
+	}
+
+	for(int i=0; i<N_EVENT_TAGS; i++)
+		eventTagDrum[i] = "";
+	eventTagDrum[0]="RESETDRUMS"; eventTagDrum[1]="WHITENOISE"; eventTagDrum[2]="PINKNOISE";
+	eventTagDrum[100]="KICKPITCH="; eventTagDrum[101]="SNAREPITCH="; eventTagDrum[102]="HIHATPITCH=";
+	eventTagDrum[103]="BEEFUP="; 
+	eventTagDrum[104]="KICKLENGTH="; eventTagDrum[105]="SNARELENGTH="; eventTagDrum[106]="HIHATLENGTH=";
+	eventTagDrum[107]="SQUARELEVEL="; eventTagDrum[108]="NOISELEVEL=";
+	
+	for(int i=0; i<N_EVENT_TAGS; i++)
+	{
+		if(eventTagDrum[i].empty())
+			eventTagLenDrum[i] = 0;
+		else
+			eventTagLenDrum[i] = eventTagDrum[i].length();
 	}
 
 	this->sampleRate = sampleRate;
@@ -961,6 +978,13 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 				output->eventFrame.push_back(framesWritten);
 				output->nEvents++;
 			}
+			else if(str.substr(i, 8) == "WAVEFLIP")
+			{
+				output->eventType.push_back(11);
+				output->eventParam.push_back(0); // 0 - dummy
+				output->eventFrame.push_back(framesWritten);
+				output->nEvents++;				
+			}
 			else if(str.substr(i, 11) == "ATTACKTIME=")
 			{
 				string strValue = str.substr(i+11,4); // get 4 digits following '='
@@ -1165,7 +1189,30 @@ string MML::parseChannelSource(MPlayer* player, int channel)
 				output->eventParam.push_back(value);
 				output->eventFrame.push_back(framesWritten);
 				output->nEvents++;				
-			}			
+			}
+			else if(str.substr(i, 8) == "RINGMOD=") // in a value 0 to 9 - channel num, 0 for OFF
+			{
+				if(str.substr(i, 11) == "RINGMOD=OFF")
+				{
+					output->eventType.push_back(81);
+					output->eventParam.push_back(0);
+					output->eventFrame.push_back(framesWritten);
+					output->nEvents++;
+				}
+				else
+				{
+					string strValue = str.substr(i+8,1); // get 1 digit following '='
+					int valueDigits = countDigits(strValue);
+					strValue = strValue.substr(0, valueDigits);
+					int value = atoi(strValue.c_str());
+					value = min(9, max(0, value)); // floor + ceil the value
+					
+					output->eventType.push_back(80);
+					output->eventParam.push_back(value);
+					output->eventFrame.push_back(framesWritten);
+					output->nEvents++;
+				}				
+			}
 			// cout << "event parsing done! " << str.substr(i,13) << "\n";
 			
 			// fast forward to where we find the next ')'
@@ -1224,11 +1271,62 @@ string MML::parseDrumSource(MPlayer* player)
 
 	// channel source string to work on
 	string str = dsource;
+	
 
+	//
+	// first take care of event change commands
+	// enclose them with parenthesis for now...
+	//
+	
+	
+	bool eventTagsDone = false; // when all config statements are parsed, this gets set to true
+	int searchPos = 0;
+	int strLen = str.length();
+	str = str + "              $$$$$$"; // safeguard, and signal end of string!
+	size_t found;
+
+	while(!eventTagsDone)
+	{		
+		// if an event tag is found, enclose with ()
+		for(int i=0; i<N_EVENT_TAGS; i++)
+		{
+			if(!eventTagDrum[i].empty())
+			{
+				if( str.substr(searchPos, eventTagLenDrum[i]) == eventTagDrum[i] ) // found!
+				{					
+					int targetLen = eventTagLenDrum[i];
+					int digits = 0;
+					
+					// number 100 and later - these are tags that take parameters
+					// let's place ')' after the parameter digits
+					if(i>=100)
+					{
+						int digitStart = searchPos + targetLen;
+						digits = countDigits( str.substr(digitStart, 5) );
+					}
+					
+					str.insert(searchPos + targetLen + digits, ")");
+					str.insert(searchPos,"(");
+					strLen += 2; // we just increased the string's length by w chars...
+					searchPos += targetLen; // advance.. we should skip the newly inserted '('
+					i = N_EVENT_TAGS; // force this loop to end
+				}
+			}
+		}
+		
+		searchPos++;
+		if(searchPos>=strLen)
+			eventTagsDone = true;
+
+	}
+	
+	cout << "After parsing drum source...\n" << str << endl;
+	
 	// first, parse the repeat signs
 	// (any repeated parts will be duplicated)
 
 	str = str + "$$$$$$"; // to signal end of string
+	
 	bool done = false;
 
 	int i = 0;
@@ -1583,6 +1681,168 @@ string MML::parseDrumSource(MPlayer* player)
 			
 			i++;
 		}
+		
+		else if(str.at(i)=='(')
+		{
+			i++;
+			
+			if(str.substr(i, 10) == "RESETDRUMS")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(500); // event type 500 is 'reset drum settings'
+				dOutput->eventParam.push_back(0);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 10) == "WHITENOISE")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(530); // event type 530 is 'use white noise'
+				dOutput->eventParam.push_back(0);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 9) == "PINKNOISE")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(531); // event type 500 is 'use pink noise'
+				dOutput->eventParam.push_back(0);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 10) == "KICKPITCH=")
+			{
+				string strValue = str.substr(i+10,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(510);
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 11) == "SNAREPITCH=")
+			{
+				string strValue = str.substr(i+11,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(511);
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 11) == "HIHATPITCH=")
+			{
+				string strValue = str.substr(i+11,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(512);
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 7) == "BEEFUP=")
+			{
+				string strValue = str.substr(i+7,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(520);
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 11) == "KICKLENGTH=")
+			{
+				string strValue = str.substr(i+11,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(400, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(540); // event no. 540 = KICKLENGTH
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 12) == "SNARELENGTH=")
+			{
+				string strValue = str.substr(i+12,4); // get 4 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(1000, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(541); // event no. 541 = SNARELENGTH
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 12) == "HIHATLENGTH=")
+			{
+				string strValue = str.substr(i+12,4); // get 4 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(1000, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(542); // event no. 542 = HIHATLENGTH
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 12) == "SQUARELEVEL=")
+			{
+				string strValue = str.substr(i+12,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(550); // event no. 550 = SQUARELEVEL
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 11) == "NOISELEVEL=")
+			{
+				string strValue = str.substr(i+11,3); // get 3 digits following '='
+				int valueDigits = countDigits(strValue);
+				strValue = strValue.substr(0, valueDigits);
+				int value = atoi(strValue.c_str());
+				value = min(100, max(0, value)); // floor + ceil the value
+	
+				dOutput->eventType.push_back(551); // event no. 550 = NOISELEVEL
+				dOutput->eventParam.push_back(value);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			
+			cout << "event parsing done! " << str.substr(i,13) << "\n";
+			
+			// fast forward to where we find the next ')'
+			bool fastFwdDone = false;
+			while(!fastFwdDone)
+			{
+				i++;
+				if(str.at(i)==')') // stop at where ')' is
+					fastFwdDone = true;
+				else if(str.at(i)=='$') // we didn't have ')'!!
+					fastFwdDone = true;
+			}
+			
+			
+		}
 
 		// '%%' is for bookmarking
 		else if(str.at(i)=='%')
@@ -1681,6 +1941,19 @@ void MML::parseGlobalSource(MPlayer* player)
 			str.erase(fpos, 6+valueDigits);
 
 		}
+		else if(str.find("REPEAT=") != string::npos)
+		{
+			fpos = str.find("REPEAT=");
+			string strValue = str.substr(fpos+7,1); // get 1 digit following '='
+			int valueDigits = countDigits(strValue);
+			int value = atoi(strValue.c_str());
+			value = min(9, max(1, value)); // floor + ceil the value
+
+			// set repeat count to the value that was read
+			player->disableLooping();
+			player->setRepeatsRemaining(value);
+			str.erase(fpos, 7+valueDigits);
+		}
 		else if(str.find("LOOP=ON") != string::npos)
 		{
 			player->loopEnabled = true; // enable loop
@@ -1700,6 +1973,36 @@ void MML::parseGlobalSource(MPlayer* player)
 		{
 			player->delayEnabled = false;// turn delay off
 			str.erase(str.find("DELAY=OFF"), 9);
+		}
+		else if(str.find("DELAYTIME=AUTO3") != string::npos)
+		{
+			fpos = str.find("DELAYTIME=AUTO3");
+			int eraseLen = 15;
+			double magicNum = 39999.996; // 333.3333 * 120
+			if(str.at(fpos+15)=='L') // if 'DELAYTIME=AUTO3L', set to longer 3-based value
+			{
+				magicNum = 79999.992; // 666.6666 * 120
+				eraseLen++;
+			}
+			
+			int value = magicNum / tpo; // calculate tempo-adjusted delay time -> 60000 / tempo
+			value = min(999, max(10, value)); // floor + ceil the value
+
+			// set delay parameters - first delay, delay time, gain (negative for no change)
+			player->delay[0].setParameters(value, value, -0.1f); // -> LEFT channel = 0
+			player->delay[1].setParameters(value*3/2, value, -0.1f); // -> RIGHT channel = 1
+			str.erase(fpos, eraseLen);		
+		}
+		else if(str.find("DELAYTIME=AUTO") != string::npos)
+		{
+			fpos = str.find("DELAYTIME=AUTO");
+			int value = 60000 / tpo; // calculate tempo-adjusted delay time -> 60000 / tempo
+			value = min(999, max(10, value)); // floor + ceil the value
+
+			// set delay parameters - first delay, delay time, gain (negative for no change)
+			player->delay[0].setParameters(value, value, -0.1f); // -> LEFT channel = 0
+			player->delay[1].setParameters(value*3/2, value, -0.1f); // -> RIGHT channel = 1
+			str.erase(fpos, 14);		
 		}
 		else if(str.find("DELAYTIME=") != string::npos)
 		{

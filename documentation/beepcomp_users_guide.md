@@ -662,6 +662,8 @@ Here is an example where a different waveform than the default form is selected:
     WAVEFORM=2  // sets up a saw tooth wave
 	F~:G~:Ab~:>C~:<Ab:G:F~:Eb~:F~~~~~::::
 
+If you overlay multiple pulse wave tracks, the mixed waveform will start to get heavier on one side. This can take away the audio headroom if you want to raise the track volume after exporting. You can help balance your mixed output by using `WAVEFLIP` in some of your tracks using pulse waves to filp the waveform vertically.  
+
 <div id="beef_up" />
 ## Beef Up! ##
 
@@ -676,11 +678,14 @@ For each channel, you can use a mild overdrive effect if you want to boost up a 
     BEEFUP=50 CDEFG~
     BEEFUP=100 CDEFG~
 
+The beef-up effect is available also available for the drum channel, but be careful because too much of this effect can lessen the crispness of the drum hits. 
+
 <div id="tone_presets" />
 ## Tone Presets ##
 
 With one line of the command `PRESET=`, you can set your channel to a set of predetermined tone parameters. You are welcome to try out the currently registered presets by declaring one of the following at the top of a channel:
 
+* `DEFAULTTONE` ... (Square wave) Resets to flat envelope shaping.
 * `PRESET=BEEP` ... (Square wave) Straight PC Beep tone.
 * `PRESET=POPPY` ... (Square wave) Sustained tone with a strong attack.
 * `PRESET=POPPYVIB` ... (Square wave) Preset POPPY with vibrato.
@@ -724,12 +729,14 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 
 * `MASTERVOLUME=n` ... Sets the master output gain (n=1 to 100)
 * `TEMPO=n` ... Sets the track tempo (n=40 to 300)
-* `Vn=v` ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100)
+* `Vn=v` ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100) 
 * `VD=v` ... Sets the volume (v=0 to 10) for the drum channel
 * `LOOP=?` ... Turns track looping on or off (?=ON or OFF)
 * `DELAY=?` ... Turns the delay effect on or off (?=ON or OFF)
 * `DELAYLEVEL=n` ... Sets the delay output level (n=0 to 100)
 * `DELAYTIME=n` ... Sets the delay timing in milliseconds (n=0 to 999)
+* `DELAYTIME=AUTO` ... Sets the delay timing according to the tempo.
+* `DELAYTIME=AUTO3` ... Sets the delay time to 8th triplets according to the tempo.
 
 <div id="syntax_reference_music_channel" />
 ### Music channel ###
@@ -750,6 +757,7 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 * `PRESET=?` ... Sets up at once for a predetermined set of tone parameters
 * `DEFAULTTONE` ... Sets up a straight square wave tone
 * `WAVEFORM=n` ... Chooses the waveform that the channel uses (n=0 to 5)
+* `WAVEFLIP` ... Flips the channel's audio output waveform vertically
 * `FALLSPEED=n` ... Speed of the Fall effect in 100ths of a semitone per second (n=0 to 9600)
 * `FALLWAIT=n` ... Wait time in milliseconds before the Fall effect starts (n=0 to 9999)
 * `RISESPEED=n` ... Speed of the Rise effect in 100ths of a semitone per second (n=0 to 9600)
@@ -780,6 +788,10 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 <div id="syntax_reference_drum_channel" />
 ### Drum Channel ###
 
+* `RESETDRUMTONE` ... Resets all drum tone settings to default
+* `KICKPITCH=n` ... Sets the kick's pitch tuning (n=0 to 100, default=50)
+* `SNAREPITCH=n` ... Sets the snare's pitch tuning (n=0 to 100, default=50)
+* `BEEFUP=n` ... Add a mild overdrive effect to the channel (n=0 to 100, 0=off)
 * `Vn` ... Sets channel volume (n=0,1,2...10)
 * `Ln` ... Sets the current note length (n=1 to 64)
 * `K` ... Kick

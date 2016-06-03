@@ -28,6 +28,7 @@ public:
 	vector<float> table;
 	
 	int tableType;
+	float yFlip;
 	double phase;
 	double dblPhaseIntPart;
 	int intPhase;
@@ -135,6 +136,8 @@ public:
 	void pushHistory(float g);
 	float getHistoricalAverage();
 	void clearHistory();
+	void flipYAxis();
+	void resetYFlip();
 };
 
 #endif

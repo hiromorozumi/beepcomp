@@ -18,6 +18,7 @@ OSC::OSC()
 	tableType = 0; // FORCE setTable() to rewrite wavetable
 	setTable(1); // default - set up a square table
 	tableType = 1;
+	yFlip = 1.0f;
 	phase = 0.0;
 	increment = 0.0;
 	freq = 10.0; // not to set to zero to safeguard
@@ -618,7 +619,12 @@ float OSC::getOutput()
 	int ph = static_cast<int> (phase);
 	// cout << "phase=" << phase << "..";
 	
-	float out = table[ph] * getEnvelopeOutput();
+	float out;
+	
+	if(yFlip > 0)
+		out = table[ph] * getEnvelopeOutput();
+	else
+		out = -table[ph] * getEnvelopeOutput();
 	
 	// if BeefUp is enabled... beef up and compress!
 	if(beefUp)
@@ -713,4 +719,17 @@ void OSC::clearHistory()
 		history[i] = 0.0f;
 	historyWriteWait = 0;
 	historyWriteIndex = 0;
+}
+
+// set yFlip between 1.0 and -1.0
+// determines if wavetable is read as is or vertically inverted
+void OSC::flipYAxis()
+{
+	yFlip = -1.0f;
+}
+
+// reset yFlip to default normal 1.0 (table reading won't get vertically inverted)
+void OSC::resetYFlip()
+{
+	yFlip = 1.0f;
 }

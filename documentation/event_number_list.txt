@@ -5,6 +5,7 @@ Event Type number List
 	2	Decrement volume
 	
 	10	WAVEFORM=		(=param, 0 to 99)
+	11	WAVEFLIP
 	
 	20	ATTACKTIME=
 	21	PEAKTIME=
@@ -30,6 +31,27 @@ Event Type number List
 	62	RISERANGE=
 	
 	70  BEEFUP=			(=param, 0 to 100)
+	
+	80  RINGMOD=		(=param, 0 to 9 for channel #, 0: OFF)
+	81	RINGMOD=OFF
+
+	500 	RESETDRUMS
+	
+	510		KICKPITCH=		(=param, scale of 0 to 100, default is 50%)
+	511		SNAREPITCH=		(=param, scale of 0 to 100, default is 50%)
+	512		HIHATPITCH=		(=param, scale of 0 to 100, default is 50%)
+	
+	520		BEEFUP=			(=param, 0 to 100) // for drums
+	
+	530		WHITENOISE
+	531		PINKNOISE
+	
+	540		KICKLENGTH=		(=param, 0 to 400 in milliseconds, default=50)
+	541		SNARELENGTH=	(=param, 0 to 1000 in milliseconds, default=140)	
+	542		HIHATLENGTH=	(=param, 0 to 1000 in milliseconds, default=20)
+	
+	550		SQUARELEVEL=	(=param, 0 to 100, default=100)
+	551		NOISELEVEL=		(=param, 0 to 100, default=100)
 	
 	1000	DEFAULTTONE
 	1001	PRESET=BELL
