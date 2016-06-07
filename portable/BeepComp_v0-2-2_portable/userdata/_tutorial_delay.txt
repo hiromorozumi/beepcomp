@@ -1,0 +1,56 @@
+//       ====================================
+//       <<< how to set DELAYTIME setting >>>
+//       ====================================
+//
+//       try using this formula:
+//
+//              DELAYTIME = 500 * 120 / tempo  
+//
+
+@G
+DELAYLEVEL=30
+
+    //  let's say the tempo is 132
+
+TEMPO=132
+// DELAYTIME=500 //<- avoid default setting
+
+    //  and apply the formula above
+
+DELAYTIME=454 // 500 * 120 / 132 = 454.5..
+
+@D
+
+L4
+K: :: S: :: K: S: KK S:
+
+    //  you hear the echos nicely synchronized
+    //  the DELAYTIME number sets
+    //  the wait time for the first delay
+    //  in milliseconds
+    //  the wait for the second echo is 
+    //  x1.5 times that amount
+
+    //  just know that the magic formula works :)
+    //  500 * 120 / tempo
+
+    //  try also 250 or 1000 instead of 500
+    //  all these numbers will work
+
+:::: ::::
+
+    //  note that if your music is based on
+    //  triplets you would want to use numbers
+    //  like 666 and 333
+
+    //  666 * 120 / 132  ---->  606
+    //  333 * 120 / 132  ---->  303
+    //  these numbers will work
+    //  for the following:
+
+// L12
+// K:k S:h K:k S:k K:k S:h K:k S:k
+// ::: ::: ::: :::
+
+    //  reset the DELAYTIME to 606 or 303 and
+    //  de-comment the 3 lines above :)

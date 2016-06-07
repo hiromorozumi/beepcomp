@@ -1,0 +1,95 @@
+//
+//  ***** shape up your drum sounds! *****
+//
+//
+//  1) noise types
+//     - white noise -> brighter
+//     - pink noise  -> darker
+//
+//  2) noise volume in the mix
+//     NOISELEVEL=n, SQUARELEVEL=n (0 to 100)
+//
+//  2) pitch tuning
+//     KICKPITCH=n, SNAREPITCH=n (0 to 100)
+//
+//  3) drum length
+//     KICKLENGTH=n, SNARELENGTH=n, HIHATLENGTH=n
+//                                 (milliseconds)
+//
+
+/////////////////////////////////////////////////
+
+@G
+
+TEMPO=154
+DELAYTIME=AUTO // let the machine do calculating
+
+////////////////////////////////////////////////
+
+@D
+
+ // let's start with basic white noise
+ // which is the type used by default
+
+RESETDRUMS // <- resets all drum tone settings
+KICKNOISE=PINK // set only kick to pink noise
+SNARENOISE=WHITE
+HIHATNOISE=WHITE
+KICKLENGTH=25     // default is 40
+SNARELENGTH=100   // default is 140
+SNAREPITCH=40     // default is 50
+
+KhK:S~Hs :hk:S~Hh KhK:S~Hs hskKS~Hh
+KhK:S~Hs hsK:HhS~ :skKS~H[ss] :sK:HhS~
+
+ // pink noise gives darker colors
+ // downtune kick and snare for more heaviness
+
+PINKNOISE         // set all to pink noise
+NOISELEVEL=75     // default is 100
+KICKPITCH=35
+SNAREPITCH=20
+SNARELENGTH=130
+
+KhK:S~Hs :hk:S~Hh KhK:S~Hs hskKS~Hh
+KhK:S~Hs hsK:HhS~ :skKS~H[ss] :sK:HhS~
+
+ // by turning off noise output
+ // you can get real cute and unique sounds
+ // let's uptune the drums
+
+NOISELEVEL=0
+KICKPITCH=70
+SNAREPITCH=70
+SNARELENGTH=50
+
+KhK:S~Hs :hk:S~Hh KhK:S~Hs hskKS~Hh
+KhK:S~Hs hsK:HhS~ :skKS~H[ss] :sK:HhS~
+
+ // raise snare's and kick's pitches even more
+ // mix in a bit of noise back...
+
+WHITENOISE     // set all to white noise
+NOISELEVEL=60
+KICKPITCH=100
+SNAREPITCH=100
+SNARELENGTH=30
+KICKLENGTH=14
+HIHATLENGTH=14
+
+KhK:S~Hs :hk:S~Hh KhK:S~Hs hskKS~Hh
+KhK:S~Hs hsK:HhS~ :skKS~H[ss] :sK:HhS~
+
+NOISELEVEL=100
+SNAREPITCH=40
+SNARELENGTH=100
+SNARENOISE=PINK 
+
+______ ssss ^^ ssss ^^ ssss ^^ ssss
+
+ // you can change and morph parameters
+ // whenever you want in your track :)
+
+SNARENOISE=WHITE SSSS SNAREPITCH=47 SSSS 
+SNAREPITCH=55 [4SSSSSSSS]
+SNAREPITCH=70 [4SSSSSSSS]

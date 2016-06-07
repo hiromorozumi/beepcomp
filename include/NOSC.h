@@ -19,8 +19,7 @@ public:
 	std::vector<float> nTable;
 	std::vector<float> nPinkTable;
 	std::vector<float> pTable;
-	
-	bool usePink;
+
 	float noiseLevel; // user can change noise element mix level ... default = 1.0f;
 	float squareLevel; // user can change picthed element mix level ... default = 1.0f
 	
@@ -50,6 +49,8 @@ public:
 	float levelFallDelta[6];
 	int envPos;
 	bool envFinished;
+	
+	int noiseType[6];
 	
 	bool beefUp;
 	float beefUpFactor;
@@ -82,8 +83,14 @@ public:
 	void enableBeefUp();
 	void disableBeefUp();
 	void setBeefUpFactor(float factor);
+	
 	void useWhiteNoise();
 	void usePinkNoise();
+	
+	void setKickNoiseType(int type);
+	void setSnareNoiseType(int type);
+	void setHiHatNoiseType(int type);
+	
 	void setNoiseLevel(float nLevel);
 	void setSquareLevel(float sqLevel);
 	void setDrumTone(int dType, double nMilSecAttack, double nMilSecPeak, double nMilSecDecay, float peakVol,

@@ -282,6 +282,12 @@
 						</File>
 					</Component>
 					
+					<Component Id='cmp_ys2_to_make_the_end_of_battleTXT' Guid='*' >
+						<File Id="ys2_to_make_the_end_of_battleTXT" Name="ys2_to_make_the_end_of_battle.txt" 
+						DiskId='1' Source='..\userdata\ys2_to_make_the_end_of_battle.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
 					<Component Id='cmp_astro_wars_1TXT' Guid='*' >
 						<File Id="astro_wars_1TXT" Name="astro_wars_1.txt" 
 						DiskId='1' Source='..\userdata\astro_wars_1.txt' KeyPath='yes'>				
@@ -305,6 +311,12 @@
 						DiskId='1' Source='..\userdata\waveforms_test.txt' KeyPath='yes'>				
 						</File>
 					</Component>
+				
+					<Component Id='cmp_bach_prelude_c_minTXT' Guid='*' >
+						<File Id="bach_prelude_c_minTXT" Name="bach_prelude_c_min.txt" 
+						DiskId='1' Source='..\userdata\bach_prelude_c_min.txt' KeyPath='yes'>				
+						</File>
+					</Component>
 					
 					<Component Id='cmp__tutorial_basic_1TXT' Guid='*' >
 						<File Id="cmp__tutorial_basic_1TXT" Name="_tutorial_basic_1.txt" 
@@ -321,6 +333,12 @@
 					<Component Id='cmp__tutorial_drumsTXT' Guid='*' >
 						<File Id="cmp__tutorial_drumsTXT" Name="_tutorial_drums.txt" 
 						DiskId='1' Source='..\userdata\_tutorial_drums.txt' KeyPath='yes'>				
+						</File>
+					</Component>
+					
+					<Component Id='cmp__tutorial_drum_shapingTXT' Guid='*' >
+						<File Id="cmp__tutorial_drum_shapingTXT" Name="_tutorial_drum_shaping.txt" 
+						DiskId='1' Source='..\userdata\_tutorial_drum_shaping.txt' KeyPath='yes'>				
 						</File>
 					</Component>
 
@@ -447,12 +465,14 @@
 		<ComponentRef Id='cmp_ys1_field_musicTXT' />
 		<ComponentRef Id='cmp_ys1_town_musicTXT' />
 		<ComponentRef Id='cmp_ys2_palace_of_salmonTXT' />
+		<ComponentRef Id='cmp_ys2_to_make_the_end_of_battleTXT' />
 		<ComponentRef Id='cmp_astro_wars_1TXT' />
 		<ComponentRef Id='cmp_pure_psg_toneTXT' />
+		<Component Id='cmp_bach_prelude_c_minTXT' />
 		<ComponentRef Id='cmp_astro_effectTXT' />
-		<ComponentRef Id='cmp_waveforms_testTXT' />
-		<ComponentRef Id='cmp__tutorial_repeatsTXT' />	
+		<ComponentRef Id='cmp__tutorial_repeatsTXT' />
 		<ComponentRef Id='cmp__tutorial_drumsTXT' />
+		<ComponentRef Id='cmp__tutorial_drum_shapingTXT' />	
 		<ComponentRef Id='cmp__tutorial_basic_1TXT' />
 		<ComponentRef Id='cmp__tutorial_delayTXT' />
 		<ComponentRef Id='cmp__helpful_tipsTXT' />

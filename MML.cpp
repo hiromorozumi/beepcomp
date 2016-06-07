@@ -54,6 +54,9 @@ void MML::initialize(double sampleRate, double tempo)
 	for(int i=0; i<N_EVENT_TAGS; i++)
 		eventTagDrum[i] = "";
 	eventTagDrum[0]="RESETDRUMS"; eventTagDrum[1]="WHITENOISE"; eventTagDrum[2]="PINKNOISE";
+	eventTagDrum[3]="KICKNOISE=WHITE"; eventTagDrum[4]="KICKNOISE=PINK";
+	eventTagDrum[5]="SNARENOISE=WHITE"; eventTagDrum[6]="SNARENOISE=PINK";
+	eventTagDrum[7]="HIHATNOISE=WHITE"; eventTagDrum[8]="HIHATNOISE=PINK";
 	eventTagDrum[100]="KICKPITCH="; eventTagDrum[101]="SNAREPITCH="; eventTagDrum[102]="HIHATPITCH=";
 	eventTagDrum[103]="BEEFUP="; 
 	eventTagDrum[104]="KICKLENGTH="; eventTagDrum[105]="SNARELENGTH="; eventTagDrum[106]="HIHATLENGTH=";
@@ -1282,7 +1285,7 @@ string MML::parseDrumSource(MPlayer* player)
 	bool eventTagsDone = false; // when all config statements are parsed, this gets set to true
 	int searchPos = 0;
 	int strLen = str.length();
-	str = str + "              $$$$$$"; // safeguard, and signal end of string!
+	str = str + "                $$$$$$"; // safeguard, and signal end of string!
 	size_t found;
 
 	while(!eventTagsDone)
@@ -1705,8 +1708,56 @@ string MML::parseDrumSource(MPlayer* player)
 			else if(str.substr(i, 9) == "PINKNOISE")
 			{
 				// push this event to events vector in DData
-				dOutput->eventType.push_back(531); // event type 500 is 'use pink noise'
+				dOutput->eventType.push_back(531); // event type 531 is 'use pink noise'
 				dOutput->eventParam.push_back(0);
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 15) == "KICKNOISE=WHITE")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(532); // event type 532 is 'set kick's noise type'
+				dOutput->eventParam.push_back(0); // 0 for white noise
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 14) == "KICKNOISE=PINK")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(532); // event type 532 is 'set kick's noise type'
+				dOutput->eventParam.push_back(1); // 1 for pink noise
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 16) == "SNARENOISE=WHITE")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(533); // event type 533 is 'set snare's noise type'
+				dOutput->eventParam.push_back(0); // 0 for white noise
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 15) == "SNARENOISE=PINK")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(533); // event type 533 is 'set snare's noise type'
+				dOutput->eventParam.push_back(1); // 1 for pink noise
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 16) == "HIHATNOISE=WHITE")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(534); // event type 533 is 'set hihat's noise type'
+				dOutput->eventParam.push_back(0); // 0 for white noise
+				dOutput->eventFrame.push_back(framesWritten);
+				dOutput->nEvents++;
+			}
+			else if(str.substr(i, 15) == "HIHATNOISE=PINK")
+			{
+				// push this event to events vector in DData
+				dOutput->eventType.push_back(534); // event type 533 is 'set hihat's noise type'
+				dOutput->eventParam.push_back(1); // 1 for pink noise
 				dOutput->eventFrame.push_back(framesWritten);
 				dOutput->nEvents++;
 			}

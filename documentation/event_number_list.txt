@@ -45,6 +45,9 @@ Event Type number List
 	
 	530		WHITENOISE
 	531		PINKNOISE
+	532		KICKNOISE=		(=WHITE sets whitenoise, =PINK sets pinknoise)
+	533		SNARENOISE=		(=WHITE sets whitenoise, =PINK sets pinknoise)
+	534		HIHATNOISE=		(=WHITE sets whitenoise, =PINK sets pinknoise)
 	
 	540		KICKLENGTH=		(=param, 0 to 400 in milliseconds, default=50)
 	541		SNARELENGTH=	(=param, 0 to 1000 in milliseconds, default=140)	

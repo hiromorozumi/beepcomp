@@ -490,7 +490,7 @@ void MPlayer::resetForNewSong()
 	nosc.resetDrumTones();
 	nosc.disableBeefUp();
 	nosc.setBeefUpFactor(1.0f);
-	nosc.useWhiteNoise();
+	// nosc.useWhiteNoise();
 
 	// clear all osc history data used for meter visualization
 	for(int i=0; i<9; i++)
@@ -1252,13 +1252,31 @@ void MPlayer::processDrumEvent(int eType, int eParam)
 	else if(eType==530)
 	{
 		nosc.useWhiteNoise();
-		cout << "WHITENOISE\n";
+		cout << "WHITENOISE - All drums\n";
 	}
 	// type 531 - use pink noise
 	else if(eType==531)
 	{
 		nosc.usePinkNoise();
-		cout << "PINKNOISE\n";
+		cout << "PINKNOISE - All drums\n";
+	}
+	// type 532 - set kick noise type
+	else if(eType==532)
+	{
+		nosc.setKickNoiseType(eParam);
+		cout << "set kick noise type =" << eParam << "\n";
+	}
+	// type 533 - set snare noise type
+	else if(eType==533)
+	{
+		nosc.setSnareNoiseType(eParam);
+		cout << "set snare noise type =" << eParam << "\n";
+	}
+	// type 534 - set hihat noise type
+	else if(eType==534)
+	{
+		nosc.setHiHatNoiseType(eParam);
+		cout << "set hihat noise type =" << eParam << "\n";
 	}
 	// type 540 - set kick length
 	// passed value = 0 to 400 (milliseconds), set to int value ranging between 0 and 400 msec

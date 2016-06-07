@@ -1,0 +1,93 @@
+/////////////////////////////////////////////////
+//                                             //
+//   "Song of Romancia" - from RPG "Romancia"  //
+//                                     (1986)  //
+//                                             //
+//                      Music by Takahito Abe  //
+//        From Album "Sound Fantasy Romancia"  //
+//               (c) Nihon Falcom Corporation  //
+//                                             //
+/////////////////////////////////////////////////
+
+// Global ///////////////////////////////////////
+
+@G
+
+MASTERVOLUME=70
+TEMPO=104
+DELAYTIME=577
+V1=9 V2=9 V3=5 VD=0
+
+// Channel 1 ////////////////////////////////////
+
+@1
+
+LFO=ON
+L16O6
+
+EbEb:C~<EbAb>CDD:<Bb~DFBb
+>C<BbAbG~F~EbD:::Bb~~~
+
+G:G:BbG:>C~C<Bb:G:Eb~CEb:Eb~CEbFGF:F~~~~
+G:G:BbG:>C~C<Bb:G:Eb~CEb:Eb~CEbGFEb:Eb~~~~
+G:G:BbG:>C~C<Bb:G:Eb~CEb:Eb~CEbFGF:F~~~~
+G~Eb>Eb~C~<Bb:>C~<BbEb~F~F#GBbBbBbGEbGFEb:Eb~~~:
+
+>::EbD~Eb~CD~~~<Bb~~~
+:>C<B>C~EbDC<ABb>Eb<G~~~~
+FEFG:Ab:Bb>C~~~Eb~~~
+D~~~C~~~<Bb~~~Ab~~~
+
+G:G:BbG:>C~C<Bb:G:Eb~CEb:Eb~CEbFGF:F~~~~
+G:G:BbG:>C~C<Bb:G:Eb~CEb:Eb~CEbGFEb:Eb~~~~
+G:G:BbG:>C~C<Bb:G:Eb~CEb:Eb~CEbFGF:F~~~~
+G~Eb>Eb~C~<Bb:>C~<BbEb~F~F#GBbBbBbGEbGFEb:Eb~~~:
+
+>::EbD~Eb~CD~~~<Bb~~~
+:>C<B>C~EbDC<ABb>Eb<G~~~~
+FEFG:Ab:Bb>C~~~Eb~~~
+D~~~C~~~<Bb~~~Ab~~~
+
+G~~~~~~~::::
+
+
+// Channel 2 ////////////////////////////////////
+
+@2
+
+L16O4
+
+CC:<Ab~~~~BbBb:G~~~~
+AbGFEb~<Ab~ABb:::>Bb~~~
+
+Eb:Eb:GEb:Ab~AbG:Eb:<G~
+AbAb:A~AAABbBb:Bb~Bb>CD
+Eb:Eb:GEb:Ab~AbG:Eb:<G~
+AbAb:Ab~AbAbAbBbBb:>Eb~<Bb>CD
+
+EbEbEbEbGEb:AbAbAbG<Bb>EbEbEb<G
+AbAbAbA~AAABbBb:Bb~Bb>CD
+EbEb:Eb EbEb:Eb <AbAb:Ab AbAb:Ab
+BbBb:Bb BbBb:Bb BbBb:>Eb~~~:
+
+>C~~<GCEbG>C<Bb~~G<Bb>DGBb
+AbEb<Ab>C~<Ab>CDEb~~~~BbGEb
+<Ab>AbAb<AbAb>AbAb<AbA>AA<AA>AA<A
+Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb
+
+Eb:Eb:GEb:Ab~AbG:Eb:<G~
+AbAb:A~AAABbBb:Bb~Bb>CD
+Eb:Eb:GEb:Ab~AbG:Eb:<G~
+AbAb:Ab~AbAbAbBbBb:>Eb~<Bb>CD
+
+EbEbEbEbGEb:AbAbAbG:Eb:<GG
+AbAb:A~AAABbBb:Bb~Bb>CD
+EbEb:Eb EbEb:Eb AbAb:Ab AbAb:Ab
+<BbBb:BbBbBb:BbBbBb:>Eb~~~:
+
+>C~~<GCEbG>C<Bb~~G<Bb>DGBb
+AbEb<Ab>C~<Ab>CDEb~~~~BbGEb
+<Ab>AbAb<AbAb>AbAb<AbA>AA<AA>AA<A
+Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb<Bb>Bb>Bb<Bb
+
+Eb~~~~~~~::::

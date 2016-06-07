@@ -21,8 +21,9 @@ NOSC::NOSC()
 	nPinkTable.resize(NOSC_NTABLE_SIZE);
 	pTable.resize(NOSC_PTABLE_SIZE);
 	setTable();
-	
-	usePink = false;
+
+	for(int i=0; i<6; i++)
+		noiseType[i] = 0; // set all to use white noise to begin
 	
 	squareLevel = 1.0f;
 	noiseLevel = 1.0f;
@@ -94,7 +95,7 @@ void NOSC::setTable()
 		b0 = 0.99765f * b0 + nTable[i] * 0.0990460f; 
 		b1 = 0.96300f * b1 + nTable[i] * 0.2965164f; 
 		b2 = 0.57000f * b2 + nTable[i] * 1.0526913f; 
-		nPinkTable[i] = (b0 + b1 + b2 + nTable[i] * 0.1848f) * 0.36f;	
+		nPinkTable[i] = (b0 + b1 + b2 + nTable[i] * 0.1848f) * 0.32f;	
 	}
 }
 
@@ -139,6 +140,8 @@ void NOSC::resetDrumTones()
 {
 	squareLevel = 1.0f;
 	noiseLevel = 1.0f;
+	
+	useWhiteNoise();
 	
 	// set default envelope for each drum
 	setDrumTone(0, 1, 25,  15,  0.8, 200.0,  50  , 0.9, 2.0); // kick
@@ -374,10 +377,13 @@ float NOSC::getOutput()
 	int ph = (int) phase;
 
 	float noiseOut;
-	if(usePink) // if flag's set, use pink noise
+	
+	if(noiseType[drumType]==1) // if one, use pink noise
 		noiseOut = nPinkTable[ph] * noiseLevel;
-	else // use regular white noise
-		noiseOut = nTable[ph] * noiseLevel;
+	else // if zero, use white noise
+		noiseOut = nTable[ph] * noiseLevel;	
+		
+		
 
 	float pitchOut = getPitchOutput() * squareLevel;
 
@@ -446,11 +452,26 @@ void NOSC::setBeefUpFactor(float factor)
 }
 
 void NOSC::useWhiteNoise()
-	{ usePink = false; }
+{ 
+	for(int i=0; i<6; i++)
+		noiseType[i] = 0;
+}
 
 void NOSC::usePinkNoise()
-	{ usePink = true; }
+{ 
+	for(int i=0; i<6; i++)
+		noiseType[i] = 1;
+}
+	
+void NOSC::setKickNoiseType(int type)
+	{ noiseType[0] = type; noiseType[3] = type; }
+	
+void NOSC::setSnareNoiseType(int type)
+	{ noiseType[1] = type; noiseType[4] = type; }
 
+void NOSC::setHiHatNoiseType(int type)
+	{ noiseType[2] = type; noiseType[5] = type; }
+	
 void NOSC::setNoiseLevel(float nLevel)
 	{ noiseLevel = nLevel; }
 

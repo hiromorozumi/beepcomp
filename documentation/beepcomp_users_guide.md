@@ -35,6 +35,7 @@
 	* [Volume Envelope Commands](#volume_envelope_commands)
 	* [LFO Commands](#lfo_commands)
 	* [Astro Command](#astro_command)
+	* [Ring Modulation](#ring_modulation_command)
 * [Drum Section in Detail](#drum_section_in_detail)
 	* [Drum Hits](#drum_section_drum_hits)
 	* [Quieter Drum Hits](#drum_section_quieter_drum_hits)
@@ -42,6 +43,9 @@
 	* [Rests](#drum_section_rests)
 	* [Ties](#drum_section_ties)
 	* [Tuplets](#drum_section_tuplets)
+	* [Noise Type](#noise_type)
+	* [Adjusting the Noise Mix](#adjusting_the_noise_mix)
+	* [Drum Sound Shaping](#drum_sound_shaping)
 * [Delay Effect](#delay_effect)
 * [Volume Envelope](#volume_envelope)
 * [LFO Effect](#lfo_effect)
@@ -49,6 +53,7 @@
 * [Waveforms](#waveforms)
 * [Beef Up!](#beef_up)
 * [Tone Presets](#tone_presets)
+* [Ring Modultion](#ring_modulation)
 * [Bookmarking Your Start Position](#bookmarking_your_start_position)
 * [Auto Saving](#auto_saving)
 * [Syntax Reference](#syntax_reference)
@@ -208,9 +213,9 @@ Of course, going the other way is easy, too. You can easily copy your work from 
 
 You can create audio files of your work by pressing the EXPORT button(or F12). Currently supported formats are: WAV, MP3 and OGG files. After you export your work, you can add fades and other finishing touches on audio editors like Audacity.
 
-Your music won't be looped in your exported file.
+Note that by default your music won't be looped when exported.
 
-Here is a tip if you want the exported data to be looped (so you can fade out after the loop point etc.) - Enclose the entire content of each channel with `{}`. Your exported file will come with your entire music repeated once.
+If you want your export to be looped, specify the total number for the song to be written with the command `REPEAT=n` in the global section. If you want your track to play through once and then fade out, write `REPEAT=2` in the global section, load the exported file in an audio editor and apply a fade-out briefly after the loop point.
 
 <div id="key_commands" />
 ## Key Commands ##
@@ -299,10 +304,11 @@ Here is an example of using the global section to set up the volume, tempo and l
     MASTERVOLUME=50 // not too loud
     TEMPO=80 // kind of slow
     LOOP=OFF
+    REPEAT=3 // song plays 3 times in succession
     DELAYTIME=750 // adjust delay timing
 
     @1
-    GFEDC // this won't be looped
+    GFEDC
 
 <div id="music_section_in_detail" />
 ## Music Section in Detail ##
@@ -483,6 +489,11 @@ The pitch LFO filter adds a vibrato effect. See [LFO Effect](#lfo_effect).
 
 The "Astro" effect is a unique 80's-ish wobble effect. See [Astro Effect](#astro_effect).
 
+<div id="ring_modulation_command" />
+###Ring Modulation###
+
+You can use two music channels to create a ring modulation effect similar to the effect Commodore 64's SID chip produced. see [Ring Modulation](#ring_modulation)
+
 <div id="drum_section_in_detail" />
 ## Drum Section in Detail ##
 
@@ -546,10 +557,63 @@ Using the both methods, let's illustrate some interesting things you can do to y
     K::[KK] S~~~ K::: [4SSS]
     K[KK]K[KK] KK[8HHHH] ss[8sss][8SSSS][8SSSSSSSS]
 
+<div id="noise_type">
+###Noise Type###
+
+There are two types of noise available to use for your drum sounds: white noise and pink noise. The default noise type is bright-sounding white noise. Pink noise gives you a darker color. To change the noise type on all drums at once, use the commands `WHITENOISE` or `PINKNOISE`. To change the noise type individually on a drum, use the commands `KICKNOISE=`, `SNARENOISE=` or `HIHATNOISE=` and specify `PINK` or `WHITE` following the equal sign. Try the following example to explore the different noise types:
+
+    @D
+
+    PINKNOISE              // darker 
+    { K:HKS~~s hsKKS~Hs }
+    WHITENOISE             // brighter (default)
+    { K:HKS~~s hsKKS~Hs }
+    KICKNOISE=PINK         // pink noise only for kick
+    { KKS~ KKS~ KHS[HH] HSSS }
+
+<div id="adjusting_the_noise_mix">
+###Adjusting the Noise Mix###
+
+The drum channel combines two audio sources: a noise oscillator and a square wave oscillator. You can adjust how loud each source's output is by commands `NOISELEVEL=` and `SQUAREWAVE=` with values ranging from 0 to 100. The following example decreases the noise oscillator's output volume gradually:
+
+    @D
+    SQUARELEVEL=100 // 100 is default
+    NOISELEVEL=100 { K:HHS~HH }
+    NOISELEVEL=70  { K:HHS~HH }
+    NOISELEVEL=40  { K:HHS~HH }
+    NOISELEVEL=0   { K:HHS~HH } // you won't hear hi-hat
+
+The Hi-hat only uses the noise output. That's why you didn't hear the hihat in the last line where the noise output was set to zero.
+
+<div id="drum_sound_shaping">
+###Drum sound shaping###
+
+One way you can change how your drums sound is to change the tuning pitch of the snare or the kick. Use `SNAREPITCH=` and `KICKPITCH=` with values from 0 to 100 to adjust the pitches. The default value is 50 for the both drums. Hear how pitch adjustment affects how your drum kit sounds:
+
+    @D
+
+    RESETDRUMS // set all parameters back to default
+    {3 KhKS~h} [ss]SS[ss]SS
+
+    SNAREPITCH=20 KICKPITCH=30 // lower than default value 50
+    {3 KhKS~h} [ss]SS[ss]SS
+
+Another way to shape your drum sounds is to change the time length value of each drum by writing commands `KICKLENGTH=`, `SNARELENGTH=`, `HIHATLENGTH=` with values in milliseconds. The default time length values of kick, snare, hi-hat are 40, 140, 20, respectively.
+
+    @D
+
+    L8 RESETDRUMS // all back to default
+    K:::S~H~ K:::S~H~
+
+    KICKLENGTH=70
+    SNARELENGTH=200
+    HIHATLENGTH=100
+    K:::S~H~ K:::S~H~ // all drums are longer
+
 <div id="delay_effect" />
 ## Delay Effect ##
 
-There is a nice stereo delay effect that is added to your track by default when it first plays. You can turn off the delay by pushing the DELAY button or pressing F7.
+There is a nice stereo delay effect that is added to your track by default. You can turn off the delay by pushing the DELAY button or pressing F7.
 
 You can set the delay parameters in your source. Your commands will go in the Global section. For instance:
 
@@ -561,7 +625,7 @@ You can set the delay parameters in your source. Your commands will go in the Gl
     @1
     CDEFG
 
-This gives you a pretty prominent delay effect with a short timing. Play around with `DELAYTIME=` (in milliseconds) and `DELAYLEVEL=` (scale of 100). You can turn off delay for the whole track by saying `DELAY=OFF`. Please note that you cannot change the settings for the delay effect not separately on each channel.
+This gives you a pretty prominent delay effect with a short timing. Play around with `DELAYTIME=` (in milliseconds) and `DELAYLEVEL=` (scale of 100). You can turn off delay for the whole track by saying `DELAY=OFF`. You can use `DELAYTIME=AUTO` to automatically set the delay timing according to the tempo. Please note that you cannot change the settings for the delay effect not separately on each channel.
 
 <div id="volume_envelope" />
 ## Volume Envelope ##
@@ -691,6 +755,24 @@ With one line of the command `PRESET=`, you can set your channel to a set of pre
 * `PRESET=POPPYVIB` ... (Square wave) Preset POPPY with vibrato.
 * `PRESET=BELL` ... (Square wave) Hard tone that decays in time.
 
+<div id="ring_modulation" />
+## Ring Modulation ##
+
+Ring modulation is an effect where the inputs of two audio source are multiplied. The resulting sounds can be very unique and futuristic, and they're sure to amuse your ears. You can use this effect to produce metallic percussive sounds or Sci-Fi sound effects. To use this effect, within a music channel, designate another channel as the modulator source by using the command `RINGMOD=n` where n is the modulator channel number. The direct output of the modulator channel will not be audible.
+
+In the following example, Channel 1 is set to take Channel 2 as its modulator input. Channel 2 feeds a signal with the ASTRO and Fall effect into Channel 1:
+
+    @1
+    RINGMOD=2 // channel 2 modulates channel 1
+    DEFAULTTONE
+    L1 O3 C~
+
+    @2
+    ASTRO=10
+    L1 O6 D#~,
+
+Experiment further changing Channel 2's output using various effects, envelope settings and waveforms. Additionally, you can route any of the nine music channels to modulate any other channel. Ring modulation offers a huge range of tonal possibilities. You can read more about the ring modulation effect [here](https://en.wikipedia.org/wiki/Ring_modulation).
+
 <div id="bookmarking_your_start_position" />
 ## Bookmarking Your Start Position ##
 
@@ -703,7 +785,7 @@ When you compose a long song, you can take advantage of the bookmarking feature.
      // chorus
      F~G~A~F~>C~C~<G~~~
 
-Now that you have finished working on the verse, you can just focus on the chorus part without having to go back to the top every time you press the play button.
+Let's say you have just finished working on the verse in the above example - since the bookmark is placed at the top of the chorus, you can now focus on writing the chorus without having to go back to the top every time you press the play button.
 
 Note that the bookmark will not be effective when you export to an audio file.
 
@@ -728,10 +810,11 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 ### Global Section ###
 
 * `MASTERVOLUME=n` ... Sets the master output gain (n=1 to 100)
-* `TEMPO=n` ... Sets the track tempo (n=40 to 300)
+* `TEMPO=n` ... Sets the track tempo (n=40 to 400)
 * `Vn=v` ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100) 
 * `VD=v` ... Sets the volume (v=0 to 10) for the drum channel
 * `LOOP=?` ... Turns track looping on or off (?=ON or OFF)
+* `REPEAT=n` ... Play or export the song n times in succession (automatically sets `LOOP=OFF`)
 * `DELAY=?` ... Turns the delay effect on or off (?=ON or OFF)
 * `DELAYLEVEL=n` ... Sets the delay output level (n=0 to 100)
 * `DELAYTIME=n` ... Sets the delay timing in milliseconds (n=0 to 999)
@@ -788,9 +871,19 @@ Your work gets automatically saved to a hidden file named "\_\_AUTOSAVED\_\_.txt
 <div id="syntax_reference_drum_channel" />
 ### Drum Channel ###
 
-* `RESETDRUMTONE` ... Resets all drum tone settings to default
+* `RESETDRUMS` ... Resets all drum tone settings to default
+* `WHITENOISE` ... Set all drums to use white noise
+* `PINKNOISE` ... Set all drums to use pink noise
+* `NOISELEVEL=` ... Set the noise element's volume (n=0 to 100, default=100)
+* `SQUARELEVEL=` ... Set the square wave element's volume (n=0 to 100, default=100)
+* `KICKNOISE=?` ... Set the kick's noise type (?=`WHITE` or `PINK`)
+* `SNARENOISE=?` ... Set the snare's noise type (?=`WHITE` or `PINK`)
+* `HIHATNOISE=?` ... Set the Hi-hat's noise type (?=`WHITE` or `PINK`) 
 * `KICKPITCH=n` ... Sets the kick's pitch tuning (n=0 to 100, default=50)
 * `SNAREPITCH=n` ... Sets the snare's pitch tuning (n=0 to 100, default=50)
+* `KICKLENGTH=n` ... Sets the kick's duration in milliseconds (n=0 to 400)
+* `SNARELENGTH=n` ... Sets the kick's duration in milliseconds (n=0 to 1000)
+* `HIHATLENGTH=n` ... Sets the kick's duration in milliseconds (n=0 to 1000)
 * `BEEFUP=n` ... Add a mild overdrive effect to the channel (n=0 to 100, 0=off)
 * `Vn` ... Sets channel volume (n=0,1,2...10)
 * `Ln` ... Sets the current note length (n=1 to 64)
