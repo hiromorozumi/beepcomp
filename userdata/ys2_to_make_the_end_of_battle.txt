@@ -236,9 +236,9 @@ LFORANGE=30
 :<[A>C]DF CDFG
 *DFGA FGA>C <GA>CD <A>CDF *E[FE]CD~~,~:
 O6
-L8 [*D~~~~~~~:] [8DC<A] > [*D~~~~~~~:][8DC<A]
->[*D~~~~~~~:] [8DC<A] > [*D~~~~~~~:] [8DC<A] 
->[*D~~~~~~~:] L8 [DC<A] >[C<AG] [AGF] 
+L8 [*D~~~~~~~~:] [8DC<A] > [*D~~~~~~~~:][8DC<A]
+>[*D~~~~~~~~:] [8DC<A] > [*D~~~~~~~~:] [8DC<A] 
+>[*D~~~~~~~~:] L8 [DC<A] >[C<AG] [AGF] 
 [GFD][FDC][DC<A]>[C<AG][AGF][GFD] L24 C~~~~,~
 L16 :<[GA]>CDFDFG*A~>CD<[AbG]FDCFD[F~:]FD<A>CD~~~,~
 L8 [CDF][GA>C]

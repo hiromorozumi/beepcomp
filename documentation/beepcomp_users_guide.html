@@ -394,8 +394,8 @@ img {
 <p>I'll be working on these versions soon :)</p>
 <div id="tutorials" />
 <h2>Tutorials</h2>
-<p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> on this documentation has a similar content.</p>
-<p>After exploring those tutorials, exploring the tutorial files included in the <strong>userdata</strong> folder (the program's default save location) will be helpful, also. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
+<p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> in this document has a similar content.</p>
+<p>After exploring those tutorials, exploring the tutorial files included in the <strong>userdata</strong> folder (the program's default save location) will be helpful. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
 <p>These files are located in:</p>
 <ul>
 <li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
@@ -480,7 +480,7 @@ L4 KKKSSS
 <h3>Exporting Your Work</h3>
 <p>You can create audio files of your work by pressing the EXPORT button(or F12). Currently supported formats are: WAV, MP3 and OGG files. After you export your work, you can add fades and other finishing touches on audio editors like Audacity.</p>
 <p>Note that by default your music won't be looped when exported.</p>
-<p>If you want your export to be looped, specify the total number for the song to be written with the command <code>REPEAT=n</code> in the global section. If you want your track to play through once and then fade out, write <code>REPEAT=2</code> in the global section, load the exported file in an audio editor and apply a fade-out briefly after the loop point.</p>
+<p>If you want your export to be looped, specify the total number the song should execute with the command <code>REPEAT=n</code> in the global section. If you want your track to play through once and then fade out, first write <code>REPEAT=2</code> in the global section and export your song. This will output your song twice in succession. Then load the exported file in an audio editor and apply fade-out around the middle of the file briefly after where the song repeats.</p>
 <div id="key_commands" />
 <h2>Key Commands</h2>
 <h3>Mouse Input</h3>
@@ -718,7 +718,7 @@ See <a href="#beef_up">Beef Up!</a></p>
 <p>The &quot;Astro&quot; effect is a unique 80's-ish wobble effect. See <a href="#astro_effect">Astro Effect</a>.</p>
 <div id="ring_modulation_command" />
 <h3>Ring Modulation</h3>
-<p>You can use two music channels to create a ring modulation effect similar to the effect Commodore 64's SID chip produced. see <a href="#ring_modulation">Ring Modulation</a></p>
+<p>You can use two music channels to create a ring modulation effect similar to the effect Commodore 64's SID chip produced. see <a href="#ring_modulation">Ring Modulation</a>.</p>
 <div id="drum_section_in_detail" />
 <h2>Drum Section in Detail</h2>
 <p>Writing <code>@D</code> starts the drum section.</p>
@@ -786,7 +786,7 @@ KICKNOISE=PINK         // pink noise only for kick
 
 <p><div id="adjusting_the_noise_mix"></p>
 <h3>Adjusting the Noise Mix</h3>
-<p>The drum channel combines two audio sources: a noise oscillator and a square wave oscillator. You can adjust how loud each source's output is by commands <code>NOISELEVEL=</code> and <code>SQUAREWAVE=</code> with values ranging from 0 to 100. The following example decreases the noise oscillator's output volume gradually:</p>
+<p>The drum channel combines two audio sources: a noise oscillator and a square wave oscillator. You can adjust how loud each source's output is by commands <code>NOISELEVEL=</code> and <code>SQUARELEVEL=</code> with values ranging from 0 to 100. The following example decreases the noise oscillator's output volume gradually:</p>
 <pre><code>@D
 SQUARELEVEL=100 // 100 is default
 NOISELEVEL=100 { K:HHS~HH }
@@ -915,7 +915,7 @@ L4 CDEFG
 <li>pulse with 25% cycle (n=7)</li>
 <li>pulse with 33% cycle (n=8)</li>
 </ul>
-<p>The most frequent waveform used in old PCs and game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.</p>
+<p>The most frequent waveforms used in old PCs and early game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.</p>
 <p>Here is an example where a different waveform than the default form is selected:</p>
 <pre><code>@1
 DEFAULTTONE // resets the tone to plain beep with no envelope
@@ -1091,8 +1091,8 @@ L1 O6 D#~,
 <p>Please note that your &quot;userdata&quot; folder inside your &quot;Documents&quot; (or &quot;My Documents&quot; on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your &quot;userdata&quot; folder, please manually delete it along with its parent folder named BeepComp.</p>
 <div id="staying_updated" />
 <h2>Staying Updated</h2>
-<p>New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix and improve the bugs or issues found on the previous versions. I announce new versions through <a href="https://sourceforge.net/p/beepcomp/blog/">the SourceForge Blog page</a>. I also upload <a href="https://sourceforge.net/projects/beepcomp/files/patches/">patches</a> whenever there is a critical issue.</p>
-<p>Alternatively, you can scroll down the <a href="http://beepcomp.sourceforge.net">SourceForge project top page</a> and press the button that says &quot;Follow&quot; to receive automatic updates, but be alerted that you will receive third-party junk mail as well. I will find a better newsgroup format that's clean. If anyone knows of a good service, let me know! :)</p>
+<p>New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix the bugs and improve on the issues found on the previous versions. I announce new versions through <a href="https://sourceforge.net/p/beepcomp/blog/">the SourceForge Blog page</a>. I also upload <a href="https://sourceforge.net/projects/beepcomp/files/patches/">patches</a> whenever there is a critical issue.</p>
+<p>Alternatively, you can scroll down the <a href="http://beepcomp.sourceforge.net">SourceForge project top page</a> to below the feature list and press the button that says &quot;Follow&quot; to receive automatic updates. But be alerted that you might receive third-party mail from SourceForge. I will also be sending out update notifications via <a href="https://twitter.com/hiromorozumi">Twitter</a> and <a href="https://plus.google.com/103995858202385924195/posts">Google+</a>.</p>
 <p>You can find out the version of BeepComp you're using by clicking the logo in the main editor screen.</p>
 <p>When you update to a new release, you will have to first <a href="#uninstalling_beepcomp">uninstall</a> your current version.</p>
 <div id="if_you_found_issues_bugs" />
@@ -1106,6 +1106,7 @@ L1 O6 D#~,
 <p>Also, there is a <a href="http://beepcomp.freeforums.net/">forum page</a> where you can join our discussion. I have also set up a <a href="https://www.facebook.com/beepcomp">Facebook</a> page.</p>
 <p>The source code is publicly available at the <a href="http://sourceforge.net">SourceForge</a> repository. I will also welcome patches if you spot issues. The address of the repository is:
 <a href="https://sourceforge.net/p/beepcomp/code/ci/master/tree/">https://sourceforge.net/p/beepcomp/code/ci/master/tree/</a>.</p>
+<p>Also, I have been developing a game audio engine library API for game developers to incorporate music made with BeepComp into their projects. This library is available at <a href="https://github.com/hiromorozumi/bcplayer/releases">Github</a>.</p>
 <div id="contact_me" />
 <h2>Contact Me!</h2>
 <p>I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) You can contact me by emailing me at beepcomp-at-hiromorozumi-dot-com.</p>

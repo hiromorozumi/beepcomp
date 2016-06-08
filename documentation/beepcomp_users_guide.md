@@ -97,9 +97,9 @@ I'll be working on these versions soon :)
 <div id="tutorials" />
 ## Tutorials ##
 
-The BeepComp homepage has section named [Your First Tutorial](http://hiromorozumi.com/beepcomp/first_tutorial_1.html), which will be your great starting point. The later section [Writing Your First Track](#basics_writing_your_first_track) on this documentation has a similar content.
+The BeepComp homepage has section named [Your First Tutorial](http://hiromorozumi.com/beepcomp/first_tutorial_1.html), which will be your great starting point. The later section [Writing Your First Track](#basics_writing_your_first_track) in this document has a similar content.
 
-After exploring those tutorials, exploring the tutorial files included in the **userdata** folder (the program's default save location) will be helpful, also. Simply load one of these files named **\_tutorial\_---.txt**, read and play to see writing what produces what result. I recommend starting from **\_tutorial\_basic\_1.txt**.
+After exploring those tutorials, exploring the tutorial files included in the **userdata** folder (the program's default save location) will be helpful. Simply load one of these files named **\_tutorial\_---.txt**, read and play to see writing what produces what result. I recommend starting from **\_tutorial\_basic\_1.txt**.
 
 These files are located in:
 
@@ -215,7 +215,7 @@ You can create audio files of your work by pressing the EXPORT button(or F12). C
 
 Note that by default your music won't be looped when exported.
 
-If you want your export to be looped, specify the total number for the song to be written with the command `REPEAT=n` in the global section. If you want your track to play through once and then fade out, write `REPEAT=2` in the global section, load the exported file in an audio editor and apply a fade-out briefly after the loop point.
+If you want your export to be looped, specify the total number the song should execute with the command `REPEAT=n` in the global section. If you want your track to play through once and then fade out, first write `REPEAT=2` in the global section and export your song. This will output your song twice in succession. Then load the exported file in an audio editor and apply fade-out around the middle of the file briefly after where the song repeats.
 
 <div id="key_commands" />
 ## Key Commands ##
@@ -492,7 +492,7 @@ The "Astro" effect is a unique 80's-ish wobble effect. See [Astro Effect](#astro
 <div id="ring_modulation_command" />
 ###Ring Modulation###
 
-You can use two music channels to create a ring modulation effect similar to the effect Commodore 64's SID chip produced. see [Ring Modulation](#ring_modulation)
+You can use two music channels to create a ring modulation effect similar to the effect Commodore 64's SID chip produced. see [Ring Modulation](#ring_modulation).
 
 <div id="drum_section_in_detail" />
 ## Drum Section in Detail ##
@@ -574,7 +574,7 @@ There are two types of noise available to use for your drum sounds: white noise 
 <div id="adjusting_the_noise_mix">
 ###Adjusting the Noise Mix###
 
-The drum channel combines two audio sources: a noise oscillator and a square wave oscillator. You can adjust how loud each source's output is by commands `NOISELEVEL=` and `SQUAREWAVE=` with values ranging from 0 to 100. The following example decreases the noise oscillator's output volume gradually:
+The drum channel combines two audio sources: a noise oscillator and a square wave oscillator. You can adjust how loud each source's output is by commands `NOISELEVEL=` and `SQUARELEVEL=` with values ranging from 0 to 100. The following example decreases the noise oscillator's output volume gradually:
 
     @D
     SQUARELEVEL=100 // 100 is default
@@ -717,7 +717,7 @@ Each music channel is by default set to play a square wave tone. But you can cha
 - pulse with 25% cycle (n=7)
 - pulse with 33% cycle (n=8)
 
-The most frequent waveform used in old PCs and game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.
+The most frequent waveforms used in old PCs and early game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.
 
 Here is an example where a different waveform than the default form is selected:
 
@@ -912,9 +912,9 @@ Please note that your "userdata" folder inside your "Documents" (or "My Document
 <div id="staying_updated" />
 ## Staying Updated ##
 
-New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix and improve the bugs or issues found on the previous versions. I announce new versions through [the SourceForge Blog page](https://sourceforge.net/p/beepcomp/blog/). I also upload [patches](https://sourceforge.net/projects/beepcomp/files/patches/) whenever there is a critical issue.
+New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix the bugs and improve on the issues found on the previous versions. I announce new versions through [the SourceForge Blog page](https://sourceforge.net/p/beepcomp/blog/). I also upload [patches](https://sourceforge.net/projects/beepcomp/files/patches/) whenever there is a critical issue.
 
-Alternatively, you can scroll down the [SourceForge project top page](http://beepcomp.sourceforge.net) and press the button that says "Follow" to receive automatic updates, but be alerted that you will receive third-party junk mail as well. I will find a better newsgroup format that's clean. If anyone knows of a good service, let me know! :)
+Alternatively, you can scroll down the [SourceForge project top page](http://beepcomp.sourceforge.net) to below the feature list and press the button that says "Follow" to receive automatic updates. But be alerted that you might receive third-party mail from SourceForge. I will also be sending out update notifications via [Twitter](https://twitter.com/hiromorozumi) and [Google+](https://plus.google.com/103995858202385924195/posts).
 
 You can find out the version of BeepComp you're using by clicking the logo in the main editor screen.
 
@@ -937,6 +937,8 @@ Also, there is a [forum page](http://beepcomp.freeforums.net/) where you can joi
 
 The source code is publicly available at the [SourceForge](http://sourceforge.net) repository. I will also welcome patches if you spot issues. The address of the repository is:
 [https://sourceforge.net/p/beepcomp/code/ci/master/tree/](https://sourceforge.net/p/beepcomp/code/ci/master/tree/).
+
+Also, I have been developing a game audio engine library API for game developers to incorporate music made with BeepComp into their projects. This library is available at [Github](https://github.com/hiromorozumi/bcplayer/releases).
 
 <div id="contact_me" />
 ## Contact Me! ##

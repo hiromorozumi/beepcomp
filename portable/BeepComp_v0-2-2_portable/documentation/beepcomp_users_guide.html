@@ -328,10 +328,12 @@ img {
 <li><a href="#fall_effect">Fall Effect</a></li>
 <li><a href="#rise_effect">Rise Effect</a></li>
 <li><a href="#waveform_selection">Waveform Selection</a></li>
+<li><a href="#beef_up_effect">&quot;Beef-Up&quot; Effect</a></li>
 <li><a href="#preset_selection">Preset Selection</a></li>
 <li><a href="#volume_envelope_commands">Volume Envelope Commands</a></li>
 <li><a href="#lfo_commands">LFO Commands</a></li>
 <li><a href="#astro_command">Astro Command</a></li>
+<li><a href="#ring_modulation_command">Ring Modulation</a></li>
 </ul>
 </li>
 <li>
@@ -343,6 +345,9 @@ img {
 <li><a href="#drum_section_rests">Rests</a></li>
 <li><a href="#drum_section_ties">Ties</a></li>
 <li><a href="#drum_section_tuplets">Tuplets</a></li>
+<li><a href="#noise_type">Noise Type</a></li>
+<li><a href="#adjusting_the_noise_mix">Adjusting the Noise Mix</a></li>
+<li><a href="#drum_sound_shaping">Drum Sound Shaping</a></li>
 </ul>
 </li>
 <li><a href="#delay_effect">Delay Effect</a></li>
@@ -350,7 +355,9 @@ img {
 <li><a href="#lfo_effect">LFO Effect</a></li>
 <li><a href="#astro_effect">Astro Effect</a></li>
 <li><a href="#waveforms">Waveforms</a></li>
+<li><a href="#beef_up">Beef Up!</a></li>
 <li><a href="#tone_presets">Tone Presets</a></li>
+<li><a href="#ring_modulation">Ring Modultion</a></li>
 <li><a href="#bookmarking_your_start_position">Bookmarking Your Start Position</a></li>
 <li><a href="#auto_saving">Auto Saving</a></li>
 <li>
@@ -382,17 +389,19 @@ img {
 <li><strong>C:\Program Files (x86)\BeepComp\</strong> on 64-bit Windows</li>
 </ul>
 <p>After installation, BeepComp will be on the list of installed programs. On Windows XP &amp; 7, go to Start-&gt;All Programs-&gt;BeepComp. You can also click the shortcut that has been created on your Desktop.</p>
+<p>(Note: If you downloaded the portable version, the installation steps below are not required. To launch, open the folder you extracted from the downloaded .zip file and double-click on <strong>beepcomp_portable.exe</strong>.)</p>
 <h4>Mac / Linux</h4>
 <p>I'll be working on these versions soon :)</p>
 <div id="tutorials" />
 <h2>Tutorials</h2>
-<p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> on this documentation has a similar content.</p>
-<p>After exploring those tutorials, exploring the tutorial files included in the <strong>userdata</strong> folder (the program's default save location) will be helpful, also. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
+<p>The BeepComp homepage has section named <a href="http://hiromorozumi.com/beepcomp/first_tutorial_1.html">Your First Tutorial</a>, which will be your great starting point. The later section <a href="#basics_writing_your_first_track">Writing Your First Track</a> in this document has a similar content.</p>
+<p>After exploring those tutorials, exploring the tutorial files included in the <strong>userdata</strong> folder (the program's default save location) will be helpful. Simply load one of these files named <strong>_tutorial_---.txt</strong>, read and play to see writing what produces what result. I recommend starting from <strong>_tutorial_basic_1.txt</strong>.</p>
 <p>These files are located in:</p>
 <ul>
 <li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
 <li><strong>C:\Users\{USERNAME}\Documents\BeepComp\userdata</strong> on Vista and later</li>
 </ul>
+<p>(Note: for the portable version, find the <strong>userdata</strong> folder inside the application top folder)</p>
 <div id="basics" />
 <h2>Basics</h2>
 <div id="basics_main_editor" />
@@ -458,19 +467,20 @@ L4 KKKSSS
 <li><strong>C:\Documents and Settings\{USERNAME}\My Documents\BeepComp\userdata</strong> on XP</li>
 <li><strong>C:\Users\{USERNAME}\Documents\BeepComp\userdata</strong> on Vista and later</li>
 </ul>
+<p>(Note: for the portable version, find the <strong>userdata</strong> folder inside the application top folder)</p>
 <p>See? Your BeepComp source is simply a text file. And you could even continue to work on your track in your text editor if you want.</p>
 <p>By the way, you can use the ALT + O shortcut from the main editor to open up your <strong>userdata</strong> folder anytime.</p>
 <div id="basics_copying_and_pasting_source" />
 <h3>Copying and Pasting Source</h3>
 <p>A nice thing about working with text is that you can easily copy and paste between BeepComp and other sources!</p>
 <p>Try this - Start a new file (NEW button or F9), Go to <a href="http://codrspace.com/hiromorozumi/beepcomp-source-ys-1-field-music/">this page</a>, copy all the code inside the grey box, and press CTRL + V in BeepComp, and play.</p>
-<p>I hope you see how easy it is to share work with each other on the web :)</p>
+<p>I hope you see how easy it can be to share your work with others on the web :)</p>
 <p>Of course, going the other way is easy, too. You can easily copy your work from BeepComp by pressing CTRL + A (select all) then CTRL + C (copy), and paste what you just copied into your external applications like your Outlook to email your music to a friend, for instance.</p>
 <div id="basics_exporting_your_work" />
 <h3>Exporting Your Work</h3>
 <p>You can create audio files of your work by pressing the EXPORT button(or F12). Currently supported formats are: WAV, MP3 and OGG files. After you export your work, you can add fades and other finishing touches on audio editors like Audacity.</p>
-<p>Your music won't be looped in your exported file.</p>
-<p>Here is a tip if you want the exported data to be looped (so you can fade out after the loop point etc.) - Enclose the entire content of each channel with <code>{}</code>. Your exported file will come with your entire music repeated once.</p>
+<p>Note that by default your music won't be looped when exported.</p>
+<p>If you want your export to be looped, specify the total number the song should execute with the command <code>REPEAT=n</code> in the global section. If you want your track to play through once and then fade out, first write <code>REPEAT=2</code> in the global section and export your song. This will output your song twice in succession. Then load the exported file in an audio editor and apply fade-out around the middle of the file briefly after where the song repeats.</p>
 <div id="key_commands" />
 <h2>Key Commands</h2>
 <h3>Mouse Input</h3>
@@ -519,14 +529,18 @@ L4 KKKSSS
 <li><strong>ESCAPE</strong> ... Exits dialog</li>
 <li><strong>HOME</strong> ... Go back to the default starting folder</li>
 <li><strong>END</strong> ... Go back to previous folder</li>
+<li><strong>CTRL + Z</strong> ... Go back to previous folder</li>
 <li><strong>F1</strong> ... Toggle file types to display</li>
+<li><strong>F2</strong> ... Display keyboard shortcuts</li>
 <li><strong>F12</strong> ... Load/Save/Export (as indicated)</li>
 <li><strong>UP/DOWN</strong> ... Navigate through the list of files in the current directory</li>
 <li><strong>RIGHT</strong> ... Selects a file name, Go to child folder (when over &lt;&lt;&lt;)</li>
 <li><strong>LEFT</strong> ... Go to parent folder (when over &lt;&lt;&lt;)</li>
 <li><strong>BACKSPACE</strong> ... Backspacing in the file name input</li>
+<li><strong>CTRL + G</strong> ... Go to a particular drive or special folders (Desktop and Documents)</li>
 <li><strong>ALT + O</strong> ... Open the currently selected directory in Explorer</li>
 <li><strong>ALT + D</strong> ... Go to the 'Desktop'</li>
+<li><strong>CTRL + R</strong> ... Refresh the currently viewing directory</li>
 </ul>
 <div id="global_section_in_detail" />
 <h2>Global Section in Detail</h2>
@@ -547,9 +561,11 @@ L4 KKKSSS
 MASTERVOLUME=50 // not too loud
 TEMPO=80 // kind of slow
 LOOP=OFF
+REPEAT=3 // song plays 3 times in succession
+DELAYTIME=750 // adjust delay timing
 
 @1
-GFEDC // this won't be looped
+GFEDC
 </code></pre>
 
 <div id="music_section_in_detail" />
@@ -684,6 +700,10 @@ L8 O4 *EGA&gt; *CCC *CCC *CC *C &lt;AGD#EC&lt;AG&gt;
 <h3>Waveform Selection</h3>
 <p>You can choose a waveform other than the default square wave for each channel by declaring <code>WAVEFORM=n</code>.
 See <a href="#waveforms">Waveforms</a>.</p>
+<div id="beef_up_effect" />
+<h3>&quot;Beef-Up&quot; Effect</h3>
+<p>Each channel comes with a mild overdrive effect you can use to give it a boost by declaring <code>BEEFUP=n</code>.
+See <a href="#beef_up">Beef Up!</a></p>
 <div id="preset_selection" />
 <h3>Preset Selection</h3>
 <p>You may choose a preset to for a quick tone shaping by declaring <code>PRESET=(presetname)</code>. See <a href="#tone_presets">Tone Presets</a>.</p>
@@ -696,6 +716,9 @@ See <a href="#waveforms">Waveforms</a>.</p>
 <div id="astro_command" />
 <h3>Astro Command</h3>
 <p>The &quot;Astro&quot; effect is a unique 80's-ish wobble effect. See <a href="#astro_effect">Astro Effect</a>.</p>
+<div id="ring_modulation_command" />
+<h3>Ring Modulation</h3>
+<p>You can use two music channels to create a ring modulation effect similar to the effect Commodore 64's SID chip produced. see <a href="#ring_modulation">Ring Modulation</a>.</p>
 <div id="drum_section_in_detail" />
 <h2>Drum Section in Detail</h2>
 <p>Writing <code>@D</code> starts the drum section.</p>
@@ -748,9 +771,58 @@ K::[KK] S~~~ K::: [4SSS]
 K[KK]K[KK] KK[8HHHH] ss[8sss][8SSSS][8SSSSSSSS]
 </code></pre>
 
+<p><div id="noise_type"></p>
+<h3>Noise Type</h3>
+<p>There are two types of noise available to use for your drum sounds: white noise and pink noise. The default noise type is bright-sounding white noise. Pink noise gives you a darker color. To change the noise type on all drums at once, use the commands <code>WHITENOISE</code> or <code>PINKNOISE</code>. To change the noise type individually on a drum, use the commands <code>KICKNOISE=</code>, <code>SNARENOISE=</code> or <code>HIHATNOISE=</code> and specify <code>PINK</code> or <code>WHITE</code> following the equal sign. Try the following example to explore the different noise types:</p>
+<pre><code>@D
+
+PINKNOISE              // darker 
+{ K:HKS~~s hsKKS~Hs }
+WHITENOISE             // brighter (default)
+{ K:HKS~~s hsKKS~Hs }
+KICKNOISE=PINK         // pink noise only for kick
+{ KKS~ KKS~ KHS[HH] HSSS }
+</code></pre>
+
+<p><div id="adjusting_the_noise_mix"></p>
+<h3>Adjusting the Noise Mix</h3>
+<p>The drum channel combines two audio sources: a noise oscillator and a square wave oscillator. You can adjust how loud each source's output is by commands <code>NOISELEVEL=</code> and <code>SQUARELEVEL=</code> with values ranging from 0 to 100. The following example decreases the noise oscillator's output volume gradually:</p>
+<pre><code>@D
+SQUARELEVEL=100 // 100 is default
+NOISELEVEL=100 { K:HHS~HH }
+NOISELEVEL=70  { K:HHS~HH }
+NOISELEVEL=40  { K:HHS~HH }
+NOISELEVEL=0   { K:HHS~HH } // you won't hear hi-hat
+</code></pre>
+
+<p>The Hi-hat only uses the noise output. That's why you didn't hear the hihat in the last line where the noise output was set to zero.</p>
+<p><div id="drum_sound_shaping"></p>
+<h3>Drum sound shaping</h3>
+<p>One way you can change how your drums sound is to change the tuning pitch of the snare or the kick. Use <code>SNAREPITCH=</code> and <code>KICKPITCH=</code> with values from 0 to 100 to adjust the pitches. The default value is 50 for the both drums. Hear how pitch adjustment affects how your drum kit sounds:</p>
+<pre><code>@D
+
+RESETDRUMS // set all parameters back to default
+{3 KhKS~h} [ss]SS[ss]SS
+
+SNAREPITCH=20 KICKPITCH=30 // lower than default value 50
+{3 KhKS~h} [ss]SS[ss]SS
+</code></pre>
+
+<p>Another way to shape your drum sounds is to change the time length value of each drum by writing commands <code>KICKLENGTH=</code>, <code>SNARELENGTH=</code>, <code>HIHATLENGTH=</code> with values in milliseconds. The default time length values of kick, snare, hi-hat are 40, 140, 20, respectively.</p>
+<pre><code>@D
+
+L8 RESETDRUMS // all back to default
+K:::S~H~ K:::S~H~
+
+KICKLENGTH=70
+SNARELENGTH=200
+HIHATLENGTH=100
+K:::S~H~ K:::S~H~ // all drums are longer
+</code></pre>
+
 <div id="delay_effect" />
 <h2>Delay Effect</h2>
-<p>There is a nice stereo delay effect that is added to your track by default when it first plays. You can turn off the delay by pushing the DELAY button or pressing F7.</p>
+<p>There is a nice stereo delay effect that is added to your track by default. You can turn off the delay by pushing the DELAY button or pressing F7.</p>
 <p>You can set the delay parameters in your source. Your commands will go in the Global section. For instance:</p>
 <pre><code>@G
 DELAY=ON
@@ -761,7 +833,7 @@ DELAYLEVEL=50
 CDEFG
 </code></pre>
 
-<p>This gives you a pretty prominent delay effect with a short timing. Play around with <code>DELAYTIME=</code> (in milliseconds) and <code>DELAYLEVEL=</code> (scale of 100). You can turn off delay for the whole track by saying <code>DELAY=OFF</code>.</p>
+<p>This gives you a pretty prominent delay effect with a short timing. Play around with <code>DELAYTIME=</code> (in milliseconds) and <code>DELAYLEVEL=</code> (scale of 100). You can turn off delay for the whole track by saying <code>DELAY=OFF</code>. You can use <code>DELAYTIME=AUTO</code> to automatically set the delay timing according to the tempo. Please note that you cannot change the settings for the delay effect not separately on each channel.</p>
 <div id="volume_envelope" />
 <h2>Volume Envelope</h2>
 <p>For each channel, you can shape your sound using the volume envelope. The chart below shows the parameters you can set and how they will shape the volume changes in time.</p>
@@ -831,23 +903,66 @@ L4 CDEFG
 <p>The number you specify after <code>ASTRO=</code> is the number of times that the wobble happens. Between 10 and 20 is good to start with, but try different values to see which value works for you.</p>
 <div id="waveforms" />
 <h2>Waveforms</h2>
-<p>Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring <code>WAVEFORM=</code> in each channel. The currently available waveforms and their assigned number are: sine(0), square(1, default), sawtooth(3), hybrid sine A(4), hybrid sine B(5). The hybrid sine waves combine a basic sign wave with a few added upper harmonics.</p>
-<p>Here is an example where a different waveform is selected:</p>
+<p>Each music channel is by default set to play a square wave tone. But you can change to different a wave form to work with, by declaring <code>WAVEFORM=n</code> in each channel. The currently available waveforms and their assigned numbers (n) are:</p>
+<ul>
+<li>sine (n=0)</li>
+<li>square (n=1, default)</li>
+<li>sawtooth (n=2)</li>
+<li>triangle (n=3)</li>
+<li>hybrid sine A(n=4)</li>
+<li>hybrid sine B(n=5)</li>
+<li>pulse with 12.5% cycle (n=6)</li>
+<li>pulse with 25% cycle (n=7)</li>
+<li>pulse with 33% cycle (n=8)</li>
+</ul>
+<p>The most frequent waveforms used in old PCs and early game consoles were perhaps square waves. The hybrid sine waves combine a basic sign wave with a few additional upper harmonics. Pulse waves (n=6 through 8) are kinds of sounds used a lot in the old Nintendo NES games.</p>
+<p>Here is an example where a different waveform than the default form is selected:</p>
 <pre><code>@1
-DEFAULTTONE // resets the volume envelope settings to plain beep
+DEFAULTTONE // resets the tone to plain beep with no envelope
 WAVEFORM=2  // sets up a saw tooth wave
 F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
 </code></pre>
 
+<p>If you overlay multiple pulse wave tracks, the mixed waveform will start to get heavier on one side. This can take away the audio headroom if you want to raise the track volume after exporting. You can help balance your mixed output by using <code>WAVEFLIP</code> in some of your tracks using pulse waves to filp the waveform vertically.  </p>
+<div id="beef_up" />
+<h2>Beef Up!</h2>
+<p>For each channel, you can use a mild overdrive effect if you want to boost up a soft waveform. The overdrive is turned off by default. To use it, simply declare <code>BEEFUP=n</code> where <code>n</code> is a number from 0 to 100 that specifies the strength. Setting to zero turns off the effect. Try the following example to see what <code>BEEFUP</code> does:</p>
+<pre><code>@1
+PRESET=POPPY // attacky shape
+WAVEFORM=3 // triangle wave (soft)
+L8 
+BEEFUP=0 CDEFG~ // BEEFUP is off
+BEEFUP=10 CDEFG~
+BEEFUP=50 CDEFG~
+BEEFUP=100 CDEFG~
+</code></pre>
+
+<p>The beef-up effect is available also available for the drum channel, but be careful because too much of this effect can lessen the crispness of the drum hits. </p>
 <div id="tone_presets" />
 <h2>Tone Presets</h2>
 <p>With one line of the command <code>PRESET=</code>, you can set your channel to a set of predetermined tone parameters. You are welcome to try out the currently registered presets by declaring one of the following at the top of a channel:</p>
 <ul>
+<li><code>DEFAULTTONE</code> ... (Square wave) Resets to flat envelope shaping.</li>
 <li><code>PRESET=BEEP</code> ... (Square wave) Straight PC Beep tone.</li>
 <li><code>PRESET=POPPY</code> ... (Square wave) Sustained tone with a strong attack.</li>
 <li><code>PRESET=POPPYVIB</code> ... (Square wave) Preset POPPY with vibrato.</li>
 <li><code>PRESET=BELL</code> ... (Square wave) Hard tone that decays in time.</li>
 </ul>
+<div id="ring_modulation" />
+<h2>Ring Modulation</h2>
+<p>Ring modulation is an effect where the inputs of two audio source are multiplied. The resulting sounds can be very unique and futuristic, and they're sure to amuse your ears. You can use this effect to produce metallic percussive sounds or Sci-Fi sound effects. To use this effect, within a music channel, designate another channel as the modulator source by using the command <code>RINGMOD=n</code> where n is the modulator channel number. The direct output of the modulator channel will not be audible.</p>
+<p>In the following example, Channel 1 is set to take Channel 2 as its modulator input. Channel 2 feeds a signal with the ASTRO and Fall effect into Channel 1:</p>
+<pre><code>@1
+RINGMOD=2 // channel 2 modulates channel 1
+DEFAULTTONE
+L1 O3 C~
+
+@2
+ASTRO=10
+L1 O6 D#~,
+</code></pre>
+
+<p>Experiment further changing Channel 2's output using various effects, envelope settings and waveforms. Additionally, you can route any of the nine music channels to modulate any other channel. Ring modulation offers a huge range of tonal possibilities. You can read more about the ring modulation effect <a href="https://en.wikipedia.org/wiki/Ring_modulation">here</a>.</p>
 <div id="bookmarking_your_start_position" />
 <h2>Bookmarking Your Start Position</h2>
 <p>When you compose a long song, you can take advantage of the bookmarking feature. Placing two percent signs <code>%%</code>in your source forces the player to start from where those percent signs are. Here is an example:</p>
@@ -859,7 +974,7 @@ F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
  F~G~A~F~&gt;C~C~&lt;G~~~
 </code></pre>
 
-<p>Now that you have finished working on the verse, you can just focus on the chorus part without having to go back to the top every time you press the play button.</p>
+<p>Let's say you have just finished working on the verse in the above example - since the bookmark is placed at the top of the chorus, you can now focus on writing the chorus without having to go back to the top every time you press the play button.</p>
 <p>Note that the bookmark will not be effective when you export to an audio file.</p>
 <div id="auto_saving" />
 <h2>Auto Saving</h2>
@@ -879,13 +994,16 @@ F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
 <h3>Global Section</h3>
 <ul>
 <li><code>MASTERVOLUME=n</code> ... Sets the master output gain (n=1 to 100)</li>
-<li><code>TEMPO=n</code> ... Sets the track tempo (n=40 to 300)</li>
-<li><code>Vn=v</code> ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100)</li>
+<li><code>TEMPO=n</code> ... Sets the track tempo (n=40 to 400)</li>
+<li><code>Vn=v</code> ... Sets the volume (v=0 to 10) for channel n (n=1 to 9, m=0 to 100) </li>
 <li><code>VD=v</code> ... Sets the volume (v=0 to 10) for the drum channel</li>
 <li><code>LOOP=?</code> ... Turns track looping on or off (?=ON or OFF)</li>
+<li><code>REPEAT=n</code> ... Play or export the song n times in succession (automatically sets <code>LOOP=OFF</code>)</li>
 <li><code>DELAY=?</code> ... Turns the delay effect on or off (?=ON or OFF)</li>
 <li><code>DELAYLEVEL=n</code> ... Sets the delay output level (n=0 to 100)</li>
 <li><code>DELAYTIME=n</code> ... Sets the delay timing in milliseconds (n=0 to 999)</li>
+<li><code>DELAYTIME=AUTO</code> ... Sets the delay timing according to the tempo.</li>
+<li><code>DELAYTIME=AUTO3</code> ... Sets the delay time to 8th triplets according to the tempo.</li>
 </ul>
 <div id="syntax_reference_music_channel" />
 <h3>Music channel</h3>
@@ -902,13 +1020,15 @@ F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
 <li><code>LFOWAIT=n</code> ... Sets the time in milliseconds before the LFO effect starts (n=0 to 9999)</li>
 <li><code>ASTRO=n</code> ... Turns on the Astro effect and sets the number of wobbles per second (n=0 to 100, 0 for OFF)</li>
 <li><code>ASTRO=OFF</code> ... Turns off the Astro effect</li>
-<li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters (?=BEEP available currently)</li>
+<li><code>PRESET=?</code> ... Sets up at once for a predetermined set of tone parameters</li>
 <li><code>DEFAULTTONE</code> ... Sets up a straight square wave tone</li>
 <li><code>WAVEFORM=n</code> ... Chooses the waveform that the channel uses (n=0 to 5)</li>
+<li><code>WAVEFLIP</code> ... Flips the channel's audio output waveform vertically</li>
 <li><code>FALLSPEED=n</code> ... Speed of the Fall effect in 100ths of a semitone per second (n=0 to 9600)</li>
 <li><code>FALLWAIT=n</code> ... Wait time in milliseconds before the Fall effect starts (n=0 to 9999)</li>
 <li><code>RISESPEED=n</code> ... Speed of the Rise effect in 100ths of a semitone per second (n=0 to 9600)</li>
-<li><code>RISERANGE=n</code> ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)  </li>
+<li><code>RISERANGE=n</code> ... Pitch width for the Rise effect in 100ths of a semitone (n=0 to 9600)</li>
+<li><code>BEEFUP=n</code> .... Add a mild overdrive effect to the channel (n=0 to 100, 0=off)</li>
 <li><code>Vn</code> ... Sets channel volume (n=0,1,2...10)</li>
 <li><code>Ln</code> ... Sets the current note length (n=1 to 64)</li>
 <li><code>C</code> ... Musical note</li>
@@ -934,6 +1054,20 @@ F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
 <div id="syntax_reference_drum_channel" />
 <h3>Drum Channel</h3>
 <ul>
+<li><code>RESETDRUMS</code> ... Resets all drum tone settings to default</li>
+<li><code>WHITENOISE</code> ... Set all drums to use white noise</li>
+<li><code>PINKNOISE</code> ... Set all drums to use pink noise</li>
+<li><code>NOISELEVEL=</code> ... Set the noise element's volume (n=0 to 100, default=100)</li>
+<li><code>SQUARELEVEL=</code> ... Set the square wave element's volume (n=0 to 100, default=100)</li>
+<li><code>KICKNOISE=?</code> ... Set the kick's noise type (?=<code>WHITE</code> or <code>PINK</code>)</li>
+<li><code>SNARENOISE=?</code> ... Set the snare's noise type (?=<code>WHITE</code> or <code>PINK</code>)</li>
+<li><code>HIHATNOISE=?</code> ... Set the Hi-hat's noise type (?=<code>WHITE</code> or <code>PINK</code>) </li>
+<li><code>KICKPITCH=n</code> ... Sets the kick's pitch tuning (n=0 to 100, default=50)</li>
+<li><code>SNAREPITCH=n</code> ... Sets the snare's pitch tuning (n=0 to 100, default=50)</li>
+<li><code>KICKLENGTH=n</code> ... Sets the kick's duration in milliseconds (n=0 to 400)</li>
+<li><code>SNARELENGTH=n</code> ... Sets the kick's duration in milliseconds (n=0 to 1000)</li>
+<li><code>HIHATLENGTH=n</code> ... Sets the kick's duration in milliseconds (n=0 to 1000)</li>
+<li><code>BEEFUP=n</code> ... Add a mild overdrive effect to the channel (n=0 to 100, 0=off)</li>
 <li><code>Vn</code> ... Sets channel volume (n=0,1,2...10)</li>
 <li><code>Ln</code> ... Sets the current note length (n=1 to 64)</li>
 <li><code>K</code> ... Kick</li>
@@ -953,12 +1087,12 @@ F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
 </ul>
 <div id="uninstalling_beepcomp" />
 <h2>Uninstalling BeepComp</h2>
-<p>You can uninstall the application by using the &quot;Programs and Features&quot; under the Control Panel / Programs menu to uninstall BeepComp. Typing in &quot;appwiz.cpl&quot; in the command prompt or in the search box will direct you to this dialog, also.</p>
-<p>Please note that your &quot;userdata&quot; folder inside your &quot;Documents&quot; (or &quot;My Documents&quot; on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your &quot;userdata&quot; folder, please delete it along with its parent folder named BeepComp.</p>
+<p>You can uninstall the application by using the &quot;Programs and Features&quot; under the Control Panel / Programs menu to uninstall BeepComp. Typing in &quot;appwiz.cpl&quot; in the command prompt or in the search box will direct you to this dialog, also. You can also find a shortcut to uninstall in the Start menu.</p>
+<p>Please note that your &quot;userdata&quot; folder inside your &quot;Documents&quot; (or &quot;My Documents&quot; on XP) folder will not be removed, just in case you still have some of your work left in this folder. If you no longer need your &quot;userdata&quot; folder, please manually delete it along with its parent folder named BeepComp.</p>
 <div id="staying_updated" />
 <h2>Staying Updated</h2>
-<p>New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix and improve the bugs or issues found on the previous versions. I announce new versions through <a href="https://sourceforge.net/p/beepcomp/blog/">the SourceForge Blog page</a>. I also upload <a href="https://sourceforge.net/projects/beepcomp/files/patches/">patches</a> whenever there is a critical issue.</p>
-<p>Alternatively, you can scroll down the <a href="http://beepcomp.sourceforge.net">SourceForge project top page</a> and press the button that says &quot;Follow&quot; to receive automatic updates, but be alerted that you will receive third-party junk mail as well. I will find a better newsgroup format that's clean. If anyone knows of a good service, let me know! :)</p>
+<p>New updates of BeepComp come out often. I ask every user to stay updated since updated versions fix the bugs and improve on the issues found on the previous versions. I announce new versions through <a href="https://sourceforge.net/p/beepcomp/blog/">the SourceForge Blog page</a>. I also upload <a href="https://sourceforge.net/projects/beepcomp/files/patches/">patches</a> whenever there is a critical issue.</p>
+<p>Alternatively, you can scroll down the <a href="http://beepcomp.sourceforge.net">SourceForge project top page</a> to below the feature list and press the button that says &quot;Follow&quot; to receive automatic updates. But be alerted that you might receive third-party mail from SourceForge. I will also be sending out update notifications via <a href="https://twitter.com/hiromorozumi">Twitter</a> and <a href="https://plus.google.com/103995858202385924195/posts">Google+</a>.</p>
 <p>You can find out the version of BeepComp you're using by clicking the logo in the main editor screen.</p>
 <p>When you update to a new release, you will have to first <a href="#uninstalling_beepcomp">uninstall</a> your current version.</p>
 <div id="if_you_found_issues_bugs" />
@@ -972,6 +1106,7 @@ F~:G~:Ab~:&gt;C~:&lt;Ab:G:F~:Eb~:F~~~~~::::
 <p>Also, there is a <a href="http://beepcomp.freeforums.net/">forum page</a> where you can join our discussion. I have also set up a <a href="https://www.facebook.com/beepcomp">Facebook</a> page.</p>
 <p>The source code is publicly available at the <a href="http://sourceforge.net">SourceForge</a> repository. I will also welcome patches if you spot issues. The address of the repository is:
 <a href="https://sourceforge.net/p/beepcomp/code/ci/master/tree/">https://sourceforge.net/p/beepcomp/code/ci/master/tree/</a>.</p>
+<p>Also, I have been developing a game audio engine library API for game developers to incorporate music made with BeepComp into their projects. This library is available at <a href="https://github.com/hiromorozumi/bcplayer/releases">Github</a>.</p>
 <div id="contact_me" />
 <h2>Contact Me!</h2>
 <p>I welcome anyone using BeepComp and also anyone interested in getting involved in this project to getting in touch. Feature suggestions are great. Bug reports are welcome. If you are a coder interested in working together to make this a better application, that's great, too!  Just letting me hear the tracks you create with BeepComp will make my day :) You can contact me by emailing me at beepcomp-at-hiromorozumi-dot-com.</p>

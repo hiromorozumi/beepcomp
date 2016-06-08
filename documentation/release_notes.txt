@@ -2,6 +2,14 @@
 Release Notes v0.2.2
 ====================
 
+Dear users,
+
+One of BeepComp's newest features is ring modulation. You can create really amazing Sci-Fi effects and unique sound textures with this effect, so I hope you experiment with this feature! See the posts in our forum under the thread "Ring Modulation" where you can find interesting source scripts to try. Another new feature for this version is sound shaping for drums. Now you can change noise types, noise mix level, pitches and lengths for the drums through event commands. I have included a tutorial file to introduce you to these commands.
+I hope you enjoy these new developments - happy beep-making! :)
+
+Sincerely,
+Hiro
+
 New in BeepComp version 0.2.2:
 
 - New ring modulation feature - create wacky sci-fi sound effects and unique percussion sounds

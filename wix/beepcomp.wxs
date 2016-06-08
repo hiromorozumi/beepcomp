@@ -305,12 +305,6 @@
 						DiskId='1' Source='..\userdata\astro_effect.txt' KeyPath='yes'>				
 						</File>
 					</Component>
-					
-					<Component Id='cmp_waveforms_testTXT' Guid='*' >
-						<File Id="waveforms_testTXT" Name="waveforms_test.txt" 
-						DiskId='1' Source='..\userdata\waveforms_test.txt' KeyPath='yes'>				
-						</File>
-					</Component>
 				
 					<Component Id='cmp_bach_prelude_c_minTXT' Guid='*' >
 						<File Id="bach_prelude_c_minTXT" Name="bach_prelude_c_min.txt" 
@@ -468,7 +462,7 @@
 		<ComponentRef Id='cmp_ys2_to_make_the_end_of_battleTXT' />
 		<ComponentRef Id='cmp_astro_wars_1TXT' />
 		<ComponentRef Id='cmp_pure_psg_toneTXT' />
-		<Component Id='cmp_bach_prelude_c_minTXT' />
+		<ComponentRef Id='cmp_bach_prelude_c_minTXT' />
 		<ComponentRef Id='cmp_astro_effectTXT' />
 		<ComponentRef Id='cmp__tutorial_repeatsTXT' />
 		<ComponentRef Id='cmp__tutorial_drumsTXT' />
