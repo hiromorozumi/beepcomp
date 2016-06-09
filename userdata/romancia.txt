@@ -16,7 +16,7 @@
 MASTERVOLUME=70
 TEMPO=104
 DELAYTIME=577
-V1=9 V2=9 V3=5 VD=0
+V1=8 V2=8 V3=5 VD=0
 
 // Channel 1 ////////////////////////////////////
 

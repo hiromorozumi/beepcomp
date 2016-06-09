@@ -12,7 +12,7 @@
 @G
 
 TEMPO=100         // takes range 40~300
-MASTERVOLUME=80   // scale to 100
+MASTERVOLUME=70   // scale to 100
 
   // @1, @2, @3... starts each music channel
 
